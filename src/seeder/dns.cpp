@@ -1,0 +1,678 @@
+// Copyright (c) 2017-2020 The Bitcoin developers
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+#include <seeder/dns.h>
+
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <strings.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+#include <cctype>
+#include <cstdbool>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+
+#define BUFLEN 512
+
+#if defined IP_RECVDSTADDR
+#define DSTADDR_SOCKOPT IP_RECVDSTADDR
+#define DSTADDR_DATASIZE (CMSG_SPACE(sizeof(struct in6_addr)))
+#define dstaddr(x) (CMSG_DATA(x))
+#elif defined IPV6_PKTINFO
+#define DSTADDR_SOCKOPT IPV6_PKTINFO
+#define DSTADDR_DATASIZE (CMSG_SPACE(sizeof(struct in6_pktinfo)))
+#define dstaddr(x) (&(((struct in6_pktinfo *)(CMSG_DATA(x)))->ipi6_addr))
+#else
+#error "can't determine socket option"
+#endif
+
+union control_data {
+    struct cmsghdr cmsg;
+    uint8_t data[DSTADDR_DATASIZE];
+};
+
+typedef enum {
+    CLASS_IN = 1,
+    QCLASS_ANY = 255,
+} dns_class;
+
+typedef enum {
+    TYPE_A = 1,
+    TYPE_NS = 2,
+    TYPE_CNAME = 5,
+    TYPE_SOA = 6,
+    TYPE_MX = 15,
+    TYPE_AAAA = 28,
+    TYPE_SRV = 33,
+    QTYPE_ANY = 255
+} dns_type;
+
+enum class DNSResponseCode : uint8_t {
+    OK = 0,
+    FORMAT_ERROR = 1,
+    SERVER_FAILURE = 2,
+    NAME_ERROR = 3,
+    NOT_IMPLEMENTED = 4,
+    REFUSED = 5,
+};
+
+ParseNameStatus parse_name(const uint8_t **inpos, const uint8_t *inend,
+                           const uint8_t *inbuf, char *buf, size_t bufsize) {
+    if (bufsize == 0) {
+        return ParseNameStatus::OutputBufferError;
+    }
+    size_t bufused = 0;
+    int init = 1;
+    do {
+        if (*inpos == inend) {
+            return ParseNameStatus::InputError;
+        }
+        // read length of next component
+        int octet = *((*inpos)++);
+        if (octet == 0) {
+            buf[bufused] = 0;
+            return ParseNameStatus::OK;
+        }
+        // add dot in output
+        if (!init) {
+            if (bufused == bufsize - 1) {
+                return ParseNameStatus::OutputBufferError;
+            }
+            buf[bufused++] = '.';
+        } else {
+            init = 0;
+        }
+        // handle references
+        if ((octet & 0xC0) == 0xC0) {
+            if (*inpos == inend) {
+                return ParseNameStatus::InputError;
+            }
+            int ref = ((octet - 0xC0) << 8) + *((*inpos)++);
+            if (ref < 0 || ref >= (*inpos) - inbuf - 2) {
+                return ParseNameStatus::InputError;
+            }
+            const uint8_t *newbuf = inbuf + ref;
+            return parse_name(&newbuf, (*inpos) - 2, inbuf, buf + bufused,
+                              bufsize - bufused);
+        }
+        if (octet > MAX_LABEL_LENGTH) {
+            return ParseNameStatus::InputError;
+        }
+        // The maximum size of a query name is 255. The buffer must have
+        // room for the null-character at the end of the buffer after writing
+        // the label.
+        if (octet + bufused > MAX_QUERY_NAME_LENGTH) {
+            return ParseNameStatus::InputError;
+        }
+        // copy label
+        while (octet) {
+            if (*inpos == inend) {
+                return ParseNameStatus::InputError;
+            }
+            if (bufused == bufsize - 1) {
+                return ParseNameStatus::OutputBufferError;
+            }
+            int c = *((*inpos)++);
+            if (c == '.') {
+                return ParseNameStatus::InputError;
+            }
+            octet--;
+            buf[bufused++] = c;
+        }
+    } while (1);
+}
+
+int write_name(uint8_t **outpos, const uint8_t *outend, const char *name,
+               int offset) {
+    while (*name != 0) {
+        const char *const dot = std::strchr(name, '.');
+        const char *fin = dot;
+        if (!dot) {
+            fin = name + std::strlen(name);
+        }
+        if (fin - name > MAX_LABEL_LENGTH) {
+            return -1;
+        }
+        if (fin == name) {
+            return -3;
+        }
+        if (outend - *outpos < fin - name + 2) {
+            return -2;
+        }
+        *((*outpos)++) = fin - name;
+        std::memcpy(*outpos, name, fin - name);
+        *outpos += fin - name;
+        if (!dot) {
+            break;
+        }
+        name = dot + 1;
+    }
+    if (offset < 0) {
+        // no reference
+        if (outend == *outpos) {
+            return -2;
+        }
+        *((*outpos)++) = 0;
+    } else {
+        if (outend - *outpos < 2) {
+            return -2;
+        }
+        *((*outpos)++) = (offset >> 8) | 0xC0;
+        *((*outpos)++) = offset & 0xFF;
+    }
+    return 0;
+}
+
+static int write_record(uint8_t **outpos, const uint8_t *outend,
+                        const char *name, int offset, dns_type typ,
+                        dns_class cls, int ttl) {
+    uint8_t *const oldpos = *outpos;
+    int error = 0;
+    // name
+    int ret = write_name(outpos, outend, name, offset);
+    if (ret) {
+        error = ret;
+        goto error;
+    }
+    if (outend - *outpos < 8) {
+        error = -4;
+        goto error;
+    }
+    // type
+    *((*outpos)++) = typ >> 8;
+    *((*outpos)++) = typ & 0xFF;
+    // class
+    *((*outpos)++) = cls >> 8;
+    *((*outpos)++) = cls & 0xFF;
+    // ttl
+    *((*outpos)++) = (ttl >> 24) & 0xFF;
+    *((*outpos)++) = (ttl >> 16) & 0xFF;
+    *((*outpos)++) = (ttl >> 8) & 0xFF;
+    *((*outpos)++) = ttl & 0xFF;
+    return 0;
+error:
+    *outpos = oldpos;
+    return error;
+}
+
+static int write_record_a(uint8_t **outpos, const uint8_t *outend,
+                          const char *name, int offset, dns_class cls, int ttl,
+                          const AddrGeneric *ip) {
+    if (ip->v != 4) {
+        return -6;
+    }
+    uint8_t *const oldpos = *outpos;
+    int error = 0;
+    int ret = write_record(outpos, outend, name, offset, TYPE_A, cls, ttl);
+    if (ret) {
+        return ret;
+    }
+    if (outend - *outpos < 6) {
+        error = -5;
+        goto error;
+    }
+    // rdlength
+    *((*outpos)++) = 0;
+    *((*outpos)++) = 4;
+    // rdata
+    for (int i = 0; i < 4; i++) {
+        *((*outpos)++) = ip->data.v4[i];
+    }
+    return 0;
+error:
+    *outpos = oldpos;
+    return error;
+}
+
+static int write_record_aaaa(uint8_t **outpos, const uint8_t *outend,
+                             const char *name, int offset, dns_class cls,
+                             int ttl, const AddrGeneric *ip) {
+    if (ip->v != 6) {
+        return -6;
+    }
+    uint8_t *const oldpos = *outpos;
+    int error = 0;
+    int ret = write_record(outpos, outend, name, offset, TYPE_AAAA, cls, ttl);
+    if (ret) {
+        return ret;
+    }
+    if (outend - *outpos < 18) {
+        error = -5;
+        goto error;
+    }
+    // rdlength
+    *((*outpos)++) = 0;
+    *((*outpos)++) = 16;
+    // rdata
+    for (int i = 0; i < 16; i++) {
+        *((*outpos)++) = ip->data.v6[i];
+    }
+    return 0;
+error:
+    *outpos = oldpos;
+    return error;
+}
+
+static int write_record_ns(uint8_t **outpos, const uint8_t *outend,
+                           const char *name, int offset, dns_class cls, int ttl,
+                           const char *ns) {
+    uint8_t *const oldpos = *outpos;
+    int ret = write_record(outpos, outend, name, offset, TYPE_NS, cls, ttl);
+    if (ret) {
+        return ret;
+    }
+
+    // Predeclare to avoid jumping over declaration.
+    uint8_t *curpos;
+
+    int error = 0;
+    if (outend - *outpos < 2) {
+        error = -5;
+        goto error;
+    }
+
+    (*outpos) += 2;
+    curpos = *outpos;
+    ret = write_name(outpos, outend, ns, -1);
+    if (ret) {
+        error = ret;
+        goto error;
+    }
+
+    curpos[-2] = (*outpos - curpos) >> 8;
+    curpos[-1] = (*outpos - curpos) & 0xFF;
+    return 0;
+
+error:
+    *outpos = oldpos;
+    return error;
+}
+
+static int write_record_soa(uint8_t **outpos, const uint8_t *outend,
+                            const char *name, int offset, dns_class cls,
+                            int ttl, const char *mname, const char *rname,
+                            uint32_t serial, uint32_t refresh, uint32_t retry,
+                            uint32_t expire, uint32_t minimum) {
+    uint8_t *const oldpos = *outpos;
+    int ret = write_record(outpos, outend, name, offset, TYPE_SOA, cls, ttl);
+    if (ret) {
+        return ret;
+    }
+
+    // Predeclare variable to not jump over declarations.
+    uint8_t *curpos;
+
+    int error = 0;
+    if (outend - *outpos < 2) {
+        error = -5;
+        goto error;
+    }
+
+    (*outpos) += 2;
+    curpos = *outpos;
+    ret = write_name(outpos, outend, mname, -1);
+    if (ret) {
+        error = ret;
+        goto error;
+    }
+
+    ret = write_name(outpos, outend, rname, -1);
+    if (ret) {
+        error = ret;
+        goto error;
+    }
+
+    if (outend - *outpos < 20) {
+        error = -5;
+        goto error;
+    }
+
+    *((*outpos)++) = (serial >> 24) & 0xFF;
+    *((*outpos)++) = (serial >> 16) & 0xFF;
+    *((*outpos)++) = (serial >> 8) & 0xFF;
+    *((*outpos)++) = serial & 0xFF;
+    *((*outpos)++) = (refresh >> 24) & 0xFF;
+    *((*outpos)++) = (refresh >> 16) & 0xFF;
+    *((*outpos)++) = (refresh >> 8) & 0xFF;
+    *((*outpos)++) = refresh & 0xFF;
+    *((*outpos)++) = (retry >> 24) & 0xFF;
+    *((*outpos)++) = (retry >> 16) & 0xFF;
+    *((*outpos)++) = (retry >> 8) & 0xFF;
+    *((*outpos)++) = retry & 0xFF;
+    *((*outpos)++) = (expire >> 24) & 0xFF;
+    *((*outpos)++) = (expire >> 16) & 0xFF;
+    *((*outpos)++) = (expire >> 8) & 0xFF;
+    *((*outpos)++) = expire & 0xFF;
+    *((*outpos)++) = (minimum >> 24) & 0xFF;
+    *((*outpos)++) = (minimum >> 16) & 0xFF;
+    *((*outpos)++) = (minimum >> 8) & 0xFF;
+    *((*outpos)++) = minimum & 0xFF;
+    curpos[-2] = (*outpos - curpos) >> 8;
+    curpos[-1] = (*outpos - curpos) & 0xFF;
+    return 0;
+
+error:
+    *outpos = oldpos;
+    return error;
+}
+
+static ssize_t dnshandle(dns_opt_t *opt, const uint8_t *inbuf, size_t insize,
+                         uint8_t *outbuf) {
+    DNSResponseCode responseCode = DNSResponseCode::OK;
+    if (insize < 12) {
+        // DNS header
+        return -1;
+    }
+
+    // Predeclare various variables to avoid jumping over declarations.
+    int have_ns = 0;
+    int max_auth_size = 0;
+    int nquestion = 0;
+
+    // copy id
+    outbuf[0] = inbuf[0];
+    outbuf[1] = inbuf[1];
+    // copy flags;
+    outbuf[2] = inbuf[2];
+    outbuf[3] = inbuf[3];
+    // clear response code
+    outbuf[3] &= ~15;
+    // check qr
+    if (inbuf[2] & 128) {
+        /* std::fprintf(stdout, "Got response?\n"); */
+        responseCode = DNSResponseCode::FORMAT_ERROR;
+        goto error;
+    }
+
+    // check opcode
+    if (((inbuf[2] & 120) >> 3) != 0) {
+        /* std::fprintf(stdout, "Opcode nonzero?\n"); */
+        responseCode = DNSResponseCode::NOT_IMPLEMENTED;
+        goto error;
+    }
+
+    // unset TC
+    outbuf[2] &= ~2;
+    // unset RA
+    outbuf[3] &= ~128;
+    // check questions
+    nquestion = (inbuf[4] << 8) + inbuf[5];
+    if (nquestion == 0) {
+        /* std::fprintf(stdout, "No questions?\n"); */
+        responseCode = DNSResponseCode::OK;
+        goto error;
+    }
+
+    if (nquestion > 1) {
+        /* std::fprintf(stdout, "Multiple questions %i?\n", nquestion); */
+        responseCode = DNSResponseCode::NOT_IMPLEMENTED;
+        goto error;
+    }
+
+    {
+        const uint8_t *inpos = inbuf + 12;
+        const uint8_t *inend = inbuf + insize;
+        char name[MAX_QUERY_NAME_BUFFER_LENGTH];
+        int offset = inpos - inbuf;
+        ParseNameStatus ret = parse_name(&inpos, inend, inbuf, name,
+                                         MAX_QUERY_NAME_BUFFER_LENGTH);
+        if (ret == ParseNameStatus::InputError) {
+            responseCode = DNSResponseCode::FORMAT_ERROR;
+            goto error;
+        }
+
+        if (ret == ParseNameStatus::OutputBufferError) {
+            responseCode = DNSResponseCode::REFUSED;
+            goto error;
+        }
+
+        int namel = std::strlen(name), hostl = std::strlen(opt->host);
+        if (strcasecmp(name, opt->host) &&
+            (namel < hostl + 2 || name[namel - hostl - 1] != '.' ||
+             strcasecmp(name + namel - hostl, opt->host))) {
+            responseCode = DNSResponseCode::REFUSED;
+            goto error;
+        }
+
+        if (inend - inpos < 4) {
+            responseCode = DNSResponseCode::FORMAT_ERROR;
+            goto error;
+        }
+
+        // copy question to output
+        std::memcpy(outbuf + 12, inbuf + 12, inpos + 4 - (inbuf + 12));
+        // set counts
+        outbuf[4] = 0;
+        outbuf[5] = 1;
+        outbuf[6] = 0;
+        outbuf[7] = 0;
+        outbuf[8] = 0;
+        outbuf[9] = 0;
+        outbuf[10] = 0;
+        outbuf[11] = 0;
+        // set qr
+        outbuf[2] |= 128;
+
+        int typ = (inpos[0] << 8) + inpos[1];
+        int cls = (inpos[2] << 8) + inpos[3];
+        inpos += 4;
+
+        uint8_t *outpos = outbuf + (inpos - inbuf);
+        uint8_t *outend = outbuf + BUFLEN;
+
+        //   std::fprintf(stdout, "DNS: Request host='%s' type=%i class=%i\n", name,
+        //                typ, cls);
+
+        // calculate max size of authority section
+
+        if (!((typ == TYPE_NS || typ == QTYPE_ANY) &&
+              (cls == CLASS_IN || cls == QCLASS_ANY))) {
+            // authority section will be necessary, either NS or SOA
+            uint8_t *newpos = outpos;
+            write_record_ns(&newpos, outend, "", offset, CLASS_IN, 0, opt->ns);
+            max_auth_size = newpos - outpos;
+
+            newpos = outpos;
+            write_record_soa(&newpos, outend, "", offset, CLASS_IN, opt->nsttl,
+                             opt->ns, opt->mbox, std::time(nullptr), 604800, 86400,
+                             2592000, 604800);
+            if (max_auth_size < newpos - outpos) {
+                max_auth_size = newpos - outpos;
+            }
+            //    std::fprintf(stdout, "Authority section will claim %i bytes max\n",
+            //                 max_auth_size);
+        }
+
+        // Answer section
+
+        // NS records
+        if ((typ == TYPE_NS || typ == QTYPE_ANY) &&
+            (cls == CLASS_IN || cls == QCLASS_ANY)) {
+            int ret2 = write_record_ns(&outpos, outend - max_auth_size, "",
+                                       offset, CLASS_IN, opt->nsttl, opt->ns);
+            //    std::fprintf(stdout, "wrote NS record: %i\n", ret2);
+            if (!ret2) {
+                outbuf[7]++;
+                have_ns++;
+            }
+        }
+
+        // SOA records
+        if ((typ == TYPE_SOA || typ == QTYPE_ANY) &&
+            (cls == CLASS_IN || cls == QCLASS_ANY) && opt->mbox) {
+            int ret2 =
+                write_record_soa(&outpos, outend - max_auth_size, "", offset,
+                                 CLASS_IN, opt->nsttl, opt->ns, opt->mbox,
+                                 std::time(nullptr), 604800, 86400, 2592000, 604800);
+            //    std::fprintf(stdout, "wrote SOA record: %i\n", ret2);
+            if (!ret2) {
+                outbuf[7]++;
+            }
+        }
+
+        // A/AAAA records
+        if ((typ == TYPE_A || typ == TYPE_AAAA || typ == QTYPE_ANY) &&
+            (cls == CLASS_IN || cls == QCLASS_ANY)) {
+            AddrGeneric addr[32];
+            int naddr = opt->cb((void *)opt, name, addr, 32,
+                                typ == TYPE_A || typ == QTYPE_ANY,
+                                typ == TYPE_AAAA || typ == QTYPE_ANY);
+            int n = 0;
+            while (n < naddr) {
+                int mustbreak = 1;
+                if (addr[n].v == 4) {
+                    mustbreak = write_record_a(&outpos, outend - max_auth_size,
+                                               "", offset, CLASS_IN,
+                                               opt->datattl, &addr[n]);
+                } else if (addr[n].v == 6) {
+                    mustbreak = write_record_aaaa(
+                        &outpos, outend - max_auth_size, "", offset, CLASS_IN,
+                        opt->datattl, &addr[n]);
+                }
+
+                //      std::fprintf(stdout, "wrote A record: %i\n", mustbreak);
+                if (mustbreak) {
+                    break;
+                }
+
+                n++;
+                outbuf[7]++;
+            }
+        }
+
+        // Authority section
+        if (!have_ns && outbuf[7]) {
+            int ret2 = write_record_ns(&outpos, outend, "", offset, CLASS_IN,
+                                       opt->nsttl, opt->ns);
+            //    std::fprintf(stdout, "wrote NS record: %i\n", ret2);
+            if (!ret2) {
+                outbuf[9]++;
+            }
+        } else if (!outbuf[7]) {
+            // Didn't include any answers, so reply with SOA as this is a
+            // negative response. If we replied with NS above we'd create a bad
+            // horizontal referral loop, as the NS response indicates where the
+            // resolver should try next.
+            int ret2 = write_record_soa(
+                &outpos, outend, "", offset, CLASS_IN, opt->nsttl, opt->ns,
+                opt->mbox, std::time(nullptr), 604800, 86400, 2592000, 604800);
+            //    std::fprintf(stdout, "wrote SOA record: %i\n", ret2);
+            if (!ret2) {
+                outbuf[9]++;
+            }
+        }
+
+        // set AA
+        outbuf[2] |= 4;
+
+        return outpos - outbuf;
+    }
+
+error:
+    // set response code
+    outbuf[3] |= uint8_t(responseCode) & 0xF;
+    // set counts
+    outbuf[4] = 0;
+    outbuf[5] = 0;
+    outbuf[6] = 0;
+    outbuf[7] = 0;
+    outbuf[8] = 0;
+    outbuf[9] = 0;
+    outbuf[10] = 0;
+    outbuf[11] = 0;
+    return 12;
+}
+
+static int listenSocket = -1;
+
+int dnsserver(dns_opt_t *opt) {
+    struct sockaddr_in6 si_other;
+    int senderSocket = -1;
+    senderSocket = socket(AF_INET6, SOCK_DGRAM, IPPROTO_UDP);
+    if (senderSocket == -1) {
+        return -3;
+    }
+
+    int replySocket;
+    if (listenSocket == -1) {
+        struct sockaddr_in6 si_me;
+        if ((listenSocket = socket(AF_INET6, SOCK_DGRAM, IPPROTO_UDP)) == -1) {
+            return -1;
+        }
+        replySocket = socket(AF_INET6, SOCK_DGRAM, IPPROTO_UDP);
+        if (replySocket == -1) {
+            close(listenSocket);
+            return -1;
+        }
+        int sockopt = 1;
+        setsockopt(listenSocket, IPPROTO_IPV6, DSTADDR_SOCKOPT, &sockopt,
+                   sizeof sockopt);
+        std::memset((char *)&si_me, 0, sizeof(si_me));
+        si_me.sin6_family = AF_INET6;
+        si_me.sin6_port = htons(opt->port);
+        si_me.sin6_addr = in6addr_any;
+        if (bind(listenSocket, (struct sockaddr *)&si_me, sizeof(si_me)) ==
+            -1) {
+            return -2;
+        }
+    }
+
+    uint8_t inbuf[BUFLEN], outbuf[BUFLEN];
+    struct iovec iov[1] = {
+        {
+            // NB: Named struct initializers are a C++20 extension and not supported by all compilers.
+            /* .iov_base = */ inbuf,
+            /* .iov_len =  */ sizeof(inbuf),
+        },
+    };
+
+    union control_data cmsg;
+    msghdr msg;
+    msg.msg_name = &si_other;
+    msg.msg_namelen = sizeof(si_other);
+    msg.msg_iov = iov;
+    msg.msg_iovlen = 1;
+    msg.msg_control = &cmsg;
+    msg.msg_controllen = sizeof(cmsg);
+
+    for (; 1; ++(opt->nRequests)) {
+        ssize_t insize = recvmsg(listenSocket, &msg, 0);
+        //    uint8_t *addr = (uint8_t*)&si_other.sin_addr.s_addr;
+        //    std::fprintf(stdout, "DNS: Request %llu from %i.%i.%i.%i:%i of %i
+        //                 bytes\n", (unsigned long long)(opt->nRequests), addr[0], addr[1],
+        //                 addr[2], addr[3], ntohs(si_other.sin_port), (int)insize);
+        if (insize <= 0) {
+            continue;
+        }
+
+        ssize_t ret = dnshandle(opt, inbuf, insize, outbuf);
+        if (ret <= 0) {
+            continue;
+        }
+
+        bool handled = false;
+        for (struct cmsghdr *hdr = CMSG_FIRSTHDR(&msg); hdr;
+             hdr = CMSG_NXTHDR(&msg, hdr)) {
+            if (hdr->cmsg_level == IPPROTO_IP &&
+                hdr->cmsg_type == DSTADDR_SOCKOPT) {
+                msg.msg_iov[0].iov_base = outbuf;
+                msg.msg_iov[0].iov_len = ret;
+                sendmsg(listenSocket, &msg, 0);
+                msg.msg_iov[0].iov_base = inbuf;
+                msg.msg_iov[0].iov_len = sizeof(inbuf);
+                handled = true;
+            }
+        }
+        if (!handled) {
+            sendto(listenSocket, outbuf, ret, 0, (struct sockaddr *)&si_other,
+                   sizeof(si_other));
+        }
+    }
+    return 0;
+}

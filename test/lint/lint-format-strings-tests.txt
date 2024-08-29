@@ -1,0 +1,18 @@
+--- Good ones ---
+printf("%d", 1); => no error
+printf("%d%d%d", 1, 2, 3); => no error
+printf("%a%b%z", 1, "anything", 3); => no error
+
+--- Comments ---
+// This is a c++ comment, should not throw printf("%d", 1, 2); => no error
+
+--- Preprocessor ---
+#define printf(%d, 1, 2); => no error
+
+-- Too many arguments ---
+printf("%d", 1, 2); => error
+printf("%a %b", 1, 2, "anything"); => error
+
+--- Not enough argument ---
+printf("%d"); should throw => error
+printf("%a%b%z", 1, "anything"); => error
