@@ -1,11 +1,11 @@
 // Copyright (c) 2009-2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
-// Copyright (c) 2021 The Bitcoin developers
+// Copyright (c) 2009-2016 The Lambda Core developers
+// Copyright (c) 2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
+#include <config/lambda-config.h>
 #endif
 
 #include <net.h>
@@ -558,7 +558,7 @@ void CNode::copyStats(CNodeStats &stats, const std::vector<bool> &m_asmap) {
     }
 
     // Raw ping time is in microseconds, but show it to user as whole seconds
-    // (Bitcoin users should be well used to small numbers with many decimal
+    // (Lambda users should be well used to small numbers with many decimal
     // places by now :)
     stats.dPingTime = ((double(nPingUsecTime)) / 1e6);
     stats.dMinPing = ((double(nMinPingUsecTime)) / 1e6);
@@ -1564,7 +1564,7 @@ static void ThreadMapPort() {
             }
         }
 
-        std::string strDesc = "Bitcoin " + FormatFullVersion();
+        std::string strDesc = "Lambda " + FormatFullVersion();
 
         do {
 #ifndef UPNPDISCOVER_SUCCESS

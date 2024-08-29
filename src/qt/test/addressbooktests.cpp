@@ -159,7 +159,7 @@ void AddressBookTests::addressBookTests() {
         // (https://bugreports.qt.io/browse/QTBUG-49686).
         QWARN(
             "Skipping AddressBookTests on mac build with 'minimal' platform "
-            "set due to Qt bugs. To run AppTests, invoke with 'test_bitcoin-qt "
+            "set due to Qt bugs. To run AppTests, invoke with 'test_lambda-qt "
             "-platform cocoa' on mac, or else use a linux or windows build.");
         return;
     }

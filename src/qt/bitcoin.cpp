@@ -1,5 +1,5 @@
-// Copyright (c) 2011-2019 The Bitcoin Core developers
-// Copyright (c) 2021 The Bitcoin developers
+// Copyright (c) 2011-2019 The Lambda Core developers
+// Copyright (c) 2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -158,14 +158,14 @@ void DebugMessageHandler(QtMsgType type, const QMessageLogContext &context,
     }
 }
 
-BitcoinCashNode::BitcoinCashNode(interfaces::Node &node) : QObject(), m_node(node) {}
+LambdaNode::LambdaNode(interfaces::Node &node) : QObject(), m_node(node) {}
 
-void BitcoinCashNode::handleRunawayException(const std::exception *e) {
+void LambdaNode::handleRunawayException(const std::exception *e) {
     PrintExceptionContinue(e, "Runaway exception");
     Q_EMIT runawayException(QString::fromStdString(m_node.getWarnings("gui")));
 }
 
-void BitcoinCashNode::initialize(Config *config, RPCServer *rpcServer,
+void LambdaNode::initialize(Config *config, RPCServer *rpcServer,
                             HTTPRPCRequestProcessor *httpRPCRequestProcessor) {
     try {
         qDebug() << __func__ << ": Running initialization in thread";
@@ -180,7 +180,7 @@ void BitcoinCashNode::initialize(Config *config, RPCServer *rpcServer,
     }
 }
 
-void BitcoinCashNode::shutdown() {
+void LambdaNode::shutdown() {
     try {
         qDebug() << __func__ << ": Running Shutdown in thread";
         m_node.appShutdown();
@@ -193,7 +193,7 @@ void BitcoinCashNode::shutdown() {
     }
 }
 
-BitcoinApplication::BitcoinApplication(interfaces::Node &node, int &argc,
+LambdaApplication::LambdaApplication(interfaces::Node &node, int &argc,
                                        char **argv)
     : QApplication(argc, argv), coreThread(nullptr), m_node(node),
       optionsModel(nullptr), clientModel(nullptr), window(nullptr),
@@ -201,12 +201,12 @@ BitcoinApplication::BitcoinApplication(interfaces::Node &node, int &argc,
     setQuitOnLastWindowClosed(false);
 }
 
-void BitcoinApplication::setupPlatformStyle() {
+void LambdaApplication::setupPlatformStyle() {
     // UI per-platform customization
-    // This must be done inside the BitcoinApplication constructor, or after it,
+    // This must be done inside the LambdaApplication constructor, or after it,
     // because PlatformStyle::instantiate requires a QApplication.
     std::string platformName;
-    platformName = gArgs.GetArg("-uiplatform", BitcoinGUI::DEFAULT_UIPLATFORM);
+    platformName = gArgs.GetArg("-uiplatform", LambdaGUI::DEFAULT_UIPLATFORM);
     platformStyle =
         PlatformStyle::instantiate(QString::fromStdString(platformName));
     // Fall back to "other" if specified name not found.
@@ -216,7 +216,7 @@ void BitcoinApplication::setupPlatformStyle() {
     assert(platformStyle);
 }
 
-BitcoinApplication::~BitcoinApplication() {
+LambdaApplication::~LambdaApplication() {
     if (coreThread) {
         qDebug() << __func__ << ": Stopping thread";
         Q_EMIT stopThread();
@@ -239,56 +239,56 @@ BitcoinApplication::~BitcoinApplication() {
 }
 
 #ifdef ENABLE_WALLET
-void BitcoinApplication::createPaymentServer() {
+void LambdaApplication::createPaymentServer() {
     paymentServer = new PaymentServer(this);
 }
 #endif
 
-void BitcoinApplication::createOptionsModel(bool resetSettings) {
+void LambdaApplication::createOptionsModel(bool resetSettings) {
     optionsModel = new OptionsModel(m_node, nullptr, resetSettings);
 }
 
-void BitcoinApplication::createWindow(const Config *config,
+void LambdaApplication::createWindow(const Config *config,
                                       const NetworkStyle *networkStyle) {
     window =
-        new BitcoinGUI(m_node, config, platformStyle, networkStyle, nullptr);
+        new LambdaGUI(m_node, config, platformStyle, networkStyle, nullptr);
 
     pollShutdownTimer = new QTimer(window);
     connect(pollShutdownTimer, &QTimer::timeout, window,
-            &BitcoinGUI::detectShutdown);
+            &LambdaGUI::detectShutdown);
 }
 
-void BitcoinApplication::createSplashScreen(const NetworkStyle *networkStyle) {
+void LambdaApplication::createSplashScreen(const NetworkStyle *networkStyle) {
     SplashScreen *splash = new SplashScreen(m_node, networkStyle);
     // We don't hold a direct pointer to the splash screen after creation, but
     // the splash screen will take care of deleting itself when slotFinish
     // happens.
     splash->show();
-    connect(this, &BitcoinApplication::splashFinished, splash,
+    connect(this, &LambdaApplication::splashFinished, splash,
             &SplashScreen::slotFinish);
-    connect(this, &BitcoinApplication::requestedShutdown, splash,
+    connect(this, &LambdaApplication::requestedShutdown, splash,
             &QWidget::close);
 }
 
-bool BitcoinApplication::baseInitialize(Config &config) {
+bool LambdaApplication::baseInitialize(Config &config) {
     return m_node.baseInitialize(config);
 }
 
-void BitcoinApplication::startThread() {
+void LambdaApplication::startThread() {
     if (coreThread) {
         return;
     }
     coreThread = new QThread(this);
-    BitcoinCashNode *executor = new BitcoinCashNode(m_node);
+    LambdaNode *executor = new LambdaNode(m_node);
     executor->moveToThread(coreThread);
 
     /*  communication to and from thread */
-    connect(executor, &BitcoinCashNode::initializeResult, this,
-            &BitcoinApplication::initializeResult);
-    connect(executor, &BitcoinCashNode::shutdownResult, this,
-            &BitcoinApplication::shutdownResult);
-    connect(executor, &BitcoinCashNode::runawayException, this,
-            &BitcoinApplication::handleRunawayException);
+    connect(executor, &LambdaNode::initializeResult, this,
+            &LambdaApplication::initializeResult);
+    connect(executor, &LambdaNode::shutdownResult, this,
+            &LambdaApplication::shutdownResult);
+    connect(executor, &LambdaNode::runawayException, this,
+            &LambdaApplication::handleRunawayException);
 
     // Note on how Qt works: it tries to directly invoke methods if the signal
     // is emitted on the same thread that the target object 'lives' on.
@@ -303,20 +303,20 @@ void BitcoinApplication::startThread() {
     // temporary (eg it lives somewhere aside from the stack) or this will
     // crash because initialize() gets executed in another thread at some
     // unspecified time (after) requestedInitialize() is emitted!
-    connect(this, &BitcoinApplication::requestedInitialize, executor,
-            &BitcoinCashNode::initialize);
+    connect(this, &LambdaApplication::requestedInitialize, executor,
+            &LambdaNode::initialize);
 
-    connect(this, &BitcoinApplication::requestedShutdown, executor,
-            &BitcoinCashNode::shutdown);
+    connect(this, &LambdaApplication::requestedShutdown, executor,
+            &LambdaNode::shutdown);
     /*  make sure executor object is deleted in its own thread */
-    connect(this, &BitcoinApplication::stopThread, executor,
+    connect(this, &LambdaApplication::stopThread, executor,
             &QObject::deleteLater);
-    connect(this, &BitcoinApplication::stopThread, coreThread, &QThread::quit);
+    connect(this, &LambdaApplication::stopThread, coreThread, &QThread::quit);
 
     coreThread->start();
 }
 
-void BitcoinApplication::parameterSetup() {
+void LambdaApplication::parameterSetup() {
     // Default printtoconsole to false for the GUI. GUI programs should not
     // print to the console unnecessarily.
     gArgs.SoftSetBoolArg("-printtoconsole", false);
@@ -325,7 +325,7 @@ void BitcoinApplication::parameterSetup() {
     m_node.initParameterInteraction();
 }
 
-void BitcoinApplication::requestInitialize(
+void LambdaApplication::requestInitialize(
     Config &config, RPCServer &rpcServer,
     HTTPRPCRequestProcessor &httpRPCRequestProcessor) {
     qDebug() << __func__ << ": Requesting initialize";
@@ -336,7 +336,7 @@ void BitcoinApplication::requestInitialize(
     Q_EMIT requestedInitialize(&config, &rpcServer, &httpRPCRequestProcessor);
 }
 
-void BitcoinApplication::requestShutdown(Config &config) {
+void LambdaApplication::requestShutdown(Config &config) {
     // Show a simple window indicating shutdown status. Do this first as some of
     // the steps may take some time below, for example the RPC console may still
     // be executing a command.
@@ -363,7 +363,7 @@ void BitcoinApplication::requestShutdown(Config &config) {
     Q_EMIT requestedShutdown();
 }
 
-void BitcoinApplication::initializeResult(bool success) {
+void LambdaApplication::initializeResult(bool success) {
     qDebug() << __func__ << ": Initialization result: " << success;
     returnValue = success ? EXIT_SUCCESS : EXIT_FAILURE;
     if (!success) {
@@ -408,11 +408,11 @@ void BitcoinApplication::initializeResult(bool success) {
 
 #ifdef ENABLE_WALLET
     // Now that initialization/startup is done, process any command-line
-    // bitcoincash: URIs or payment requests:
+    // lambda: URIs or payment requests:
     if (paymentServer) {
         connect(paymentServer, &PaymentServer::receivedPaymentRequest, window,
-                &BitcoinGUI::handlePaymentRequest);
-        connect(window, &BitcoinGUI::receivedURI, paymentServer,
+                &LambdaGUI::handlePaymentRequest);
+        connect(window, &LambdaGUI::receivedURI, paymentServer,
                 &PaymentServer::handleURIOrFile);
         connect(paymentServer, &PaymentServer::message,
                 [this](const QString &title, const QString &message,
@@ -426,21 +426,21 @@ void BitcoinApplication::initializeResult(bool success) {
     pollShutdownTimer->start(200);
 }
 
-void BitcoinApplication::shutdownResult() {
+void LambdaApplication::shutdownResult() {
     // Exit second main loop invocation after shutdown finished.
     quit();
 }
 
-void BitcoinApplication::handleRunawayException(const QString &message) {
+void LambdaApplication::handleRunawayException(const QString &message) {
     QMessageBox::critical(
         nullptr, "Runaway exception",
-        BitcoinGUI::tr("A fatal error occurred. Bitcoin can no longer continue "
+        LambdaGUI::tr("A fatal error occurred. Lambda can no longer continue "
                        "safely and will quit.") +
             QString("\n\n") + message);
     ::exit(EXIT_FAILURE);
 }
 
-WId BitcoinApplication::getMainWinId() const {
+WId LambdaApplication::getMainWinId() const {
     if (!window) {
         return 0;
     }
@@ -476,7 +476,7 @@ static void SetupUIArgs() {
     gArgs.AddArg("-uiplatform",
                  strprintf("Select platform to customize UI for (one of "
                            "windows, macosx, other; default: %s)",
-                           BitcoinGUI::DEFAULT_UIPLATFORM),
+                           LambdaGUI::DEFAULT_UIPLATFORM),
                  ArgsManager::ALLOW_ANY | ArgsManager::DEBUG_ONLY, OptionsCategory::GUI);
 }
 
@@ -542,7 +542,7 @@ int GuiMain(int argc, char *argv[]) {
     // some Qt-internal arguments, they should be made available by wrapping them in arguments defined in gArgs (which also ensures
     // syntax consistency and yields visibility in documentation).
     int argcQt = 1;
-    BitcoinApplication app(*node, argcQt, argv);
+    LambdaApplication app(*node, argcQt, argv);
 #if QT_VERSION > 0x050100
     // Generate high-dpi pixmaps
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
@@ -675,7 +675,7 @@ int GuiMain(int argc, char *argv[]) {
     }
 
     // Start up the payment server early, too, so impatient users that click on
-    // bitcoincash: links repeatedly have their payment requests routed to this
+    // lambda: links repeatedly have their payment requests routed to this
     // process:
     app.createPaymentServer();
 #endif

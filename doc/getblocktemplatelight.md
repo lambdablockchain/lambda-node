@@ -9,9 +9,9 @@ Created: 2020-04-28
 Authors: freetrader <freetrader@tuta.io>
          Calin Culianu <calin.culianu@gmail.com>
          Dagur Valberg Johannsson <dagurval@pvv.ntnu.no>
-         BigBlockIfTrue <info@bitcoinlogo.eu>
+         BigBlockIfTrue <info@lambdalogo.eu>
 License: CC0-1.0
-Comments-URI: https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node/-/merge_requests/284
+Comments-URI: https://github.com/lambdablockchain/lambda-node/-/merge_requests/284
 Comments-Summary: BCHN internal review comments.
 ```
 
@@ -68,7 +68,7 @@ NOTE: The first element of the Merkle path list will be a transaction hash
       (the first transaction is hashed with the future coinbase transaction).
       Refer to Appendix B for information on how the Merkle root is computed.
       Implementations are allowed to impose more severe size restrictions
-      on the size of the job id string, for example the Bitcoin Cash Node
+      on the size of the job id string, for example the Lambda Node
       implementation uses 40 characters.
 
 #### GBTL-INPUT-ADDITIONAL-TXS-1
@@ -160,7 +160,7 @@ Notes:
 
 (2) The coinbase field has an enforced minimum size of 100 bytes.
     Also, block construction typically reserves some space for the coinbase.
-    For example, in the Bitcoin Cash Node software a maximum of 1000 bytes are
+    For example, in the Lambda Node software a maximum of 1000 bytes are
     reserved for the coinbase by default - this should be taken into account when
     a larger coinbase needs to be included.
 
@@ -198,13 +198,13 @@ implementations may use shorter job ids based on whatever they see fit.
 
 ## Reference implementation
 
-A C++ reference implementation is available in Bitcoin Cash Node
-[merge request 281](https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node/-/merge_requests/281).
+A C++ reference implementation is available in Lambda Node
+[merge request 281](https://github.com/lambdablockchain/lambda-node/-/merge_requests/281).
 
 ## Example outputs
 
 ```
-$ bitcoin-cli getblocktemplatelight
+$ lambda-cli getblocktemplatelight
 {
   "capabilities": [
     "proposal"
@@ -251,16 +251,16 @@ $ bitcoin-cli getblocktemplatelight
 
 ### Appendix A - Historical context
 
-This specification is based on an adaptation by Bitcoin Cash Node of a
+This specification is based on an adaptation by Lambda Node of a
 concept originally implemented by BTC.com (at least as far as we know).
 The original implementation is available at [3].
 
-Bitcoin Unlimited has previously released a similar feature (in v1.4.0.0
+Lambda Unlimited has previously released a similar feature (in v1.4.0.0
 of its client) consisting of two RPC calls called `getminingcandidate`
 and `submitminingsolution` [9].
 
 There is an ASCII diagram with additional explanations of the Merkle
-branch construction in the Bitcoin Cash Node source code [4].
+branch construction in the Lambda Node source code [4].
 
 ### Appendix B - Computation of Merkle root from coinbase + branch
 
@@ -286,15 +286,15 @@ merkle_root = hashes[0]
 
 ## References
 
-- [1] [BIP22: getblocktemplate - Fundamentals](https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki/)
-- [2] [BIP23: getblocktemplate - Pooled Mining](https://github.com/bitcoin/bips/blob/master/bip-0023.mediawiki/)
-- [3] [https://github.com/btccom/bitcoin-abc-1/commit/e87774c8ee724a0e9ecbc289236920ea1aa04a83](https://github.com/btccom/bitcoin-abc-1/commit/e87774c8ee724a0e9ecbc289236920ea1aa04a83)
+- [1] [BIP22: getblocktemplate - Fundamentals](https://github.com/lambda/bips/blob/master/bip-0022.mediawiki/)
+- [2] [BIP23: getblocktemplate - Pooled Mining](https://github.com/lambda/bips/blob/master/bip-0023.mediawiki/)
+- [3] [https://github.com/btccom/lambda-abc-1/commit/e87774c8ee724a0e9ecbc289236920ea1aa04a83](https://github.com/btccom/lambda-abc-1/commit/e87774c8ee724a0e9ecbc289236920ea1aa04a83)
 - [4] [src/rpc/mining.cpp](../src/rpc/mining.cpp), see `MakeMerkleBranch` function
 - [5] [https://reference.cash/protocol/blockchain/block/block-header](https://reference.cash/protocol/blockchain/block/block-header)
 - [6] [https://reference.cash/protocol/p2p/compact__int/](https://reference.cash/protocol/p2p/compact__int/)
 - [7] [https://reference.cash/protocol/blockchain/block/#coinbase-transaction](https://reference.cash/protocol/blockchain/block/#coinbase-transaction)
 - [8] [https://reference.cash/protocol/blockchain/transaction/](https://reference.cash/protocol/blockchain/transaction/)
-- [9] [https://github.com/BitcoinUnlimited/BitcoinUnlimited/blob/release/doc/miner.md#getminingcandidate-and-submitminingsolution](https://github.com/BitcoinUnlimited/BitcoinUnlimited/blob/release/doc/miner.md#getminingcandidate-and-submitminingsolution)
+- [9] [https://github.com/LambdaUnlimited/LambdaUnlimited/blob/release/doc/miner.md#getminingcandidate-and-submitminingsolution](https://github.com/LambdaUnlimited/LambdaUnlimited/blob/release/doc/miner.md#getminingcandidate-and-submitminingsolution)
 
 ## Copyright
 

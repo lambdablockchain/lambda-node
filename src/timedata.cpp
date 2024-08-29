@@ -1,9 +1,9 @@
-// Copyright (c) 2014-2016 The Bitcoin Core developers
+// Copyright (c) 2014-2016 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
+#include <config/lambda-config.h>
 #endif
 
 #include <timedata.h>
@@ -41,13 +41,13 @@ static uint64_t abs64(int64_t n) {
     return (n >= 0) ? un : -un;
 }
 
-#define BITCOIN_TIMEDATA_MAX_SAMPLES 200
+#define LAMBDA_TIMEDATA_MAX_SAMPLES 200
 
 void AddTimeData(const CNetAddr &ip, int64_t nOffsetSample) {
     LOCK(cs_nTimeOffset);
     // Ignore duplicates
     static std::set<CNetAddr> setKnown GUARDED_BY(cs_nTimeOffset);
-    if (setKnown.size() == BITCOIN_TIMEDATA_MAX_SAMPLES) {
+    if (setKnown.size() == LAMBDA_TIMEDATA_MAX_SAMPLES) {
         return;
     }
     if (!setKnown.insert(ip).second) {
@@ -55,7 +55,7 @@ void AddTimeData(const CNetAddr &ip, int64_t nOffsetSample) {
     }
 
     // Add data
-    static CMedianFilter<int64_t> vTimeOffsets GUARDED_BY(cs_nTimeOffset) {BITCOIN_TIMEDATA_MAX_SAMPLES, 0};
+    static CMedianFilter<int64_t> vTimeOffsets GUARDED_BY(cs_nTimeOffset) {LAMBDA_TIMEDATA_MAX_SAMPLES, 0};
     vTimeOffsets.input(nOffsetSample);
     LogPrint(BCLog::NET,
              "added time data, samples %d, offset %+d (%+d minutes)\n",

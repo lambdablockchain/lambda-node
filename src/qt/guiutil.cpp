@@ -1,5 +1,5 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
-// Copyright (c) 2020-2021 The Bitcoin developers
+// Copyright (c) 2011-2016 The Lambda Core developers
+// Copyright (c) 2020-2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -13,8 +13,8 @@
 #include <policy/policy.h>
 #include <primitives/transaction.h>
 #include <protocol.h>
-#include <qt/bitcoinaddressvalidator.h>
-#include <qt/bitcoinunits.h>
+#include <qt/lambdaaddressvalidator.h>
+#include <qt/lambdaunits.h>
 #include <qt/qvalidatedlineedit.h>
 #include <qt/walletmodel.h>
 #include <script/script.h>
@@ -150,13 +150,13 @@ void setupAddressWidget(QValidatedLineEdit *widget, QWidget *parent) {
     // We don't want translators to use own addresses in translations
     // and this is the only place, where this address is supplied.
     widget->setPlaceholderText(
-        QObject::tr("Enter a Bitcoin Cash address (e.g. %1)").arg(QString::fromStdString(DummyAddress(Params()))));
+        QObject::tr("Enter a Lambda address (e.g. %1)").arg(QString::fromStdString(DummyAddress(Params()))));
     widget->setValidator(
-        new BitcoinAddressEntryValidator(Params().CashAddrPrefix(), parent));
-    widget->setCheckValidator(new BitcoinAddressCheckValidator(parent));
+        new LambdaAddressEntryValidator(Params().CashAddrPrefix(), parent));
+    widget->setCheckValidator(new LambdaAddressCheckValidator(parent));
 }
 
-bool parseBitcoinURI(const QString &scheme, const QUrl &uri,
+bool parseLambdaURI(const QString &scheme, const QUrl &uri,
                      SendCoinsRecipient *out) {
     // return if URI has wrong scheme.
     if (!uri.isValid() || uri.scheme() != scheme) {
@@ -186,7 +186,7 @@ bool parseBitcoinURI(const QString &scheme, const QUrl &uri,
             rv.message = value;
         } else if (key == "amount") {
             if (!value.isEmpty()) {
-                const auto amount = BitcoinUnits::parse(BitcoinUnits::BCH, false, value);
+                const auto amount = LambdaUnits::parse(LambdaUnits::BCH, false, value);
                 if (!amount) {
                     return false;
                 }
@@ -202,24 +202,24 @@ bool parseBitcoinURI(const QString &scheme, const QUrl &uri,
     return true;
 }
 
-bool parseBitcoinURI(const QString &scheme, QString uri,
+bool parseLambdaURI(const QString &scheme, QString uri,
                      SendCoinsRecipient *out) {
     //
-    //    Cannot handle this later, because bitcoincash://
+    //    Cannot handle this later, because lambda://
     //    will cause Qt to see the part after // as host,
     //    which will lower-case it (and thus invalidate the address).
     if (uri.startsWith(scheme + "://", Qt::CaseInsensitive)) {
         uri.replace(0, scheme.length() + 3, scheme + ":");
     }
     QUrl uriInstance(uri);
-    return parseBitcoinURI(scheme, uriInstance, out);
+    return parseLambdaURI(scheme, uriInstance, out);
 }
 
-QString formatBitcoinURI(const SendCoinsRecipient &info) {
-    return formatBitcoinURI(Params(), info);
+QString formatLambdaURI(const SendCoinsRecipient &info) {
+    return formatLambdaURI(Params(), info);
 }
 
-QString formatBitcoinURI(const CChainParams &params,
+QString formatLambdaURI(const CChainParams &params,
                          const SendCoinsRecipient &info) {
     QString ret = convertToCashAddr(params, info.address);
     int paramCount = 0;
@@ -227,8 +227,8 @@ QString formatBitcoinURI(const CChainParams &params,
     if (info.amount != Amount::zero()) {
         ret +=
             QString("?amount=%1")
-                .arg(BitcoinUnits::format(BitcoinUnits::BCH, info.amount, false,
-                                          BitcoinUnits::separatorNever));
+                .arg(LambdaUnits::format(LambdaUnits::BCH, info.amount, false,
+                                          LambdaUnits::separatorNever));
         paramCount++;
     }
 
@@ -410,9 +410,9 @@ void openDebugLogfile() {
     }
 }
 
-bool openBitcoinConf() {
+bool openLambdaConf() {
     fs::path pathConfig =
-        GetConfigFile(gArgs.GetArg("-conf", BITCOIN_CONF_FILENAME));
+        GetConfigFile(gArgs.GetArg("-conf", LAMBDA_CONF_FILENAME));
 
     /* Create the file */
     fs::ofstream configFile(pathConfig, std::ios_base::app);
@@ -423,7 +423,7 @@ bool openBitcoinConf() {
 
     configFile.close();
 
-    /* Open bitcoin.conf with the associated application */
+    /* Open lambda.conf with the associated application */
     return QDesktopServices::openUrl(
         QUrl::fromLocalFile(boostPathToQString(pathConfig)));
 }
@@ -581,23 +581,23 @@ static fs::path StartupShortcutPath() {
        in the uninstaller NSIS script (see: cmake/modules/NSIS.template.in) */
     std::string chain = gArgs.GetChainName();
     if (chain == CBaseChainParams::MAIN) {
-        return GetSpecialFolderPath(CSIDL_STARTUP) / "Bitcoin Cash Node.lnk";
+        return GetSpecialFolderPath(CSIDL_STARTUP) / "Lambda Node.lnk";
     }
     if (chain == CBaseChainParams::TESTNET) {
-        return GetSpecialFolderPath(CSIDL_STARTUP) / "Bitcoin Cash Node (testnet).lnk";
+        return GetSpecialFolderPath(CSIDL_STARTUP) / "Lambda Node (testnet).lnk";
     }
     if (chain == CBaseChainParams::TESTNET4) {
-        return GetSpecialFolderPath(CSIDL_STARTUP) / "Bitcoin Cash Node (testnet4).lnk";
+        return GetSpecialFolderPath(CSIDL_STARTUP) / "Lambda Node (testnet4).lnk";
     }
     if (chain == CBaseChainParams::SCALENET) {
-        return GetSpecialFolderPath(CSIDL_STARTUP) / "Bitcoin Cash Node (scalenet).lnk";
+        return GetSpecialFolderPath(CSIDL_STARTUP) / "Lambda Node (scalenet).lnk";
     }
     return GetSpecialFolderPath(CSIDL_STARTUP) /
-           strprintf("Bitcoin Cash Node (%s).lnk", chain); // If we get here: "regtest"
+           strprintf("Lambda Node (%s).lnk", chain); // If we get here: "regtest"
 }
 
 bool GetStartOnSystemStartup() {
-    // check for Bitcoin*.lnk
+    // check for Lambda*.lnk
     return fs::exists(StartupShortcutPath());
 }
 
@@ -673,9 +673,9 @@ static fs::path GetAutostartDir() {
 static fs::path GetAutostartFilePath() {
     std::string chain = gArgs.GetChainName();
     if (chain == CBaseChainParams::MAIN) {
-        return GetAutostartDir() / "bitcoin.desktop";
+        return GetAutostartDir() / "lambda.desktop";
     }
-    return GetAutostartDir() / strprintf("bitcoin-%s.lnk", chain);
+    return GetAutostartDir() / strprintf("lambda-%s.lnk", chain);
 }
 
 bool GetStartOnSystemStartup() {
@@ -717,13 +717,13 @@ bool SetStartOnSystemStartup(bool fAutoStart) {
             return false;
         }
         std::string chain = gArgs.GetChainName();
-        // Write a bitcoin.desktop file to the autostart directory:
+        // Write a lambda.desktop file to the autostart directory:
         optionFile << "[Desktop Entry]\n";
         optionFile << "Type=Application\n";
         if (chain == CBaseChainParams::MAIN) {
-            optionFile << "Name=Bitcoin\n";
+            optionFile << "Name=Lambda\n";
         } else {
-            optionFile << strprintf("Name=Bitcoin (%s)\n", chain);
+            optionFile << strprintf("Name=Lambda (%s)\n", chain);
         }
         optionFile << "Exec=" << pszExePath
                    << strprintf(" -min -testnet=%d -regtest=%d\n",
@@ -746,7 +746,7 @@ LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list,
 LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list,
                                               CFURLRef findUrl) {
     LSSharedFileListItemRef foundItem = nullptr;
-    // loop through the list of startup items and try to find the bitcoin app
+    // loop through the list of startup items and try to find the lambda app
     CFArrayRef listSnapshot = LSSharedFileListCopySnapshot(list, nullptr);
     for (int i = 0; !foundItem && i < CFArrayGetCount(listSnapshot); ++i) {
         LSSharedFileListItemRef item =
@@ -786,32 +786,32 @@ LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list,
 }
 
 bool GetStartOnSystemStartup() {
-    CFURLRef bitcoinAppUrl = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+    CFURLRef lambdaAppUrl = CFBundleCopyBundleURL(CFBundleGetMainBundle());
     LSSharedFileListRef loginItems = LSSharedFileListCreate(
         nullptr, kLSSharedFileListSessionLoginItems, nullptr);
     LSSharedFileListItemRef foundItem =
-        findStartupItemInList(loginItems, bitcoinAppUrl);
+        findStartupItemInList(loginItems, lambdaAppUrl);
     // findStartupItemInList retains the item it returned, need to release
     if (foundItem) {
         CFRelease(foundItem);
     }
     CFRelease(loginItems);
-    CFRelease(bitcoinAppUrl);
+    CFRelease(lambdaAppUrl);
     return foundItem;
 }
 
 bool SetStartOnSystemStartup(bool fAutoStart) {
-    CFURLRef bitcoinAppUrl = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+    CFURLRef lambdaAppUrl = CFBundleCopyBundleURL(CFBundleGetMainBundle());
     LSSharedFileListRef loginItems = LSSharedFileListCreate(
         nullptr, kLSSharedFileListSessionLoginItems, nullptr);
     LSSharedFileListItemRef foundItem =
-        findStartupItemInList(loginItems, bitcoinAppUrl);
+        findStartupItemInList(loginItems, lambdaAppUrl);
 
     if (fAutoStart && !foundItem) {
-        // add bitcoin app to startup item list
+        // add lambda app to startup item list
         LSSharedFileListInsertItemURL(loginItems,
                                       kLSSharedFileListItemBeforeFirst, nullptr,
-                                      nullptr, bitcoinAppUrl, nullptr, nullptr);
+                                      nullptr, lambdaAppUrl, nullptr, nullptr);
     } else if (!fAutoStart && foundItem) {
         // remove item
         LSSharedFileListItemRemove(loginItems, foundItem);
@@ -821,7 +821,7 @@ bool SetStartOnSystemStartup(bool fAutoStart) {
         CFRelease(foundItem);
     }
     CFRelease(loginItems);
-    CFRelease(bitcoinAppUrl);
+    CFRelease(lambdaAppUrl);
     return true;
 }
 #pragma GCC diagnostic pop
@@ -892,7 +892,7 @@ QString formatServicesStr(quint64 mask) {
                 case NODE_XTHIN:
                     strList.append("XTHIN");
                     break;
-                case NODE_BITCOIN_CASH:
+                case NODE_LAMBDA_CASH:
                     strList.append("CASH");
                     break;
                 case NODE_GRAPHENE:

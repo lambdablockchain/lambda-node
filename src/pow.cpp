@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
-// Copyright (c) 2017-2020 The Bitcoin developers
+// Copyright (c) 2009-2016 The Lambda Core developers
+// Copyright (c) 2017-2020 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -268,7 +268,7 @@ arith_uint256 CalculateASERT(const arith_uint256 &refTarget,
 }
 
 /**
- * Compute the next required proof of work using the legacy Bitcoin difficulty
+ * Compute the next required proof of work using the legacy Lambda difficulty
  * adjustment + Emergency Difficulty Adjustment (EDA).
  */
 static uint32_t GetNextEDAWorkRequired(const CBlockIndex *pindexPrev,

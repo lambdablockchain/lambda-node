@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-# Copyright (c) 2014-2019 The Bitcoin Core developers
-# Copyright (c) 2018 The Bitcoin developers
+# Copyright (c) 2014-2019 The Lambda Core developers
+# Copyright (c) 2018 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test the -alertnotify, -blocknotify and -walletnotify options."""
 import os
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import (
     assert_equal,
     connect_nodes_bi,
@@ -16,7 +16,7 @@ from test_framework.util import (
 FORK_WARNING_MESSAGE = "Warning: Large-work fork detected, forking after block {}"
 
 
-class NotificationsTest(BitcoinTestFramework):
+class NotificationsTest(LambdaTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
         self.setup_clean_chain = True
@@ -107,7 +107,7 @@ class NotificationsTest(BitcoinTestFramework):
         # Invalidate a large branch, which should trigger an alert.
         self.nodes[0].invalidateblock(invalid_block)
 
-        # Give bitcoind 10 seconds to write the alert notification
+        # Give lambdad 10 seconds to write the alert notification
         wait_until(lambda: len(os.listdir(self.alertnotify_dir)), timeout=10)
 
         # The notification command is unable to properly handle the spaces on

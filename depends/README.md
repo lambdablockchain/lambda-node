@@ -29,7 +29,7 @@ For example, building the dependencies for Linux on ARM:
 
     make build-linux-arm
 
-To use the dependencies for building Bitcoin Cash Node, you need to set
+To use the dependencies for building Lambda Node, you need to set
 the platform file to be used by `cmake`.
 The platform files are located under `cmake/platforms/`.
 For example, cross-building for Linux on ARM (run from the project root):
@@ -129,9 +129,9 @@ The following can be set when running make: make FOO=bar
     JOBS: Number of jobs to use for each package build
 
 If some packages are not built, for example by building the depends with
-`make NO_WALLET=1`, the appropriate options should be set when building Bitcoin
+`make NO_WALLET=1`, the appropriate options should be set when building Lambda
 Cash Node using these dependencies.
-In this example, `-DBUILD_BITCOIN_WALLET=OFF` should be passed to the `cmake`
+In this example, `-DBUILD_LAMBDA_WALLET=OFF` should be passed to the `cmake`
 command line to ensure that the build will not fail due to missing dependencies.
 
 NOTE: The SDK_PATH should be set to the parent folder in which the

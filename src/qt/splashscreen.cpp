@@ -1,10 +1,10 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
-// Copyright (c) 2020 The Bitcoin developers
+// Copyright (c) 2011-2016 The Lambda Core developers
+// Copyright (c) 2020 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
+#include <config/lambda-config.h>
 #endif
 
 #include <qt/splashscreen.h>
@@ -69,7 +69,7 @@ SplashScreen::SplashScreen(interfaces::Node &node,
     QRect rGradient(QPoint(0, 0), splashSize);
     pixPaint.fillRect(rGradient, gradient);
 
-    // draw the bitcoin icon, expected size of PNG: 1024x1273
+    // draw the lambda icon, expected size of PNG: 1024x1273
     QRect rectIcon(QPoint(20, 10), QSize(184, 229));
 
     const QSize requiredSize(184, 229);

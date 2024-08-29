@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2012-2017 The Bitcoin Core developers
+# Copyright (c) 2012-2017 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 '''
@@ -11,7 +11,7 @@ import operator
 import os
 import sys
 
-OUT_CPP = "qt/bitcoinstrings.cpp"
+OUT_CPP = "qt/lambdastrings.cpp"
 EMPTY = ['""']
 
 
@@ -78,11 +78,11 @@ f.write("""
 #define UNUSED
 #endif
 """)
-f.write('static const char UNUSED *bitcoin_strings[] = {\n')
-f.write('QT_TRANSLATE_NOOP("bitcoin-cash-node", "{}"),\n'.format(os.getenv('COPYRIGHT_HOLDERS'),))
+f.write('static const char UNUSED *lambda_strings[] = {\n')
+f.write('QT_TRANSLATE_NOOP("lambda-node", "{}"),\n'.format(os.getenv('COPYRIGHT_HOLDERS'),))
 messages.sort(key=operator.itemgetter(0))
 for (msgid, msgstr) in messages:
     if msgid != EMPTY:
-        f.write('QT_TRANSLATE_NOOP("bitcoin-cash-node", {}),\n'.format('\n'.join(msgid)))
+        f.write('QT_TRANSLATE_NOOP("lambda-node", {}),\n'.format('\n'.join(msgid)))
 f.write('};\n')
 f.close()

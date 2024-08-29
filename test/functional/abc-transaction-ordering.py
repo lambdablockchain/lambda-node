@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The Bitcoin developers
+# Copyright (c) 2018 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """
@@ -28,7 +28,7 @@ from test_framework.script import (
     OP_RETURN,
     OP_TRUE,
 )
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import assert_equal
 
 
@@ -39,7 +39,7 @@ class PreviousSpendableOutput():
         self.n = n  # the output we're spending
 
 
-class TransactionOrderingTest(BitcoinTestFramework):
+class TransactionOrderingTest(LambdaTestFramework):
 
     def set_test_params(self):
         self.num_nodes = 1

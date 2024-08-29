@@ -1,5 +1,5 @@
-// Copyright (c) 2009-2019 The Bitcoin Core developers
-// Copyright (c) 2020 The Bitcoin developers
+// Copyright (c) 2009-2019 The Lambda Core developers
+// Copyright (c) 2020 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -36,7 +36,7 @@ static const int CONTINUE_EXECUTION = -1;
 
 const std::function<std::string(const char *)> G_TRANSLATION_FUN = nullptr;
 
-static void SetupBitcoinTxArgs() {
+static void SetupLambdaTxArgs() {
     SetupHelpOptions(gArgs);
 
     gArgs.AddArg("-create", "Create new, empty TX.", ArgsManager::ALLOW_ANY,
@@ -110,7 +110,7 @@ static int AppInitRawTx(int argc, char *argv[], Config &config) {
     //
     // Parameters
     //
-    SetupBitcoinTxArgs();
+    SetupLambdaTxArgs();
     std::string error;
     if (!gArgs.ParseParameters(argc, argv, error)) {
         fprintf(stderr, "Error parsing command line arguments: %s\n",

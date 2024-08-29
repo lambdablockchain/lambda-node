@@ -1,12 +1,12 @@
-# Release Notes for Bitcoin Cash Node version 24.1.0
+# Release Notes for Lambda Node version 24.1.0
 
-Bitcoin Cash Node version 24.1.0 is now available from:
+Lambda Node version 24.1.0 is now available from:
 
-  <https://bitcoincashnode.org>
+  <https://lambdanode.org>
 
 ## Overview
 
-This is a minor release of Bitcoin Cash Node (BCHN), containing:
+This is a minor release of Lambda Node (BCHN), containing:
 
 - Upgrade of TOR network support from v2 to v3
 - Upgrade checkpoints for May 15, 2022 upgrade
@@ -33,7 +33,7 @@ advised to keep running 24.0.0 until they can upgrade to Mojave.
   `-listenonion` configuration parameter will now be created as a Tor v3 service
   instead of Tor v2. The private key that was used for Tor v2 (if any) will be
   left untouched in the `onion_private_key` file in the data directory (see
-  `-datadir`) and can be removed if not needed. Bitcoin Cash Node will no longer
+  `-datadir`) and can be removed if not needed. Lambda Node will no longer
   attempt to read it. The private key for the Tor v3 service will be saved in a
   file named `onion_v3_private_key`. To use the deprecated Tor v2 service (not
   recommended), then `onion_private_key` can be copied over
@@ -46,7 +46,7 @@ advised to keep running 24.0.0 until they can upgrade to Mojave.
   is in **addition** to any `-bind=` options specified on the CLI and/or in the
   config file.
     - To specify the local onion port to bind to explicitly, use the new syntax,
-      `-bind=<HOST>:<PORT>=onion`. See `bitcoind -help` for more information on
+      `-bind=<HOST>:<PORT>=onion`. See `lambdad -help` for more information on
       the new `=onion` syntax which is used to specify local tor listening ports.
     - To not create an additional bind endpoint for tor, and/or to disable tor
       hidden service support, use `-listenonion=0`.
@@ -88,7 +88,7 @@ affected:
 - Support for platforms that lack the X protocol C-language Binding library
   (libxcb) is deprecated, and future releases may require this library.
     - This library seems available on most major Linux distributions but we urge you 
-      to check your node platform and notify us via a GitLab issue or via a comment on [MR 1524](https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node/-/merge_requests/1523)
+      to check your node platform and notify us via a GitLab issue or via a comment on [MR 1524](https://github.com/lambdablockchain/lambda-node/-/merge_requests/1523)
       if you do not have this library.
 
 If you are presently running on such older platforms, please upgrade to a newer OS
@@ -127,24 +127,24 @@ None.
 ## User interface changes
 
 - `peers.dat` file has changed format due to BIP155 / TORv3 support
-- `-blocksonly` option has been unhidden on bitcoind / bitcoin-qt command line help
+- `-blocksonly` option has been unhidden on lambdad / lambda-qt command line help
 - `walletlock`, `walletpassphrase` and `walletpassphrasechange` RPC methods
    were lacking documentation, which has been added.
 
 ## Regressions
 
-Bitcoin Cash Node 24.1.0 does not introduce any known regressions as compared to 24.0.0.
+Lambda Node 24.1.0 does not introduce any known regressions as compared to 24.0.0.
 
 ## Known Issues
 
 Some issues could not be closed in time for release, but we are tracking all of them on our GitLab repository.
 
 - MacOS versions earlier than 10.14 are no longer supported. Additionally,
-  Bitcoin Cash Node does not yet change appearance when macOS "dark mode"
+  Lambda Node does not yet change appearance when macOS "dark mode"
   is activated.
 
-- Windows users are recommended not to run multiple instances of bitcoin-qt
-  or bitcoind on the same machine if the wallet feature is enabled.
+- Windows users are recommended not to run multiple instances of lambda-qt
+  or lambdad on the same machine if the wallet feature is enabled.
   There is risk of data corruption if instances are configured to use the same
   wallet folder.
 
@@ -166,7 +166,7 @@ Some issues could not be closed in time for release, but we are tracking all of 
   When building from source it is recommended to use BerkeleyDB 5.3 as this
   avoids wallet database incompatibility issues with the official release.
 
-- The `test_bitcoin-qt` test executable fails on Linux Mint 20
+- The `test_lambda-qt` test executable fails on Linux Mint 20
   (see Issue #144). This does not otherwise appear to impact the functioning
   of the BCHN software on that platform.
 
@@ -174,7 +174,7 @@ Some issues could not be closed in time for release, but we are tracking all of 
   the QR code library, a build failure was observed where an erroneous
   linking against the QR code library (not present) was attempted (Issue #138).
 
-- Possible out-of-memory error when starting bitcoind with high excessiveblocksize
+- Possible out-of-memory error when starting lambdad with high excessiveblocksize
   value (Issue #156)
 
 - A problem was observed on scalenet where nodes would sometimes hang for
@@ -197,7 +197,7 @@ Some issues could not be closed in time for release, but we are tracking all of 
 - Spurious 'insufficient funds' failure during p2p_stresstest.py benchmark
   (see Issue #377).
 
-- `bitcoin-tx` tool does not have BIP69 support (optional or enforced) yet.
+- `lambda-tx` tool does not have BIP69 support (optional or enforced) yet.
   (see Issue #383).
 
 - secp256k1 now no longer works with latest openssl3.x series. There are
@@ -208,11 +208,11 @@ Some issues could not be closed in time for release, but we are tracking all of 
 
 ---
 
-## Changes since Bitcoin Cash Node 24.0.0
+## Changes since Lambda Node 24.0.0
 
 ### New documents
 
-- `doc/bitcoin-conf.md`: restored and updated bitcoin.conf documentation
+- `doc/lambda-conf.md`: restored and updated lambda.conf documentation
 
 ### Removed documents
 
@@ -342,7 +342,7 @@ None.
 - d10dd6d4f3eaeb2545bcd9e10f055ba4a3fdb238 [doc] Include missing dependency install step
 - be3bc5400635c4c6406f8558a79f914f91336e61 [doc] Include section on Merge Requests
 - 3bca219ca25026757f68a49fea0c1ae5163e5dd6 [doc] Remove outdated and misleading leveldb docs
-- c73be96adadde087c5e3d39a7fbdcb0066e7ae27 [doc] Restore and update bitcoin.conf documentation
+- c73be96adadde087c5e3d39a7fbdcb0066e7ae27 [doc] Restore and update lambda.conf documentation
 - 2eca96cbea53413cbebccb5f5b7855559dea6fe0 [doc] Update doc/bips.md to mention that we implemented BIP155
 - 2a6030d999206837a24b63068048e92da39bd61c [doc] Update im_uname public key
 - daa431e008068c9456c70202885a253fdea94069 [doc] Update relaese-notes to talk about changes to `-bind=`
@@ -356,17 +356,17 @@ None.
 - 5f633539d081e6f7bffd54c282c7b01240139042 Add unicode linter to `check`, `check-lint` ninja targets
 - af0d90da6aaaf74a2baa92642fa9ba0573b0da9f File permissions
 - e8836d9ddce587f0668d66eb558959bce3a9a191 Improve compiler warning configuration, enable additional warnings
-- 1c8edfadeb41f58d00d810a9b9b8e43a3a05c21f Remove install target definition for bench_bitcoin
+- 1c8edfadeb41f58d00d810a9b9b8e43a3a05c21f Remove install target definition for bench_lambda
 - a936586bdf28459b87063f9a14247f9a06be483b Resolve CMake policy CMP0071 OLD warning
 - ca12639397724cb749512a545b7b9e7e8045869c Set explicit cmake policy for CMP0116
 - fae3ead512dab5d163ac75d78096ee0d4e686558 Test build config cleanup
 - 9e93ffea5938ca349ae17fd3307cc1a9ffc66af1 Update depends/packages URLs (some have gone stale)
-- a272a2c679a3ad004d79b6a74bab9eaa3ab21c89 [build] Add missing dependency for bitcoin-wallet to functional test build target
+- a272a2c679a3ad004d79b6a74bab9eaa3ab21c89 [build] Add missing dependency for lambda-wallet to functional test build target
 - a941359a02fa5df48a92a0dd2aa4e1bbb9e87c87 depends: Fix compile error for Qt 5.9.7 when using newer GCC 11+
 
 #### Build / Linux
 
-- 18ac18d845b41473f408f628d56044044ea3e758 Fix bitcoin-seeder compile error seen on IBM S/390x
+- 18ac18d845b41473f408f628d56044044ea3e758 Fix lambda-seeder compile error seen on IBM S/390x
 - 662114a7f7dacd1ffbd08cba6e4652ec706936dd [build] Suppress ABI change build warnings when using GCC >= 7 on ARM
 - fbd6c3e6494681a784507383d4036ce0c69ffdab build: Fix boost depends build with glibc >= 2.34
 
@@ -389,13 +389,13 @@ None.
 - 6e4ee17750699092fe86e0e03a3c4a314f207187 Added a test that the node doesn't add to banscore on unknown message
 - f6d5813ee8e72bc9156a902d229234c0807029f5 Additional locale tests
 - f9b4dd4c231bae3db21ab2c619262d6b62908810 Don't start node twice
-- 5327b7b10168db7f168a3b2d257f5b2af5f83c0d Fix `gbtlight_tests` failing on Windows in `test_bitcoin.exe`
+- 5327b7b10168db7f168a3b2d257f5b2af5f83c0d Fix `gbtlight_tests` failing on Windows in `test_lambda.exe`
 - f576370cd9db280bab770838524e1b0c4e4e2732 Fix broken call to sendmany in p2p_stresstest
 - 084724c32ad5877e1fa86f33795de49e7980dfb6 Fix check assert tests
-- 724ab45fae5d7fdd0ddebbef4744fc2edf8d5a9b Fix test_bitcoin to not collide with instances from different users
+- 724ab45fae5d7fdd0ddebbef4744fc2edf8d5a9b Fix test_lambda to not collide with instances from different users
 - 4c6a48678b20e79188d7bcc3e859d95c165b3c10 Locale tests
 - 92c25e29d4636e49118ff54371892e9ef33fbe4f Run tests with eatmydata if it's available
-- 1df51732262ba24deee5b3587e3a5a1c9c32a664 Windows: Fix `test_bitcoin.exe` failure in `util_tests`
+- 1df51732262ba24deee5b3587e3a5a1c9c32a664 Windows: Fix `test_lambda.exe` failure in `util_tests`
 - 052beaaa98eecdd0ef3e3ddb5851c9a7876d0732 [test] Find emulator on path if it does not exist
 - a2e06855ff4a3ed047c79e35690685ccbd2071b3 [test] Pass the correct chain config argument in the tool_wallet test
 - 1c35876da8fea9c640bad58601e6c7362d7709e4 [test] close the socket in test_ipv6_local
@@ -425,7 +425,7 @@ None.
 
 #### Maintainer tools
 
-- 1122bcf517be972042caf85bddbc58e87dec588e Add script to poll bitcoind for MTP to elapse and broadcast a transaction
+- 1122bcf517be972042caf85bddbc58e87dec588e Add script to poll lambdad for MTP to elapse and broadcast a transaction
 - 1a5f6c8010d72b1ec9c49770d2b304786dfdcb77 Contrib script to compare benchmark results
 - 5726c664a49b066d4ddcbcb76f907e0a29b40798 Update .clang-format: column with to 120 & break template declarations
 - 36cefcd26c34b9b4d20ddef21e877021d99b444f clang-format: increase the ColumnLimit to 132 characters
@@ -607,7 +607,7 @@ None.
 - d1301b451a18fa5d9ea1fea68396d2129cfefddc [backport] scripted-diff: test: replace command with msgtype
 - e0083a3990b12f34540d7dfa80528602b303982e [backport] scripted-diff: use self.sync_* methods
 - 276995620e6a30af524020845c419f36e50aefa5 [backport] test: Adapt test framework for chains other than "regtest"
-- c3ea8823c0bec5e437a33404db6b7ba84d4c3596 [backport] test: Add BitcoinTestFramework::sync_* methods
+- c3ea8823c0bec5e437a33404db6b7ba84d4c3596 [backport] test: Add LambdaTestFramework::sync_* methods
 - b73b19af80445dcf6b51c9c0179cdf1cdd5e6204 [backport] test: Add basic addr relay test
 - 2aa9e2af8a26df26956567d76d38db73b7753ca8 [backport] test: Add basic test for BIP 37
 - 811d14ff1d26486d5280a1d72d9f7888c267dbbe [backport] test: Add generate* calls to test framework

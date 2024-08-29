@@ -1,4 +1,4 @@
-# Copyright (c) 2020 The Bitcoin developers
+# Copyright (c) 2020 The Lambda developers
 
 project(asert_testgen)
 
@@ -17,7 +17,7 @@ add_executable(gen_asert_test_vectors
     EXCLUDE_FROM_ALL
     gen_asert_test_vectors.cpp)
 
-target_link_libraries(gen_asert_test_vectors common bitcoinconsensus server)
+target_link_libraries(gen_asert_test_vectors common lambdaconsensus server)
 
 set(ASERT_TEST_VECTORS_OUTPUT "asert_test_vectors.txt")
 

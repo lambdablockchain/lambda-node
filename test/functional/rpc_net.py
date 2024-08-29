@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2017 The Bitcoin Core developers
+# Copyright (c) 2017 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test RPC calls related to net.
@@ -9,7 +9,7 @@ Tests correspond to code in rpc/net.cpp.
 
 from decimal import Decimal
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import (
     assert_equal,
     assert_greater_than_or_equal,
@@ -23,7 +23,7 @@ from test_framework.p2p import P2PInterface
 from test_framework.messages import NODE_NETWORK
 
 
-class NetTest(BitcoinTestFramework):
+class NetTest(LambdaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2

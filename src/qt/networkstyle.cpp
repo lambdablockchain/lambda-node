@@ -1,5 +1,5 @@
-// Copyright (c) 2014-2016 The Bitcoin Core developers
-// Copyright (c) 2020 The Bitcoin developers
+// Copyright (c) 2014-2016 The Lambda Core developers
+// Copyright (c) 2020 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -31,7 +31,7 @@ NetworkStyle::NetworkStyle(const QString &_appName, int iconColorHue, const char
     : appName(_appName), titleAddText(qApp->translate("SplashScreen", _titleAddText)) {
 
     // load pixmap
-    QPixmap pixmaps[] = { {":/icons/bitcoin_splash"}, {":icons/bitcoin_noletters"} };
+    QPixmap pixmaps[] = { {":/icons/lambda_splash"}, {":icons/lambda_noletters"} };
 
     if (iconColorHue) {
         for (auto & pixmap : pixmaps) {

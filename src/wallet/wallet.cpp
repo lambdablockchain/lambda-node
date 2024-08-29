@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
-// Copyright (c) 2021 The Bitcoin developers
+// Copyright (c) 2009-2016 The Lambda Core developers
+// Copyright (c) 2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -1898,7 +1898,7 @@ CWallet::ScanResult CWallet::ScanForWalletTransactions(
                     // prevent marking transactions as coming from the wrong
                     // block.
                     // TODO: This should return success instead of failure, see
-                    // https://github.com/bitcoin/bitcoin/pull/14711#issuecomment-458342518
+                    // https://github.com/lambda/lambda/pull/14711#issuecomment-458342518
                     result.failed_block = block_hash;
                     result.status = ScanResult::FAILURE;
                     break;
@@ -2506,7 +2506,7 @@ void CWallet::AvailableCoins(interfaces::Chain::Lock &locked_chain,
 
         bool safeTx = pcoin->IsTrusted(locked_chain);
 
-        // Bitcoin-ABC: Removed check that prevents consideration of coins from
+        // Lambda-ABC: Removed check that prevents consideration of coins from
         // transactions that are replacing other transactions. This check based
         // on pcoin->mapValue.count("replaces_txid") which was not being set
         // anywhere.
@@ -2520,7 +2520,7 @@ void CWallet::AvailableCoins(interfaces::Chain::Lock &locked_chain,
         // D could all be accepted (instead of just B and D, or just A and A'
         // like the user would want).
 
-        // Bitcoin-ABC: retained this check as 'replaced_by_txid' is still set
+        // Lambda-ABC: retained this check as 'replaced_by_txid' is still set
         // in the wallet code.
         if (nDepth == 0 && pcoin->mapValue.count("replaced_by_txid")) {
             safeTx = false;
@@ -3087,7 +3087,7 @@ CreateTransactionResult CWallet::CreateTransaction(
 
         // Create change script that will be used if we need change
         // TODO: pass in scriptChange instead of reservekey so
-        // change transaction isn't always pay-to-bitcoin-address
+        // change transaction isn't always pay-to-lambda-address
         CScript scriptChange;
 
         // coin control: send change to custom address
@@ -4270,8 +4270,8 @@ void CWallet::GetKeyBirthTimes(
  *   the block time.
  *
  * For more information see CWalletTx::nTimeSmart,
- * https://bitcointalk.org/?topic=54527, or
- * https://github.com/bitcoin/bitcoin/pull/1393.
+ * https://lambdatalk.org/?topic=54527, or
+ * https://github.com/lambda/lambda/pull/1393.
  */
 unsigned int CWallet::ComputeTimeSmart(const CWalletTx &wtx) const {
     unsigned int nTimeSmart = wtx.nTimeReceived;

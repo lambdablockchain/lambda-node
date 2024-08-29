@@ -3,12 +3,12 @@
 Sample configuration files for:
 
 ```
-SystemD: bitcoind.service
-Upstart: bitcoind.conf
-OpenRC:  bitcoind.openrc
-         bitcoind.openrcconf
-CentOS:  bitcoind.init
-macOS:   org.bitcoin.bitcoind.plist
+SystemD: lambdad.service
+Upstart: lambdad.conf
+OpenRC:  lambdad.openrc
+         lambdad.openrcconf
+CentOS:  lambdad.init
+macOS:   org.lambda.lambdad.plist
 ```
 
 have been made available to assist packagers in creating node packages here.

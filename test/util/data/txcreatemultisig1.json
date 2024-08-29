@@ -16,9 +16,9 @@
                 "reqSigs": 2,
                 "type": "multisig",
                 "addresses": [
-                    "bitcoincash:qz39zmnhqkpgvjn22mkjrggzq38r3rrzuv660a7t97",
-                    "bitcoincash:qz0kng5fnh74xnkaaw8v04fn73jlqc7uygy0s3jy38",
-                    "bitcoincash:qqj2ctfp2l99dny2q3zfynhzrq4n2y29mqpnfqffzd"
+                    "lambda:qz39zmnhqkpgvjn22mkjrggzq38r3rrzuv660a7t97",
+                    "lambda:qz0kng5fnh74xnkaaw8v04fn73jlqc7uygy0s3jy38",
+                    "lambda:qqj2ctfp2l99dny2q3zfynhzrq4n2y29mqpnfqffzd"
                 ]
             }
         }

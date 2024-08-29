@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 #
-# Copyright (c) 2018-2020 The Bitcoin Core developers
-# Copyright (c) 2021 The Bitcoin Cash Node developers
+# Copyright (c) 2018-2020 The Lambda Core developers
+# Copyright (c) 2021 The Lambda Node developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #
 # Check include guards.
 
 export LC_ALL=C
-HEADER_ID_PREFIX="BITCOIN_"
+HEADER_ID_PREFIX="LAMBDA_"
 HEADER_ID_SUFFIX="_H"
 
 EXIT_CODE=0

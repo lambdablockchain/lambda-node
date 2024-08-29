@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-# Copyright (c) 2017-2019 The Bitcoin Core developers
+# Copyright (c) 2017-2019 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test multiwallet.
 
-Verify that a bitcoind node can load multiple wallet files
+Verify that a lambdad node can load multiple wallet files
 """
 import os
 import shutil
 import time
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.test_node import ErrorMatch
 from test_framework.util import (
     assert_equal,
@@ -18,7 +18,7 @@ from test_framework.util import (
 )
 
 
-class MultiWalletTest(BitcoinTestFramework):
+class MultiWalletTest(LambdaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2
@@ -295,7 +295,7 @@ class MultiWalletTest(BitcoinTestFramework):
 
         # Fail to load if one wallet is a copy of another.
         # Test this twice to make sure that we don't re-introduce
-        # https://github.com/bitcoin/bitcoin/issues/14304
+        # https://github.com/lambda/lambda/issues/14304
         assert_raises_rpc_error(-1, "BerkeleyBatch: Can't open database w8_copy (duplicates fileid",
                                 self.nodes[0].loadwallet, 'w8_copy')
 

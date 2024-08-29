@@ -1,5 +1,5 @@
-// Copyright (C) 2018 The Bitcoin Unlimited developers
-// Copyright (C) 2020 The Bitcoin developers
+// Copyright (C) 2018 The Lambda Unlimited developers
+// Copyright (C) 2020 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -79,7 +79,7 @@ static_assert (version.Revision() < version.MinorRevisionRange(), "Static versio
 
 
 /*!
-  Bitcoin Cash extended version message implementation.
+  Lambda extended version message implementation.
 
   This version message de-/serializes the same fields as the version
   message format as in the BU LMA implementation as of July 2018.

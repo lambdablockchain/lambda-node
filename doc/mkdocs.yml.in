@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2021 The Bitcoin developers
+# Copyright (c) 2020-2021 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -6,12 +6,12 @@
 #
 #     ninja doc/html
 
-site_name: Bitcoin Cash Node documentation
-site_description: Documentation for the Bitcoin Cash Node project
-site_author: The Bitcoin developers
+site_name: Lambda Node documentation
+site_description: Documentation for the Lambda Node project
+site_author: The Lambda developers
 site_dir: html
 
-repo_url: https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node
+repo_url: https://github.com/lambdablockchain/lambda-node
 edit_uri: ""
 
 docs_dir: md
@@ -32,37 +32,37 @@ nav:
   - Setup instructions: doc/README.md
   - Release notes:
       - Current release notes: doc/release-notes.md
-      - Bitcoin Cash Node v24.0.0: doc/release-notes/release-notes-24.0.0.md
+      - Lambda Node v24.0.0: doc/release-notes/release-notes-24.0.0.md
       
-      - Bitcoin ABC v0.14.1-v0.20:
-          - Bitcoin ABC v0.20.12: doc/release-notes/release-notes-0.20.12.md
+      - Lambda ABC v0.14.1-v0.20:
+          - Lambda ABC v0.20.12: doc/release-notes/release-notes-0.20.12.md
          
-      - Bitcoin Core v0.9-v0.14.0:
-          - Bitcoin Core v0.14.0: doc/release-notes/release-notes-0.14.0.md
+      - Lambda Core v0.9-v0.14.0:
+          - Lambda Core v0.14.0: doc/release-notes/release-notes-0.14.0.md
           
-      - Bitcoin-Qt v0.5-v0.8:
-          - Bitcoin-Qt v0.8.6: doc/release-notes/release-notes-0.8.6.md
-          - Bitcoin-Qt v0.8.5: doc/release-notes/release-notes-0.8.5.md
-          - Bitcoin-Qt v0.8.4: doc/release-notes/release-notes-0.8.4.md
-          - Bitcoin-Qt v0.8.3: doc/release-notes/release-notes-0.8.3.md
-          - Bitcoin-Qt v0.8.2: doc/release-notes/release-notes-0.8.2.md
-          - Bitcoin-Qt v0.8.1: doc/release-notes/release-notes-0.8.1.md
-          - Bitcoin-Qt v0.8.0: doc/release-notes/release-notes-0.8.0.md
-          - Bitcoin-Qt v0.7.2: doc/release-notes/release-notes-0.7.2.md
-          - Bitcoin-Qt v0.7.1: doc/release-notes/release-notes-0.7.1.md
-          - Bitcoin-Qt v0.7.0: doc/release-notes/release-notes-0.7.0.md
-          - Bitcoin-Qt v0.6.3: doc/release-notes/release-notes-0.6.3.md
-          - Bitcoin-Qt v0.6.2: doc/release-notes/release-notes-0.6.2.md
-          - Bitcoin-Qt v0.6.1: doc/release-notes/release-notes-0.6.1.md
-          - Bitcoin-Qt v0.6.0: doc/release-notes/release-notes-0.6.0.md
-          - Bitcoin-Qt v0.5.5: doc/release-notes/release-notes-0.5.5.md
-          - Bitcoin-Qt v0.5.4: doc/release-notes/release-notes-0.5.4.md
-          - Bitcoin-Qt v0.5.3: doc/release-notes/release-notes-0.5.3.md
-          - Bitcoin-Qt v0.5.2: doc/release-notes/release-notes-0.5.2.md
-          - Bitcoin-Qt v0.5.1: doc/release-notes/release-notes-0.5.1.md
-          - Bitcoin-Qt v0.5.0: doc/release-notes/release-notes-0.5.0.md
-      - Bitcoin v0.1-v0.4:
-          - Bitcoin v0.4.6: doc/release-notes/release-notes-0.4.6.md
+      - Lambda-Qt v0.5-v0.8:
+          - Lambda-Qt v0.8.6: doc/release-notes/release-notes-0.8.6.md
+          - Lambda-Qt v0.8.5: doc/release-notes/release-notes-0.8.5.md
+          - Lambda-Qt v0.8.4: doc/release-notes/release-notes-0.8.4.md
+          - Lambda-Qt v0.8.3: doc/release-notes/release-notes-0.8.3.md
+          - Lambda-Qt v0.8.2: doc/release-notes/release-notes-0.8.2.md
+          - Lambda-Qt v0.8.1: doc/release-notes/release-notes-0.8.1.md
+          - Lambda-Qt v0.8.0: doc/release-notes/release-notes-0.8.0.md
+          - Lambda-Qt v0.7.2: doc/release-notes/release-notes-0.7.2.md
+          - Lambda-Qt v0.7.1: doc/release-notes/release-notes-0.7.1.md
+          - Lambda-Qt v0.7.0: doc/release-notes/release-notes-0.7.0.md
+          - Lambda-Qt v0.6.3: doc/release-notes/release-notes-0.6.3.md
+          - Lambda-Qt v0.6.2: doc/release-notes/release-notes-0.6.2.md
+          - Lambda-Qt v0.6.1: doc/release-notes/release-notes-0.6.1.md
+          - Lambda-Qt v0.6.0: doc/release-notes/release-notes-0.6.0.md
+          - Lambda-Qt v0.5.5: doc/release-notes/release-notes-0.5.5.md
+          - Lambda-Qt v0.5.4: doc/release-notes/release-notes-0.5.4.md
+          - Lambda-Qt v0.5.3: doc/release-notes/release-notes-0.5.3.md
+          - Lambda-Qt v0.5.2: doc/release-notes/release-notes-0.5.2.md
+          - Lambda-Qt v0.5.1: doc/release-notes/release-notes-0.5.1.md
+          - Lambda-Qt v0.5.0: doc/release-notes/release-notes-0.5.0.md
+      - Lambda v0.1-v0.4:
+          - Lambda v0.4.6: doc/release-notes/release-notes-0.4.6.md
           
   - Build guides:
       - doc/dependencies.md
@@ -85,11 +85,11 @@ nav:
           - Deterministic macOS DMGs: doc/README_osx.md
   - API documentation:
       - Command-line interfaces:
-          - bitcoind: doc/cli/bitcoind.md
-          - bitcoin-qt: doc/cli/bitcoin-qt.md
-          - bitcoin-cli: doc/cli/bitcoin-cli.md
-          - bitcoin-tx: doc/cli/bitcoin-tx.md
-          - bitcoin-seeder: doc/cli/bitcoin-seeder.md
+          - lambdad: doc/cli/lambdad.md
+          - lambda-qt: doc/cli/lambda-qt.md
+          - lambda-cli: doc/cli/lambda-cli.md
+          - lambda-tx: doc/cli/lambda-tx.md
+          - lambda-seeder: doc/cli/lambda-seeder.md
       - JSON-RPC interface:
           - JSON-RPC commands list: doc/json-rpc/README.md
       - doc/REST-interface.md
@@ -97,7 +97,7 @@ nav:
       - ZeroMQ: doc/zmq.md
   - Technical standards:
       - BIPs: doc/bips.md
-      - Bitcoin Cash upgrades: doc/bch-upgrades.md
+      - Lambda upgrades: doc/bch-upgrades.md
       - getblocktemplatelight: doc/getblocktemplatelight.md
       - XVersionMessage: doc/xversionmessage.md
       - DSProof implementation notes: doc/dsproof-implementation-notes.md

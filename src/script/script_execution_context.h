@@ -1,4 +1,4 @@
-// Copyright (c) 2021 The Bitcoin developers
+// Copyright (c) 2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -66,7 +66,7 @@ public:
     static
     std::vector<ScriptExecutionContext> createForAllInputs(CTransactionView tx, const CCoinsViewCache &coinsCache);
 
-    /// Like the above, but takes a partially-signed bitcoin transacton's inputs as its coin source.
+    /// Like the above, but takes a partially-signed lambda transacton's inputs as its coin source.
     static
     std::vector<ScriptExecutionContext> createForAllInputs(CTransactionView tx, const std::vector<PSBTInput> &inputs);
 

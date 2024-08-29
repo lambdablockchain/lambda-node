@@ -45,7 +45,7 @@ final class TestsLinter extends ArcanistExternalLinter {
   }
 
   public function getInstallInstructions() {
-    return pht('The test/lint/lint-tests.sh script is part of the bitcoin-abc '.
+    return pht('The test/lint/lint-tests.sh script is part of the lambda-abc '.
       'project');
   }
 

@@ -1,12 +1,12 @@
-// Copyright (c) 2019-2021 The Bitcoin developers
+// Copyright (c) 2019-2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#define BOOST_TEST_MODULE Bitcoin Seeder Test Suite
+#define BOOST_TEST_MODULE Lambda Seeder Test Suite
 
 #include <chainparams.h>
 #include <protocol.h>
-#include <seeder/bitcoin.h>
+#include <seeder/lambda.h>
 #include <seeder/db.h>
 #include <seeder/test/util.h>
 #include <serialize.h>
@@ -50,7 +50,7 @@ static const unsigned short SERVICE_PORT = 18444;
 struct SeederTestingSetup : public TestChain100Setup {
     SeederTestingSetup() {
         CNetAddr ip;
-        ip.SetInternal("bitcoin.test");
+        ip.SetInternal("lambda.test");
         CService service = {ip, SERVICE_PORT};
         vAddr.emplace_back(service, ServiceFlags());
         testNode = std::make_unique<CSeederNodeTest>(service, &vAddr);
@@ -82,7 +82,7 @@ static const int SEEDER_INIT_VERSION = 0;
 BOOST_AUTO_TEST_CASE(process_version_msg) {
     CService serviceFrom;
     CAddress addrFrom(serviceFrom,
-                      ServiceFlags(NODE_NETWORK | NODE_BITCOIN_CASH));
+                      ServiceFlags(NODE_NETWORK | NODE_LAMBDA_CASH));
 
     CDataStream versionMessage = CreateVersionMessage(std::time(nullptr), vAddr[0], addrFrom, GetRequireHeight());
 
@@ -142,7 +142,7 @@ BOOST_AUTO_TEST_CASE(process_verack_msg) {
 BOOST_AUTO_TEST_CASE(process_headers_msg) {
     CService serviceFrom;
     CAddress addrFrom(serviceFrom,
-                      ServiceFlags(NODE_NETWORK | NODE_BITCOIN_CASH));
+                      ServiceFlags(NODE_NETWORK | NODE_LAMBDA_CASH));
 
     CDataStream versionMessage = CreateVersionMessage(std::time(nullptr), vAddr[0], addrFrom, GetRequireHeight() + 1);
 

@@ -5,23 +5,23 @@ export LC_ALL=C
 set -euxo pipefail
 
 TOPLEVEL=$(git rev-parse --show-toplevel)
-DEFAULT_BITCOIND="${TOPLEVEL}/build/src/bitcoind"
-DEFAULT_LOG_FILE=~/".bitcoin/debug.log"
+DEFAULT_BITCOIND="${TOPLEVEL}/build/src/lambdad"
+DEFAULT_LOG_FILE=~/".lambda/debug.log"
 
 help_message() {
   set +x
-  echo "Run bitcoind until a given log message is encountered, then kill bitcoind."
+  echo "Run lambdad until a given log message is encountered, then kill lambdad."
   echo ""
   echo "Example usages:"
-  echo "$0 --grep 'progress=1.000000' --params \"-datadir=~/.bitcoin\" --callback mycallback"
+  echo "$0 --grep 'progress=1.000000' --params \"-datadir=~/.lambda\" --callback mycallback"
   echo ""
   echo "Options:"
   echo "-h, --help            Display this help message."
   echo ""
   echo "-g, --grep            (required) The grep pattern to look for."
   echo ""
-  echo "-c, --callback        (optional) Bash command to execute as a callback. This is useful for interacting with bitcoind before it is killed (to run tests, for example)."
-  echo "-p, --params          (optional) Parameters to provide to bitcoind."
+  echo "-c, --callback        (optional) Bash command to execute as a callback. This is useful for interacting with lambdad before it is killed (to run tests, for example)."
+  echo "-p, --params          (optional) Parameters to provide to lambdad."
   echo ""
   echo "Environment Variables:"
   echo "BITCOIND              Default: ${DEFAULT_BITCOIND}"
@@ -80,7 +80,7 @@ fi
 # Make sure the debug log exists so that tail does not fail
 touch "${LOG_FILE}"
 
-# Launch bitcoind using custom parameters
+# Launch lambdad using custom parameters
 read -ar BITCOIND_PARAMS <<< "${BITCOIND_PARAMS}"
 START_TIME=$(date +%s)
 if [ "${#BITCOIND_PARAMS[@]}" -gt 0 ]; then
@@ -92,9 +92,9 @@ BITCOIND_PID=$!
 
 # Wait for log checking to finish and kill the daemon
 (
-  # When this subshell finishes, kill bitcoind
+  # When this subshell finishes, kill lambdad
   log_subshell_cleanup() {
-    echo "Cleaning up bitcoin daemon (PID: ${BITCOIND_PID})."
+    echo "Cleaning up lambda daemon (PID: ${BITCOIND_PID})."
     kill ${BITCOIND_PID}
   }
   trap "log_subshell_cleanup" EXIT
@@ -111,19 +111,19 @@ BITCOIND_PID=$!
 
   echo "Grep pattern '${GREP_PATTERN}' found after ${HUMAN_RUNTIME}."
 
-  # Optional callback for interacting with bitcoind before it's killed
+  # Optional callback for interacting with lambdad before it's killed
   if [ -n "${CALLBACK}" ]; then
     "${CALLBACK}"
   fi
 ) &
 LOG_PID=$!
 
-# Wait for bitcoind to exit, whether it exited on its own or the log subshell finished
+# Wait for lambdad to exit, whether it exited on its own or the log subshell finished
 wait ${BITCOIND_PID}
 BITCOIND_EXIT_CODE=$?
 
 if [ "${BITCOIND_EXIT_CODE}" -ne "0" ]; then
-  echo "bitcoind exited unexpectedly with code: ${BITCOIND_EXIT_CODE}"
+  echo "lambdad exited unexpectedly with code: ${BITCOIND_EXIT_CODE}"
   exit ${BITCOIND_EXIT_CODE}
 fi
 

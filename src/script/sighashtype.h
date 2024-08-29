@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2018 Bitcoin developers
+// Copyright (c) 2017-2018 Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -36,7 +36,7 @@ enum class BaseSigHashType : uint8_t {
  *
  * Be very careful with modifying/using this class, as it contains a big footgun
  * regarding the bit 0x20.
- * (see https://github.com/mit-dci/cash-disclosure/blob/master/bitcoin-cash-disclosure-04252018.txt )
+ * (see https://github.com/mit-dci/cash-disclosure/blob/master/lambda-disclosure-04252018.txt )
  */
 class SigHashType {
 private:

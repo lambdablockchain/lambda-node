@@ -1,9 +1,9 @@
-// Copyright (c) 2009-2016 The Bitcoin Core developers
+// Copyright (c) 2009-2016 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
+#include <config/lambda-config.h>
 #endif
 
 #include <chainparams.h>
@@ -12,9 +12,9 @@
 #include <key.h>
 #include <util/system.h>
 
-#include <qt/bitcoin.h>
+#include <qt/lambda.h>
 #include <qt/test/apptests.h>
-#include <qt/test/bitcoinaddressvalidatortests.h>
+#include <qt/test/lambdaaddressvalidatortests.h>
 #include <qt/test/compattests.h>
 #include <qt/test/guiutiltests.h>
 #include <qt/test/rpcnestedtests.h>
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
     noui_connect();
     ClearDatadirCache();
     fs::path pathTemp =
-        fs::temp_directory_path() / strprintf("test_bitcoin-qt_%lu_%i",
+        fs::temp_directory_path() / strprintf("test_lambda-qt_%lu_%i",
                                               (unsigned long)GetTime(),
                                               (int)GetRand(100000));
     fs::create_directories(pathTemp);
@@ -75,8 +75,8 @@ int main(int argc, char *argv[]) {
 
     // Don't remove this, it's needed to access
     // QApplication:: and QCoreApplication:: in the tests
-    BitcoinApplication app(*node, argc, argv);
-    app.setApplicationName("BitcoinCashNode-Qt-test");
+    LambdaApplication app(*node, argc, argv);
+    app.setApplicationName("LambdaNode-Qt-test");
 
 #ifdef ENABLE_BIP70
     // This is necessary to initialize openssl on the test framework
@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
     if (QTest::qExec(&test5) != 0) {
         fInvalid = true;
     }
-    BitcoinAddressValidatorTests test6;
+    LambdaAddressValidatorTests test6;
     if (QTest::qExec(&test6) != 0) {
         fInvalid = true;
     }

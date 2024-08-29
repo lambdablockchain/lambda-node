@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-# Copyright (c) 2017-2019 The Bitcoin Core developers
+# Copyright (c) 2017-2019 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
-"""Test bitcoin-cli"""
-from test_framework.test_framework import BitcoinTestFramework
+"""Test lambda-cli"""
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import (
     assert_equal,
     assert_raises_process_error,
@@ -11,7 +11,7 @@ from test_framework.util import (
 )
 
 
-class TestBitcoinCli(BitcoinTestFramework):
+class TestLambdaCli(LambdaTestFramework):
 
     def set_test_params(self):
         self.setup_clean_chain = True
@@ -24,16 +24,16 @@ class TestBitcoinCli(BitcoinTestFramework):
         """Main test logic"""
 
         cli_response = self.nodes[0].cli("-version").send_cli()
-        assert "Bitcoin Cash Node RPC client version" in cli_response
+        assert "Lambda Node RPC client version" in cli_response
 
         self.log.info(
-            "Compare responses from gewalletinfo RPC and `bitcoin-cli getwalletinfo`")
+            "Compare responses from gewalletinfo RPC and `lambda-cli getwalletinfo`")
         cli_response = self.nodes[0].cli.getwalletinfo()
         rpc_response = self.nodes[0].getwalletinfo()
         assert_equal(cli_response, rpc_response)
 
         self.log.info(
-            "Compare responses from getblockchaininfo RPC and `bitcoin-cli getblockchaininfo`")
+            "Compare responses from getblockchaininfo RPC and `lambda-cli getblockchaininfo`")
         cli_response = self.nodes[0].cli.getblockchaininfo()
         rpc_response = self.nodes[0].getblockchaininfo()
         assert_equal(cli_response, rpc_response)
@@ -65,7 +65,7 @@ class TestBitcoinCli(BitcoinTestFramework):
             1, "-getinfo takes no arguments", self.nodes[0].cli('-getinfo').help)
 
         self.log.info(
-            "Compare responses from `bitcoin-cli -getinfo` and the RPCs data is retrieved from.")
+            "Compare responses from `lambda-cli -getinfo` and the RPCs data is retrieved from.")
         cli_get_info = self.nodes[0].cli('-getinfo').send_cli()
         wallet_info = self.nodes[0].getwalletinfo()
         network_info = self.nodes[0].getnetworkinfo()
@@ -95,4 +95,4 @@ class TestBitcoinCli(BitcoinTestFramework):
 
 
 if __name__ == '__main__':
-    TestBitcoinCli().main()
+    TestLambdaCli().main()

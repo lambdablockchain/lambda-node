@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Copyright (c) 2019-2020 Jonathan Toomim
-# Copyright (c) 2020 The Bitcoin Cash Node developers
+# Copyright (c) 2020 The Lambda Node developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 '''
@@ -29,7 +29,7 @@ from decimal import Decimal
 
 sys.path.insert(0, os.path.join('..', 'functional'))
 import test_framework.util # noqa: E402
-from test_framework.test_framework import BitcoinTestFramework # noqa: E402
+from test_framework.test_framework import LambdaTestFramework # noqa: E402
 from test_framework.p2p import P2PInterface # noqa: E402
 
 
@@ -44,14 +44,14 @@ MAX_GENERATION_RATE_PER_NODE = 15000
 if NUM_NODES > test_framework.util.MAX_NODES:
     test_framework.util.MAX_NODES = NUM_NODES
 
-# TestNode: A peer we use to send messages to bitcoind, and store responses.
+# TestNode: A peer we use to send messages to lambdad, and store responses.
 
 
 class TestNode(P2PInterface):
     pass
 
 
-class StressTest(BitcoinTestFramework):
+class StressTest(LambdaTestFramework):
     def skip_test_if_missing_module(self):
         self.skip_if_no_wallet()
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2014-2019 The Bitcoin Core developers
+# Copyright (c) 2014-2019 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Base class for RPC testing."""
@@ -56,30 +56,30 @@ class SkipTest(Exception):
         self.message = message
 
 
-class BitcoinTestMetaClass(type):
-    """Metaclass for BitcoinTestFramework.
+class LambdaTestMetaClass(type):
+    """Metaclass for LambdaTestFramework.
 
-    Ensures that any attempt to register a subclass of `BitcoinTestFramework`
+    Ensures that any attempt to register a subclass of `LambdaTestFramework`
     adheres to a standard whereby the subclass overrides `set_test_params` and
     `run_test` but DOES NOT override either `__init__` or `main`. If any of
     those standards are violated, a ``TypeError`` is raised."""
 
     def __new__(cls, clsname, bases, dct):
-        if not clsname == 'BitcoinTestFramework':
+        if not clsname == 'LambdaTestFramework':
             if not ('run_test' in dct and 'set_test_params' in dct):
-                raise TypeError("BitcoinTestFramework subclasses must override "
+                raise TypeError("LambdaTestFramework subclasses must override "
                                 "'run_test' and 'set_test_params'")
             if '__init__' in dct or 'main' in dct:
-                raise TypeError("BitcoinTestFramework subclasses may not override "
+                raise TypeError("LambdaTestFramework subclasses may not override "
                                 "'__init__' or 'main'")
 
         return super().__new__(cls, clsname, bases, dct)
 
 
-class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
-    """Base class for a bitcoin test script.
+class LambdaTestFramework(metaclass=LambdaTestMetaClass):
+    """Base class for a lambda test script.
 
-    Individual bitcoin test scripts should subclass this class and override the set_test_params() and run_test() methods.
+    Individual lambda test scripts should subclass this class and override the set_test_params() and run_test() methods.
 
     Individual tests can also override the following methods to customize the test setup:
 
@@ -109,9 +109,9 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
 
         parser = argparse.ArgumentParser(usage="%(prog)s [options]")
         parser.add_argument("--nocleanup", dest="nocleanup", default=False, action="store_true",
-                            help="Leave bitcoinds and test.* datadir on exit or error")
+                            help="Leave lambdads and test.* datadir on exit or error")
         parser.add_argument("--noshutdown", dest="noshutdown", default=False, action="store_true",
-                            help="Don't stop bitcoinds after the test execution")
+                            help="Don't stop lambdads after the test execution")
         parser.add_argument("--cachedir", dest="cachedir", default=os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + "/../../cache"),
                             help="Directory for caching pregenerated datadirs (default: %(default)s)")
         parser.add_argument("--tmpdir", dest="tmpdir",
@@ -129,11 +129,11 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
         parser.add_argument("--pdbonfailure", dest="pdbonfailure", default=False, action="store_true",
                             help="Attach a python debugger if test fails")
         parser.add_argument("--usecli", dest="usecli", default=False, action="store_true",
-                            help="use bitcoin-cli instead of RPC for all commands")
+                            help="use lambda-cli instead of RPC for all commands")
         parser.add_argument("--with-upgrade9activation", dest="upgrade9activation", default=False, action="store_true",
                             help="Activate May 2023 (upgrade 9) update on timestamp {}".format(TIMESTAMP_IN_THE_PAST))
-        parser.add_argument("--extra-bitcoind-args", dest="extra_bitcoind_args", default="",
-                            help="Start bitcoind with these additional arguments (comma separated)")
+        parser.add_argument("--extra-lambdad-args", dest="extra_lambdad_args", default="",
+                            help="Start lambdad with these additional arguments (comma separated)")
         self.add_options(parser)
         self.options = parser.parse_args()
 
@@ -150,10 +150,10 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
         config = configparser.ConfigParser()
         config.read_file(open(self.options.configfile, encoding='utf-8'))
         self.config = config
-        self.options.bitcoind = os.getenv(
-            "BITCOIND", default=config["environment"]["BUILDDIR"] + '/src/bitcoind' + config["environment"]["EXEEXT"])
-        self.options.bitcoincli = os.getenv(
-            "BITCOINCLI", default=config["environment"]["BUILDDIR"] + '/src/bitcoin-cli' + config["environment"]["EXEEXT"])
+        self.options.lambdad = os.getenv(
+            "LAMBDAD", default=config["environment"]["BUILDDIR"] + '/src/lambdad' + config["environment"]["EXEEXT"])
+        self.options.lambdacli = os.getenv(
+            "LAMBDACLI", default=config["environment"]["BUILDDIR"] + '/src/lambda-cli' + config["environment"]["EXEEXT"])
         self.options.emulator = config["environment"]["EMULATOR"] or None
 
         os.environ['PATH'] = config['environment']['BUILDDIR'] + os.pathsep + \
@@ -214,7 +214,7 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
             for node in self.nodes:
                 node.cleanup_on_exit = False
             self.log.info(
-                "Note: bitcoinds were not stopped and may still be running")
+                "Note: lambdads were not stopped and may still be running")
 
         if not self.options.nocleanup and not self.options.noshutdown and success != TestStatus.FAILED:
             self.log.info("Cleaning up {} on exit".format(self.options.tmpdir))
@@ -314,7 +314,7 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
         if extra_args is None:
             extra_args = [[]] * num_nodes
         if binary is None:
-            binary = [self.options.bitcoind] * num_nodes
+            binary = [self.options.lambdad] * num_nodes
         assert_equal(len(extra_confs), num_nodes)
         assert_equal(len(extra_args), num_nodes)
         assert_equal(len(binary), num_nodes)
@@ -327,8 +327,8 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
                 rpc_port=rpc_port(i),
                 p2p_port=p2p_port(i),
                 timewait=self.rpc_timeout,
-                bitcoind=binary[i],
-                bitcoin_cli=self.options.bitcoincli,
+                lambdad=binary[i],
+                lambda_cli=self.options.lambdacli,
                 mocktime=self.mocktime,
                 coverage_dir=self.options.coveragedir,
                 extra_conf=extra_confs[i],
@@ -339,12 +339,12 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
             if self.options.upgrade9activation:
                 self.nodes[i].extend_default_args(
                     ["-upgrade9activationtime={}".format(TIMESTAMP_IN_THE_PAST), "-expire=0"])
-            if len(self.options.extra_bitcoind_args):
+            if len(self.options.extra_lambdad_args):
                 self.nodes[i].extend_default_args(
-                    self.options.extra_bitcoind_args.split(","))
+                    self.options.extra_lambdad_args.split(","))
 
     def start_node(self, i, *args, **kwargs):
-        """Start a bitcoind"""
+        """Start a lambdad"""
 
         node = self.nodes[i]
 
@@ -355,7 +355,7 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
             coverage.write_all_rpc_commands(self.options.coveragedir, node.rpc)
 
     def start_nodes(self, extra_args=None, *args, **kwargs):
-        """Start multiple bitcoinds"""
+        """Start multiple lambdads"""
 
         if extra_args is None:
             extra_args = [None] * self.num_nodes
@@ -376,12 +376,12 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
                     self.options.coveragedir, node.rpc)
 
     def stop_node(self, i, expected_stderr='', wait=0):
-        """Stop a bitcoind test node"""
+        """Stop a lambdad test node"""
         self.nodes[i].stop_node(expected_stderr, wait=wait)
         self.nodes[i].wait_until_stopped()
 
     def stop_nodes(self, wait=0):
-        """Stop multiple bitcoind test nodes"""
+        """Stop multiple lambdad test nodes"""
         for node in self.nodes:
             # Issue RPC to stop nodes
             node.stop_node(wait=wait)
@@ -490,7 +490,7 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
         ll = int(self.options.loglevel) if self.options.loglevel.isdigit(
         ) else self.options.loglevel.upper()
         ch.setLevel(ll)
-        # Format logs the same as bitcoind's debug.log with microprecision (so
+        # Format logs the same as lambdad's debug.log with microprecision (so
         # log files can be concatenated and sorted)
         formatter = logging.Formatter(
             fmt='%(asctime)s.%(msecs)03d000Z %(name)s (%(levelname)s): %(message)s', datefmt='%Y-%m-%dT%H:%M:%S')
@@ -502,7 +502,7 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
         self.log.addHandler(ch)
 
         if self.options.trace_rpc:
-            rpc_logger = logging.getLogger("BitcoinRPC")
+            rpc_logger = logging.getLogger("LambdaRPC")
             rpc_logger.setLevel(logging.DEBUG)
             rpc_handler = logging.StreamHandler(sys.stdout)
             rpc_handler.setLevel(logging.DEBUG)
@@ -529,7 +529,7 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
                 if os.path.isdir(get_datadir_path(self.options.cachedir, i)):
                     shutil.rmtree(get_datadir_path(self.options.cachedir, i))
 
-            # Create cache directories, run bitcoinds:
+            # Create cache directories, run lambdads:
             for i in range(MAX_NODES):
                 datadir = initialize_datadir(self.options.cachedir, i, self.chain)
                 self.nodes.append(TestNode(
@@ -542,8 +542,8 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
                     rpc_port=rpc_port(i),
                     p2p_port=p2p_port(i),
                     timewait=self.rpc_timeout,
-                    bitcoind=self.options.bitcoind,
-                    bitcoin_cli=self.options.bitcoincli,
+                    lambdad=self.options.lambdad,
+                    lambda_cli=self.options.lambdacli,
                     mocktime=self.mocktime,
                     coverage_dir=None,
                     emulator=self.options.emulator,
@@ -610,7 +610,7 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
             from_dir = get_datadir_path(self.options.cachedir, i)
             to_dir = get_datadir_path(self.options.tmpdir, i)
             shutil.copytree(from_dir, to_dir)
-            # Overwrite port/rpcport in bitcoin.conf
+            # Overwrite port/rpcport in lambda.conf
             initialize_datadir(self.options.tmpdir, i, self.chain)
 
     def _initialize_chain_clean(self):
@@ -628,10 +628,10 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
         except ImportError:
             raise SkipTest("python3-zmq module not available.")
 
-    def skip_if_no_bitcoind_zmq(self):
-        """Skip the running test if bitcoind has not been compiled with zmq support."""
+    def skip_if_no_lambdad_zmq(self):
+        """Skip the running test if lambdad has not been compiled with zmq support."""
         if not self.is_zmq_compiled():
-            raise SkipTest("bitcoind has not been built with zmq enabled.")
+            raise SkipTest("lambdad has not been built with zmq enabled.")
 
     def skip_if_no_wallet(self):
         """Skip the running test if wallet has not been compiled."""
@@ -639,12 +639,12 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
             raise SkipTest("wallet has not been compiled.")
 
     def skip_if_no_cli(self):
-        """Skip the running test if bitcoin-cli has not been compiled."""
+        """Skip the running test if lambda-cli has not been compiled."""
         if not self.is_cli_compiled():
-            raise SkipTest("bitcoin-cli has not been compiled.")
+            raise SkipTest("lambda-cli has not been compiled.")
 
     def is_cli_compiled(self):
-        """Checks whether bitcoin-cli was compiled."""
+        """Checks whether lambda-cli was compiled."""
         config = configparser.ConfigParser()
         config.read_file(open(self.options.configfile, encoding='utf-8'))
 

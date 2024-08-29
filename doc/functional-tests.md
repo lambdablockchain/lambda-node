@@ -1,16 +1,16 @@
 # Functional tests
 
-The [/test/](/test/) directory contains integration tests that test bitcoind
+The [/test/](/test/) directory contains integration tests that test lambdad
 and its utilities in their entirety. It does not contain unit tests, which
 can be found in [/src/test](/src/test), [/src/wallet/test](/src/wallet/test), etc.
 
 There are currently two sets of tests in the [/test/](/test/) directory:
 
 - [functional](/test/functional) which test the functionality of
-  bitcoind and bitcoin-qt by interacting with them through the RPC and P2P
+  lambdad and lambda-qt by interacting with them through the RPC and P2P
   interfaces.
-- [util](/test/util) which tests the bitcoin utilities, currently only
-  bitcoin-tx.
+- [util](/test/util) which tests the lambda utilities, currently only
+  lambda-tx.
 
 The util tests are run as part of `make check` target. The functional
 tests are run by the Teamcity continuous build process whenever a diff is
@@ -73,29 +73,29 @@ options. Run `test_runner.py -h` to see them all.
 
 ##### Resource contention
 
-The P2P and RPC ports used by the bitcoind nodes-under-test are chosen to make
-conflicts with other processes unlikely. However, if there is another bitcoind
+The P2P and RPC ports used by the lambdad nodes-under-test are chosen to make
+conflicts with other processes unlikely. However, if there is another lambdad
 process running on the system (perhaps from a previous test which hasn't successfully
-killed all its bitcoind nodes), then there may be a port conflict which will
+killed all its lambdad nodes), then there may be a port conflict which will
 cause the test to fail. It is recommended that you run the tests on a system
-where no other bitcoind processes are running.
+where no other lambdad processes are running.
 
 On linux, the test_framework will warn if there is another
-bitcoind process running when the tests are started.
+lambdad process running when the tests are started.
 
-If there are zombie bitcoind processes after test failure, you can kill them
+If there are zombie lambdad processes after test failure, you can kill them
 by running the following commands. **Note that these commands will kill all
-bitcoind processes running on the system, so should not be used if any non-test
-bitcoind processes are being run.**
+lambdad processes running on the system, so should not be used if any non-test
+lambdad processes are being run.**
 
 ```bash
-killall bitcoind
+killall lambdad
 ```
 
 or
 
 ```bash
-pkill -9 bitcoind
+pkill -9 lambdad
 ```
 
 ##### Data directory cache
@@ -105,11 +105,11 @@ functional test is run and is stored in test/cache. This speeds up
 test startup times since new blockchains don't need to be generated for
 each test. However, the cache may get into a bad state, in which case
 tests will fail. If this happens, remove the cache directory (and make
-sure bitcoind processes are stopped as above):
+sure lambdad processes are stopped as above):
 
 ```bash
 rm -rf cache
-killall bitcoind
+killall lambdad
 ```
 
 ##### Test logging
@@ -122,13 +122,13 @@ default:
 - When run directly, *all* logs are written to `test_framework.log` and INFO
   level and above are output to the console.
 - When run on Travis, no logs are output to the console. However, if a test
-  fails, the `test_framework.log` and bitcoind `debug.log`s will all be dumped
+  fails, the `test_framework.log` and lambdad `debug.log`s will all be dumped
   to the console to help troubleshooting.
 
 To change the level of logs output to the console, use the `-l` command line
 argument.
 
-`test_framework.log` and bitcoind `debug.log`s can be combined into a single
+`test_framework.log` and lambdad `debug.log`s can be combined into a single
 aggregate log by running the `combine_logs.py` script. The output can be plain
 text, colorized text or html. For example:
 
@@ -155,9 +155,9 @@ import pdb; pdb.set_trace()
 ```
 
 anywhere in the test. You will then be able to inspect variables, as well as
-call methods that interact with the bitcoind nodes-under-test.
+call methods that interact with the lambdad nodes-under-test.
 
-If further introspection of the bitcoind instances themselves becomes
+If further introspection of the lambdad instances themselves becomes
 necessary, this can be accomplished by first setting a pdb breakpoint
 at an appropriate location, running the test to that point, then using
 `gdb` to attach to the process and debug.
@@ -171,8 +171,8 @@ For instance, to attach to `self.node[1]` during a run:
 use the directory path to get the pid from the pid file:
 
 ```bash
-cat /tmp/user/1000/testo9vsdjo3/node1/regtest/bitcoind.pid
-gdb /home/example/bitcoind <pid>
+cat /tmp/user/1000/testo9vsdjo3/node1/regtest/lambdad.pid
+gdb /home/example/lambdad <pid>
 ```
 
 Note: gdb attach step may require `sudo`. To get rid of this, you can run:
@@ -194,7 +194,7 @@ The warning message will now be printed to the `sys.stderr` output.
 
 ### Util tests
 
-Util tests can be run locally by running `test/util/bitcoin-util-test.py`.
+Util tests can be run locally by running `test/util/lambda-util-test.py`.
 Use the `-v` option for verbose output.
 
 ## Writing functional tests
@@ -222,7 +222,7 @@ don't have test cases for.
 - Avoid wildcard imports where possible
 - Use a module-level docstring to describe what the test is testing, and how it
   is testing it.
-- When subclassing the BitcoinTestFramwork, place overrides for the
+- When subclassing the LambdaTestFramwork, place overrides for the
   `set_test_params()`, `add_options()` and `setup_xxxx()` methods at the top of
   the subclass, then locally-defined helper methods, then the `run_test()` method.
 - Use `f'{x}'` for string formatting in preference to `'{}'.format(x)`
@@ -282,11 +282,11 @@ P2P messages. These can be found in the following source files:
   over the network (`CBlock`, `CTransaction`, etc, along with the network-level
   wrappers for them, `msg_block`, `msg_tx`, etc).
 - P2P tests have two threads. One thread handles all network communication
-  with the bitcoind(s) being tested in a callback-based event loop; the other
+  with the lambdad(s) being tested in a callback-based event loop; the other
   implements the test logic.
-- `P2PConnection` is the class used to connect to a bitcoind.  `P2PInterface`
+- `P2PConnection` is the class used to connect to a lambdad.  `P2PInterface`
   contains the higher level logic for processing P2P payloads and connecting to
-  the Bitcoin Core node application logic. For custom behaviour, subclass the
+  the Lambda Core node application logic. For custom behaviour, subclass the
   P2PInterface object and override the callback methods.
 - Can be used to write tests where specific P2P protocol behavior is tested.
 
@@ -296,7 +296,7 @@ Example tests are `p2p-acceptblock.py`, `p2p-compactblocks.py`.
 
 #### [test_framework/authproxy.py](../test/functional/test_framework/authproxy.py)
 
-Taken from the [python-bitcoinrpc repository](https://github.com/jgarzik/python-bitcoinrpc).
+Taken from the [python-lambdarpc repository](https://github.com/jgarzik/python-lambdarpc).
 
 #### [test_framework/test_framework.py](../test/functional/test_framework/test_framework.py)
 
@@ -308,15 +308,15 @@ Generally useful functions.
 
 #### [test_framework/mininode.py](../test/functional/test_framework/mininode.py)
 
-Basic code to support P2P connectivity to a bitcoind.
+Basic code to support P2P connectivity to a lambdad.
 
 #### [test_framework/script.py](../test/functional/test_framework/script.py)
 
-Utilities for manipulating transaction scripts (originally from python-bitcoinlib)
+Utilities for manipulating transaction scripts (originally from python-lambdalib)
 
 #### [test_framework/key.py](../test/functional/test_framework/key.py)
 
-Wrapper around OpenSSL EC_Key (originally from python-bitcoinlib)
+Wrapper around OpenSSL EC_Key (originally from python-lambdalib)
 
 #### [test_framework/bignum.py](../test/functional/test_framework/bignum.py)
 
@@ -344,7 +344,7 @@ In your `build` directory, run:
 cmake -GNinja .. \
    -DCMAKE_TOOLCHAIN_FILE=../cmake/platforms/LinuxAArch64.cmake \
    -DCMAKE_CROSSCOMPILING_EMULATOR=$(command -v qemu-aarch64-static) \
-   -DBUILD_BITCOIN_ZMQ=OFF
+   -DBUILD_LAMBDA_ZMQ=OFF
 ```
 
 To run functional tests:

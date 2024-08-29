@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 The Bitcoin Cash Node developers
+# Copyright (c) 2021 The Lambda Node developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 '''
@@ -14,11 +14,11 @@ from typing import Tuple, List
 
 from test_framework.messages import ser_uint256
 from test_framework.p2p import P2PInterface
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import wait_until
 
 
-class TXBroadcastIntervalTest(BitcoinTestFramework):
+class TXBroadcastIntervalTest(LambdaTestFramework):
 
     def skip_test_if_missing_module(self):
         self.skip_if_no_wallet()

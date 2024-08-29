@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-# Copyright (c) 2022 The Bitcoin developers
+# Copyright (c) 2022 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test the tor-specific p2p port"""
 
 from test_framework.p2p import P2PInterface
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import assert_equal, assert_not_equal, MAX_NODES, p2p_port
 
 
-class OnionPortTest(BitcoinTestFramework):
+class OnionPortTest(LambdaTestFramework):
     """Test the tor-specific p2p port, ensuring that the -bind=<HOST>:<PORT>=onion syntax works"""
 
     def set_test_params(self):

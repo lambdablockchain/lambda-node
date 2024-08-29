@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-# Copyright (c) 2012-2017 The Bitcoin Core developers
+# Copyright (c) 2012-2017 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 '''
-Bitcoin base58 encoding and decoding.
+Lambda base58 encoding and decoding.
 
-Based on https://bitcointalk.org/index.php?topic=1026.0 (public domain)
+Based on https://lambdatalk.org/index.php?topic=1026.0 (public domain)
 '''
 import hashlib
 
@@ -45,7 +45,7 @@ def b58encode(v):
         long_value = div
     result = __b58chars[long_value] + result
 
-    # Bitcoin does a little leading-zero-compression:
+    # Lambda does a little leading-zero-compression:
     # leading 0-bytes in the input become leading-1s
     nPad = 0
     for c in v:
@@ -118,7 +118,7 @@ def get_bcaddress_version(strAddress):
 
 
 if __name__ == '__main__':
-    # Test case (from http://gitorious.org/bitcoin/python-base58.git)
+    # Test case (from http://gitorious.org/lambda/python-base58.git)
     assert get_bcaddress_version('15VjRaDX9zpbA8LVnbrCAFzrVzN7ixHNsC') == 0
     _ohai = 'o hai'.encode('ascii')
     _tmp = b58encode(_ohai)

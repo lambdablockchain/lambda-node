@@ -1,10 +1,10 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
-// Copyright (c) 2021 The Bitcoin Core developers
+// Copyright (c) 2011-2016 The Lambda Core developers
+// Copyright (c) 2021 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
+#include <config/lambda-config.h>
 #endif
 
 #include <qt/paymentserver.h>
@@ -14,7 +14,7 @@
 #include <interfaces/node.h>
 #include <key_io.h>
 #include <policy/policy.h>
-#include <qt/bitcoinunits.h>
+#include <qt/lambdaunits.h>
 #include <qt/guiutil.h>
 #include <qt/optionsmodel.h>
 #include <ui_interface.h>
@@ -48,16 +48,16 @@
 #include <cstdlib>
 #include <memory>
 
-const int BITCOIN_IPC_CONNECT_TIMEOUT = 1000; // milliseconds
+const int LAMBDA_IPC_CONNECT_TIMEOUT = 1000; // milliseconds
 #ifdef ENABLE_BIP70
 // BIP70 payment protocol messages
 const char *BIP70_MESSAGE_PAYMENTACK = "PaymentACK";
 const char *BIP70_MESSAGE_PAYMENTREQUEST = "PaymentRequest";
 // BIP71 payment protocol media types
-const char *BIP71_MIMETYPE_PAYMENT = "application/bitcoincash-payment";
-const char *BIP71_MIMETYPE_PAYMENTACK = "application/bitcoincash-paymentack";
+const char *BIP71_MIMETYPE_PAYMENT = "application/lambda-payment";
+const char *BIP71_MIMETYPE_PAYMENTACK = "application/lambda-paymentack";
 const char *BIP71_MIMETYPE_PAYMENTREQUEST =
-    "application/bitcoincash-paymentrequest";
+    "application/lambda-paymentrequest";
 #endif
 
 //
@@ -66,7 +66,7 @@ const char *BIP71_MIMETYPE_PAYMENTREQUEST =
 //  data directory
 //
 static QString ipcServerName() {
-    QString name("BitcoinQt");
+    QString name("LambdaQt");
 
     // Append a simple hash of the datadir
     // Note that GetDataDir(true) returns a different path for -testnet versus
@@ -91,7 +91,7 @@ static std::string ipcParseURI(const QString &arg, const CChainParams &params,
     }
 
     SendCoinsRecipient r;
-    if (!GUIUtil::parseBitcoinURI(scheme, arg, &r)) {
+    if (!GUIUtil::parseLambdaURI(scheme, arg, &r)) {
         return {};
     }
 
@@ -202,7 +202,7 @@ bool PaymentServer::ipcSendCommandLine() {
     for (const QString &r : savedPaymentRequests) {
         QLocalSocket *socket = new QLocalSocket();
         socket->connectToServer(ipcServerName(), QIODevice::WriteOnly);
-        if (!socket->waitForConnected(BITCOIN_IPC_CONNECT_TIMEOUT)) {
+        if (!socket->waitForConnected(LAMBDA_IPC_CONNECT_TIMEOUT)) {
             delete socket;
             socket = nullptr;
             return false;
@@ -216,7 +216,7 @@ bool PaymentServer::ipcSendCommandLine() {
 
         socket->write(block);
         socket->flush();
-        socket->waitForBytesWritten(BITCOIN_IPC_CONNECT_TIMEOUT);
+        socket->waitForBytesWritten(LAMBDA_IPC_CONNECT_TIMEOUT);
         socket->disconnectFromServer();
 
         delete socket;
@@ -242,7 +242,7 @@ PaymentServer::PaymentServer(QObject *parent, bool startLocalServer)
 #endif
 
     // Install global event filter to catch QFileOpenEvents
-    // on Mac: sent when you click bitcoincash: links
+    // on Mac: sent when you click lambda: links
     // other OSes: helpful when dealing with payment request files
     if (parent) {
         parent->installEventFilter(this);
@@ -279,7 +279,7 @@ PaymentServer::~PaymentServer() {
 }
 
 //
-// OSX-specific way of handling bitcoincash: URIs and PaymentRequest mime types.
+// OSX-specific way of handling lambda: URIs and PaymentRequest mime types.
 // Also used by paymentservertests.cpp and when opening a payment request file
 // via "Open URI..." menu entry.
 //
@@ -349,7 +349,7 @@ bool PaymentServer::handleURI(const CChainParams &params, const QString &s) {
 
     // normal URI
     SendCoinsRecipient recipient;
-    if (GUIUtil::parseBitcoinURI(scheme, s, &recipient)) {
+    if (GUIUtil::parseLambdaURI(scheme, s, &recipient)) {
         if (!IsValidDestinationString(recipient.address.toStdString(),
                                       params)) {
             Q_EMIT message(
@@ -363,7 +363,7 @@ bool PaymentServer::handleURI(const CChainParams &params, const QString &s) {
         Q_EMIT message(
             tr("URI handling"),
             tr("URI cannot be parsed! This can be caused by an invalid "
-               "Bitcoin Cash address or malformed URI parameters."),
+               "Lambda address or malformed URI parameters."),
             CClientUIInterface::ICON_WARNING);
     }
 
@@ -376,7 +376,7 @@ void PaymentServer::handleURIOrFile(const QString &s) {
         return;
     }
 
-    // bitcoincash: CashAddr URI
+    // lambda: CashAddr URI
     if (handleURI(Params(), s)) {
         return;
     }
@@ -547,7 +547,7 @@ void PaymentServer::initNetManager() {
         delete netManager;
     }
 
-    // netManager is used to fetch paymentrequests given in bitcoincash: URIs
+    // netManager is used to fetch paymentrequests given in lambda: URIs
     netManager = new QNetworkAccessManager(this);
 
     QNetworkProxy proxy;
@@ -644,7 +644,7 @@ bool PaymentServer::processPaymentRequest(const PaymentRequestPlus &request,
             addresses.append(
                 QString::fromStdString(EncodeCashAddr(dest, Params())));
         } else if (!recipient.authenticatedMerchant.isEmpty()) {
-            // Unauthenticated payment requests to custom Bitcoin Cash addresses are
+            // Unauthenticated payment requests to custom Lambda addresses are
             // not supported (there is no good way to tell the user where they
             // are paying in a way they'd have a chance of understanding).
             Q_EMIT message(tr("Payment request rejected"),
@@ -654,7 +654,7 @@ bool PaymentServer::processPaymentRequest(const PaymentRequestPlus &request,
             return false;
         }
 
-        // Bitcoin amounts are stored as (optional) uint64 in the protobuf
+        // Lambda amounts are stored as (optional) uint64 in the protobuf
         // messages (see paymentrequest.proto), but Amount is defined as
         // int64_t. Because of that we need to verify that amounts are in a
         // valid range and no overflow has happened.
@@ -672,7 +672,7 @@ bool PaymentServer::processPaymentRequest(const PaymentRequestPlus &request,
                 tr("Payment request error"),
                 tr("Requested payment amount of %1 is too small (considered "
                    "dust).")
-                    .arg(BitcoinUnits::formatWithUnit(
+                    .arg(LambdaUnits::formatWithUnit(
                         optionsModel->getDisplayUnit(), sendingTo.second)),
                 CClientUIInterface::MSG_ERROR);
 

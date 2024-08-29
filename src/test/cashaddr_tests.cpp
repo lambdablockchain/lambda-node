@@ -1,5 +1,5 @@
 // Copyright (c) 2017 Pieter Wuille
-// Copyright (c) 2017-2019 The Bitcoin developers
+// Copyright (c) 2017-2019 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE(cashaddr_testvectors_valid) {
         "prefix:x64nx6hz",
         "PREFIX:X64NX6HZ",
         "p:gpf8m4h7",
-        "bitcoincash:qpzry9x8gf2tvdw0s3jn54khce6mua7lcw20ayyn",
+        "lambda:qpzry9x8gf2tvdw0s3jn54khce6mua7lcw20ayyn",
         "bchtest:testnetaddress4d6njnut",
         "bchreg:555555555555555555555555555555555555555555555udxmlmrz",
     };
@@ -94,11 +94,11 @@ BOOST_AUTO_TEST_CASE(cashaddr_rawencode) {
 
 BOOST_AUTO_TEST_CASE(cashaddr_testvectors_noprefix) {
     static const std::pair<std::string, std::string> CASES[] = {
-        {"bitcoincash", "qpzry9x8gf2tvdw0s3jn54khce6mua7lcw20ayyn"},
+        {"lambda", "qpzry9x8gf2tvdw0s3jn54khce6mua7lcw20ayyn"},
         {"prefix", "x64nx6hz"},
         {"PREFIX", "X64NX6HZ"},
         {"p", "gpf8m4h7"},
-        {"bitcoincash", "qpzry9x8gf2tvdw0s3jn54khce6mua7lcw20ayyn"},
+        {"lambda", "qpzry9x8gf2tvdw0s3jn54khce6mua7lcw20ayyn"},
         {"bchtest", "testnetaddress4d6njnut"},
         {"bchreg", "555555555555555555555555555555555555555555555udxmlmrz"},
     };

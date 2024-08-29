@@ -9,7 +9,7 @@
 phutil_register_library_map(array(
   '__library_version__' => 2,
   'class' => array(
-    'ArcanistBitcoinCashNodeConfiguration' => 'configuration/ArcanistBitcoinCashNodeConfiguration.php',
+    'ArcanistLambdaNodeConfiguration' => 'configuration/ArcanistLambdaNodeConfiguration.php',
     'AssertWithSideEffectsLinter' => 'linter/AssertWithSideEffectsLinter.php',
     'AutoPEP8FormatLinter' => 'linter/AutoPEP8Linter.php',
     'BashShebangLinter' => 'linter/BashShebangLinter.php',
@@ -40,7 +40,7 @@ phutil_register_library_map(array(
   ),
   'function' => array(),
   'xmap' => array(
-    'ArcanistBitcoinCashNodeConfiguration' => 'ArcanistConfiguration',
+    'ArcanistLambdaNodeConfiguration' => 'ArcanistConfiguration',
     'AssertWithSideEffectsLinter' => 'ArcanistLinter',
     'AutoPEP8FormatLinter' => 'ArcanistExternalLinter',
     'BashShebangLinter' => 'ArcanistLinter',

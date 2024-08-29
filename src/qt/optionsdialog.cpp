@@ -1,9 +1,9 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2016 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
+#include <config/lambda-config.h>
 #endif
 
 #include <qt/forms/ui_optionsdialog.h>
@@ -11,7 +11,7 @@
 
 #include <interfaces/node.h>
 #include <netbase.h>
-#include <qt/bitcoinunits.h>
+#include <qt/lambdaunits.h>
 #include <qt/guiutil.h>
 #include <qt/optionsmodel.h>
 #include <txdb.h>       // for -dbcache defaults
@@ -90,13 +90,13 @@ OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet)
     /* Display elements init */
     QDir translations(":translations");
 
-    ui->bitcoinAtStartup->setToolTip(
-        ui->bitcoinAtStartup->toolTip().arg(PACKAGE_NAME));
-    ui->bitcoinAtStartup->setText(
-        ui->bitcoinAtStartup->text().arg(PACKAGE_NAME));
+    ui->lambdaAtStartup->setToolTip(
+        ui->lambdaAtStartup->toolTip().arg(PACKAGE_NAME));
+    ui->lambdaAtStartup->setText(
+        ui->lambdaAtStartup->text().arg(PACKAGE_NAME));
 
-    ui->openBitcoinConfButton->setToolTip(
-        ui->openBitcoinConfButton->toolTip().arg(PACKAGE_NAME));
+    ui->openLambdaConfButton->setToolTip(
+        ui->openLambdaConfButton->toolTip().arg(PACKAGE_NAME));
 
     ui->lang->setToolTip(ui->lang->toolTip().arg(PACKAGE_NAME));
     ui->lang->addItem(QString("(") + tr("default") + QString(")"),
@@ -122,7 +122,7 @@ OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet)
     }
     ui->thirdPartyTxUrls->setPlaceholderText("https://example.com/tx/%s");
 
-    ui->unit->setModel(new BitcoinUnits(this));
+    ui->unit->setModel(new LambdaUnits(this));
 
     /* Widget-to-option mapper */
     mapper = new QDataWidgetMapper(this);
@@ -231,7 +231,7 @@ void OptionsDialog::setCurrentTab(OptionsDialog::Tab tab) {
 
 void OptionsDialog::setMapper() {
     /* Main */
-    mapper->addMapping(ui->bitcoinAtStartup, OptionsModel::StartAtStartup);
+    mapper->addMapping(ui->lambdaAtStartup, OptionsModel::StartAtStartup);
     mapper->addMapping(ui->threadsScriptVerif,
                        OptionsModel::ThreadsScriptVerif);
     mapper->addMapping(ui->databaseCache, OptionsModel::DatabaseCache);
@@ -296,7 +296,7 @@ void OptionsDialog::on_resetButton_clicked() {
     }
 }
 
-void OptionsDialog::on_openBitcoinConfButton_clicked() {
+void OptionsDialog::on_openLambdaConfButton_clicked() {
     /* explain the purpose of the config file */
     QMessageBox::information(
         this, tr("Configuration options"),
@@ -305,7 +305,7 @@ void OptionsDialog::on_openBitcoinConfButton_clicked() {
            "options will override this configuration file."));
 
     /* show an error if there was some problem opening the file */
-    if (!GUIUtil::openBitcoinConf()) {
+    if (!GUIUtil::openLambdaConf()) {
         QMessageBox::critical(
             this, tr("Error"),
             tr("The configuration file could not be opened."));

@@ -1,14 +1,14 @@
-# Copyright (c) 2018 The Bitcoin developers
+# Copyright (c) 2018 The Lambda developers
 
-project(test_bitcoin-qt)
+project(test_lambda-qt)
 
 include(TestSuite)
-create_test_suite(bitcoin-qt)
-add_dependencies(check check-bitcoin-qt)
+create_test_suite(lambda-qt)
+add_dependencies(check check-lambda-qt)
 
-add_test_to_suite(bitcoin-qt test_bitcoin-qt
+add_test_to_suite(lambda-qt test_lambda-qt
 	apptests.cpp
-	bitcoinaddressvalidatortests.cpp
+	lambdaaddressvalidatortests.cpp
 	compattests.cpp
 	guiutiltests.cpp
 	rpcnestedtests.cpp
@@ -20,12 +20,12 @@ add_test_to_suite(bitcoin-qt test_bitcoin-qt
 	../../test/setup_common.cpp
 )
 
-target_link_libraries(test_bitcoin-qt bitcoin-qt-base Qt5::Test)
+target_link_libraries(test_lambda-qt lambda-qt-base Qt5::Test)
 
 # Wallet
-if(BUILD_BITCOIN_WALLET)
-	# Add wallet functionality to test_bitcoin-qt
-	target_sources(test_bitcoin-qt
+if(BUILD_LAMBDA_WALLET)
+	# Add wallet functionality to test_lambda-qt
+	target_sources(test_lambda-qt
 		PRIVATE
 			addressbooktests.cpp
 			wallettests.cpp
@@ -33,11 +33,11 @@ if(BUILD_BITCOIN_WALLET)
 	)
 
 	if(ENABLE_BIP70)
-		target_sources(test_bitcoin-qt
+		target_sources(test_lambda-qt
 			PRIVATE
 				paymentservertests.cpp
 		)
 	endif()
 
-	target_link_libraries(test_bitcoin-qt wallet)
+	target_link_libraries(test_lambda-qt wallet)
 endif()

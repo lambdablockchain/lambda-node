@@ -16,7 +16,7 @@
                 "reqSigs": 1,
                 "type": "scripthash",
                 "addresses": [
-                    "bitcoincash:pqwxlwh5d4jzy85qewhpstpnmhuphy554sz8zaw8xt"
+                    "lambda:pqwxlwh5d4jzy85qewhpstpnmhuphy554sz8zaw8xt"
                 ]
             }
         }

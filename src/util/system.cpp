@@ -1,11 +1,11 @@
 // Copyright (c) 2009-2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2019 The Bitcoin Core developers
-// Copyright (c) 2020 The Bitcoin developers
+// Copyright (c) 2009-2019 The Lambda Core developers
+// Copyright (c) 2020 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
+#include <config/lambda-config.h>
 #endif
 
 #include <util/system.h>
@@ -78,7 +78,7 @@
 // Application startup time (used for uptime calculation)
 const int64_t nStartupTime = GetTime();
 
-const char *const BITCOIN_CONF_FILENAME = "bitcoin.conf";
+const char *const LAMBDA_CONF_FILENAME = "lambda.conf";
 
 ArgsManager gArgs;
 
@@ -238,7 +238,7 @@ public:
         std::pair<bool, std::string> found_result(false, std::string());
 
         // We pass "true" to GetArgHelper in order to return the last
-        // argument value seen from the command line (so "bitcoind -foo=bar
+        // argument value seen from the command line (so "lambdad -foo=bar
         // -foo=baz" gives GetArg(am,"foo")=={true,"baz"}
         found_result = GetArgHelper(am.m_override_args, arg, true);
         if (found_result.first) {
@@ -440,7 +440,7 @@ bool ArgsManager::ParseParameters(int argc, const char *const argv[],
 
     for (int i = 1; i < argc; i++) {
         std::string key(argv[i]);
-        if (key == "-") break; // bitcoin-tx using stdin
+        if (key == "-") break; // lambda-tx using stdin
         std::string val;
         if (!ParseKeyValue(key, val)) {
             break;
@@ -771,7 +771,7 @@ static std::string FormatException(const std::exception *pex,
     char pszModule[MAX_PATH] = "";
     GetModuleFileNameA(nullptr, pszModule, sizeof(pszModule));
 #else
-    const char *pszModule = "bitcoin";
+    const char *pszModule = "lambda";
 #endif
     if (pex) {
         return strprintf("EXCEPTION: %s       \n%s       \n%s in %s       \n",
@@ -790,13 +790,13 @@ void PrintExceptionContinue(const std::exception *pex, const char *pszThread) {
 }
 
 fs::path GetDefaultDataDir() {
-// Windows < Vista: C:\Documents and Settings\Username\Application Data\Bitcoin
-// Windows >= Vista: C:\Users\Username\AppData\Roaming\Bitcoin
-// Mac: ~/Library/Application Support/Bitcoin
-// Unix: ~/.bitcoin
+// Windows < Vista: C:\Documents and Settings\Username\Application Data\Lambda
+// Windows >= Vista: C:\Users\Username\AppData\Roaming\Lambda
+// Mac: ~/Library/Application Support/Lambda
+// Unix: ~/.lambda
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "Bitcoin";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "Lambda";
 #else
     fs::path pathRet;
     char *pszHome = getenv("HOME");
@@ -807,10 +807,10 @@ fs::path GetDefaultDataDir() {
     }
 #ifdef MAC_OSX
     // Mac
-    return pathRet / "Library/Application Support/Bitcoin";
+    return pathRet / "Library/Application Support/Lambda";
 #else
     // Unix
-    return pathRet / ".bitcoin";
+    return pathRet / ".lambda";
 #endif
 #endif
 }
@@ -876,9 +876,9 @@ const fs::path &GetDataDir(bool fNetSpecific) {
         //
         // TODO: this is an ugly way to create the wallets/ directory and
         // really shouldn't be done here. Once this is fixed, please
-        // also remove the corresponding line in bitcoind.cpp AppInit.
+        // also remove the corresponding line in lambdad.cpp AppInit.
         // See more info at:
-        // https://reviews.bitcoinabc.org/D3312
+        // https://reviews.lambdaabc.org/D3312
         fs::create_directories(path / "wallets");
     }
 
@@ -1023,7 +1023,7 @@ bool ArgsManager::ReadConfigFiles(std::string &error,
     }
 
     // Error out if the conf file is specified but it doesn't exist
-    const fs::path config_file_path = GetConfigFile(gArgs.GetArg("-conf", BITCOIN_CONF_FILENAME));
+    const fs::path config_file_path = GetConfigFile(gArgs.GetArg("-conf", LAMBDA_CONF_FILENAME));
     if (!fs::exists(config_file_path) && IsArgSet("-conf")) {
         error = strprintf(_("The specified config file %s does not exist"),
                           config_file_path.string());

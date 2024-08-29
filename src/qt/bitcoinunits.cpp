@@ -1,5 +1,5 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
-// Copyright (c) 2021 The Bitcoin developers
+// Copyright (c) 2011-2016 The Lambda Core developers
+// Copyright (c) 2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -10,11 +10,11 @@
 #include <QLocale>
 #include <QStringList>
 
-BitcoinUnits::BitcoinUnits(QObject *parent)
+LambdaUnits::LambdaUnits(QObject *parent)
     : QAbstractListModel(parent), unitlist(availableUnits()) {}
 
-QList<BitcoinUnits::Unit> BitcoinUnits::availableUnits() {
-    QList<BitcoinUnits::Unit> unitlist;
+QList<LambdaUnits::Unit> LambdaUnits::availableUnits() {
+    QList<LambdaUnits::Unit> unitlist;
     unitlist.append(BCH);
     unitlist.append(mBCH);
     unitlist.append(uBCH);
@@ -22,7 +22,7 @@ QList<BitcoinUnits::Unit> BitcoinUnits::availableUnits() {
     return unitlist;
 }
 
-bool BitcoinUnits::valid(int unit) {
+bool LambdaUnits::valid(int unit) {
     switch (unit) {
         case BCH:
         case mBCH:
@@ -34,7 +34,7 @@ bool BitcoinUnits::valid(int unit) {
     }
 }
 
-QString BitcoinUnits::ticker(int unit) {
+QString LambdaUnits::ticker(int unit) {
     switch (unit) {
         case BCH:
             return QString("LMA");
@@ -49,8 +49,8 @@ QString BitcoinUnits::ticker(int unit) {
     }
 }
 
-QString BitcoinUnits::description(int unit) {
-    constexpr auto thinUtf8 = BitcoinSpaces::thinUtf8;
+QString LambdaUnits::description(int unit) {
+    constexpr auto thinUtf8 = LambdaSpaces::thinUtf8;
     switch (unit) {
         case BCH:
             return QObject::tr("lambdas");
@@ -65,7 +65,7 @@ QString BitcoinUnits::description(int unit) {
     }
 }
 
-qint64 BitcoinUnits::factor(int unit) {
+qint64 LambdaUnits::factor(int unit) {
     switch (unit) {
         case BCH:
             return 100000000;
@@ -80,7 +80,7 @@ qint64 BitcoinUnits::factor(int unit) {
     }
 }
 
-int BitcoinUnits::decimals(int unit) {
+int LambdaUnits::decimals(int unit) {
     switch (unit) {
         case BCH:
             return 8;
@@ -95,12 +95,12 @@ int BitcoinUnits::decimals(int unit) {
     }
 }
 
-bool BitcoinUnits::decimalSeparatorIsComma() {
+bool LambdaUnits::decimalSeparatorIsComma() {
     // Considering that:
     // * bitcoin is an international currency;
-    // * Bitcoin-Qt uses only spaces as group separator, as recommended by SI;
-    // * Bitcoin-Qt traditionally displays amounts with the dot as decimal separator;
-    // * Bitcoin-Qt traditionally accepts both dots and commas as decimal separators in input amounts;
+    // * Lambda-Qt uses only spaces as group separator, as recommended by SI;
+    // * Lambda-Qt traditionally displays amounts with the dot as decimal separator;
+    // * Lambda-Qt traditionally accepts both dots and commas as decimal separators in input amounts;
     // * some locales use dots as group separator rather than decimal separator;
     // * some locales have different decimal separators for currency amounts and other numbers;
     // * one cannot retrieve the decimal separator for currency amounts from QLocale;
@@ -110,7 +110,7 @@ bool BitcoinUnits::decimalSeparatorIsComma() {
     return QString(QLocale().groupSeparator()) == ".";
 }
 
-QString BitcoinUnits::format(int unit, const Amount nIn, bool fPlus,
+QString LambdaUnits::format(int unit, const Amount nIn, bool fPlus,
                              SeparatorStyle separators) {
     // Note: not using straight sprintf here because we do NOT want
     // standard localized number formatting.
@@ -131,7 +131,7 @@ QString BitcoinUnits::format(int unit, const Amount nIn, bool fPlus,
     if (separators == separatorAlways ||
         (separators == separatorStandard && q_size > 4)) {
         for (int i = 3; i < q_size; i += 3) {
-            quotient_str.insert(q_size - i, BitcoinSpaces::thin);
+            quotient_str.insert(q_size - i, LambdaSpaces::thin);
         }
     }
 
@@ -159,20 +159,20 @@ QString BitcoinUnits::format(int unit, const Amount nIn, bool fPlus,
 // Please take care to use formatHtmlWithUnit instead, when
 // appropriate.
 
-QString BitcoinUnits::formatWithUnit(int unit, const Amount amount,
+QString LambdaUnits::formatWithUnit(int unit, const Amount amount,
                                      bool plussign, SeparatorStyle separators) {
     return format(unit, amount, plussign, separators) + " " + ticker(unit);
 }
 
-QString BitcoinUnits::formatHtmlWithUnit(int unit, const Amount amount,
+QString LambdaUnits::formatHtmlWithUnit(int unit, const Amount amount,
                                          bool plussign,
                                          SeparatorStyle separators) {
     QString str(formatWithUnit(unit, amount, plussign, separators));
-    str.replace(BitcoinSpaces::thin, QString(BitcoinSpaces::thinHtml));
+    str.replace(LambdaSpaces::thin, QString(LambdaSpaces::thinHtml));
     return QString("<span style='white-space: nowrap;'>%1</span>").arg(str);
 }
 
-std::optional<Amount> BitcoinUnits::parse(int unit, bool allowComma, const QString& value) {
+std::optional<Amount> LambdaUnits::parse(int unit, bool allowComma, const QString& value) {
     if (!valid(unit) || value.isEmpty()) {
         // Refuse to parse invalid unit or empty string
         return std::nullopt;
@@ -216,20 +216,20 @@ std::optional<Amount> BitcoinUnits::parse(int unit, bool allowComma, const QStri
     return sats * SATOSHI;
 }
 
-QString BitcoinUnits::getAmountColumnTitle(int unit) {
+QString LambdaUnits::getAmountColumnTitle(int unit) {
     QString amountTitle = QObject::tr("Amount");
-    if (BitcoinUnits::valid(unit)) {
-        amountTitle += " (" + BitcoinUnits::ticker(unit) + ")";
+    if (LambdaUnits::valid(unit)) {
+        amountTitle += " (" + LambdaUnits::ticker(unit) + ")";
     }
     return amountTitle;
 }
 
-int BitcoinUnits::rowCount(const QModelIndex &parent) const {
+int LambdaUnits::rowCount(const QModelIndex &parent) const {
     Q_UNUSED(parent);
     return unitlist.size();
 }
 
-QVariant BitcoinUnits::data(const QModelIndex &index, int role) const {
+QVariant LambdaUnits::data(const QModelIndex &index, int role) const {
     int row = index.row();
     if (row >= 0 && row < unitlist.size()) {
         Unit unit = unitlist.at(row);

@@ -1,9 +1,9 @@
-// Copyright (c) 2016 The Bitcoin Core developers
+// Copyright (c) 2016 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
+#include <config/lambda-config.h>
 #endif
 
 #include <qt/test/compattests.h>
@@ -16,7 +16,7 @@
 #include <compat/byteswap.h>
 
 void CompatTests::bswapTests() {
-    // Sibling in bitcoin/src/test/bswap_tests.cpp
+    // Sibling in lambda/src/test/bswap_tests.cpp
     uint16_t u1 = 0x1234;
     uint32_t u2 = 0x56789abc;
     uint64_t u3 = 0xdef0123456789abc;

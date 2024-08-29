@@ -2,7 +2,7 @@
 
 (updated for FreeBSD 12.1)
 
-This guide describes how to build bitcoind and command-line utilities on FreeBSD.
+This guide describes how to build lambdad and command-line utilities on FreeBSD.
 
 This guide does not contain instructions for building the GUI.
 
@@ -31,7 +31,7 @@ To enable ZeroMQ:
 pkg install libzmq4
 ```
 
-If not installed, ZeroMQ support should be disabled by passing `-DBUILD_BITCOIN_ZMQ=OFF`
+If not installed, ZeroMQ support should be disabled by passing `-DBUILD_LAMBDA_ZMQ=OFF`
 to `cmake`.
 
 In order to run the test suite (recommended), you will need to have Python 3:
@@ -52,7 +52,7 @@ For the wallet (optional):
 pkg install db5
 ```
 
-If you also want to build the GUI client `bitcoin-qt` Qt 5 is necessary.
+If you also want to build the GUI client `lambda-qt` Qt 5 is necessary.
 To build with Qt 5 you need the following packages installed:
 
 ```bash
@@ -71,13 +71,13 @@ pkg install help2man
 If not installed, manpage generation should be disabled by passing `-DENABLE_MAN=OFF`
 to `cmake`.
 
-## Building Bitcoin Cash Node
+## Building Lambda Node
 
 Download the source code:
 
 ```bash
-git clone https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node.git
-cd bitcoin-cash-node/
+git clone https://github.com/lambdablockchain/lambda-node.git
+cd lambda-node/
 ```
 
 To build with wallet:
@@ -85,7 +85,7 @@ To build with wallet:
 ```bash
 mkdir build
 cd build
-cmake -GNinja -DBUILD_BITCOIN_QT=OFF ..
+cmake -GNinja -DBUILD_LAMBDA_QT=OFF ..
 ninja
 ninja check # recommended
 ```
@@ -95,7 +95,7 @@ To build without wallet:
 ```bash
 mkdir build
 cd build
-cmake -GNinja -DBUILD_BITCOIN_QT=OFF -DBUILD_BITCOIN_WALLET=OFF ..
+cmake -GNinja -DBUILD_LAMBDA_QT=OFF -DBUILD_LAMBDA_WALLET=OFF ..
 ninja
 ninja check # recommended
 ```
@@ -108,7 +108,7 @@ cd build
 cmake -GNinja ..
 ninja
 ninja check # recommended
-ninja test_bitcoin-qt # recommended
+ninja test_lambda-qt # recommended
 ```
 
 After a successful test you can install the newly built binaries to your bin directory.

@@ -5,7 +5,7 @@
  */
 final class IncludeGuardLinter extends ArcanistLinter {
 
-  const GUARD_PREFIX = 'BITCOIN_';
+  const GUARD_PREFIX = 'LAMBDA_';
   const GUARD_SUFFIX = '_H';
 
   const INCLUDE_GUARD_INVALID = 1;

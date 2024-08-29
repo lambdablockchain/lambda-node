@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Copyright (c) 2016-2019 The Bitcoin Core developers
-# Copyright (c) 2020-2021 The Bitcoin developers
+# Copyright (c) 2016-2019 The Lambda Core developers
+# Copyright (c) 2020-2021 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -17,8 +17,8 @@ else
     export SOURCE_DATE_EPOCH="$(git show -s --format=%ct HEAD)"
   fi
   # Generate the manpage with help2man.
-  if [ "@CMAKE_SYSTEM_NAME@" == "Darwin" ] && [ "$1" == "qt/bitcoin-qt" ]; then
-    help2man --include=footer.h2m -o "${1##*/}.1" "../../src/qt/@BITCOIN_QT_OSX_BUNDLE_NAME@.app/Contents/MacOS/@BITCOIN_QT_OSX_BUNDLE_NAME@"
+  if [ "@CMAKE_SYSTEM_NAME@" == "Darwin" ] && [ "$1" == "qt/lambda-qt" ]; then
+    help2man --include=footer.h2m -o "${1##*/}.1" "../../src/qt/@LAMBDA_QT_OSX_BUNDLE_NAME@.app/Contents/MacOS/@LAMBDA_QT_OSX_BUNDLE_NAME@"
   else
     help2man --include=footer.h2m -o "${1##*/}.1" "../../src/$1"
   fi

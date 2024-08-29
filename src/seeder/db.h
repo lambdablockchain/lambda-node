@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2019 The Bitcoin developers
+// Copyright (c) 2017-2019 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -7,7 +7,7 @@
 #include <chainparams.h>
 #include <netbase.h>
 #include <protocol.h>
-#include <seeder/bitcoin.h>
+#include <seeder/lambda.h>
 #include <seeder/util.h>
 #include <sync.h>
 #include <version.h>

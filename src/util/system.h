@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2019 The Bitcoin Core developers
+// Copyright (c) 2009-2019 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -10,7 +10,7 @@
 #pragma once
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
+#include <config/lambda-config.h>
 #endif
 
 #include <attributes.h>
@@ -36,7 +36,7 @@
 // Application startup time (used for uptime calculation)
 int64_t GetStartupTime();
 
-extern const char *const BITCOIN_CONF_FILENAME;
+extern const char *const LAMBDA_CONF_FILENAME;
 
 /** Translate a message to the native language of the user. */
 const extern std::function<std::string(const char *)> G_TRANSLATION_FUN;

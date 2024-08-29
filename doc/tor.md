@@ -1,6 +1,6 @@
-# TOR SUPPORT IN BITCOIN
+# TOR SUPPORT IN LAMBDA
 
-It is possible to run Bitcoin Cash Node as a Tor onion service, and connect to
+It is possible to run Lambda Node as a Tor onion service, and connect to
 such services.
 
 The following directions assume you have a Tor proxy running on port 9050. Many
@@ -9,9 +9,9 @@ may not. In particular, the Tor Browser Bundle defaults to listening on port 915
 See [Tor Project FAQ:TBBSocksPort](https://www.torproject.org/docs/faq.html.en#TBBSocksPort)
 for how to properly configure Tor.
 
-## 1. Run Bitcoin Cash Node behind a Tor proxy
+## 1. Run Lambda Node behind a Tor proxy
 
-The first step is running Bitcoin Cash Node behind a Tor proxy. This will already
+The first step is running Lambda Node behind a Tor proxy. This will already
 anonymize all outgoing connections, but more is possible.
 
     -proxy=ip:port  Set the proxy server. If SOCKS5 is selected (default), this proxy
@@ -32,27 +32,27 @@ anonymize all outgoing connections, but more is possible.
 
 In a typical situation, this suffices to run behind a Tor proxy:
 
-    ./bitcoind -proxy=127.0.0.1:9050
+    ./lambdad -proxy=127.0.0.1:9050
 
-## 2. Run a Bitcoin Cash Node hidden server
+## 2. Run a Lambda Node hidden server
 
 If you configure your Tor system accordingly, it is possible to make your node also
 reachable from the Tor network. Add these lines to your /etc/tor/torrc (or equivalent
 config file): *Needed for Tor version 0.2.7.0 and older versions of Tor only.
 For newer versions of Tor see [Section 3](#3-automatically-listen-on-tor).*
 
-    HiddenServiceDir /var/lib/tor/bitcoin-service/
+    HiddenServiceDir /var/lib/tor/lambda-service/
     HiddenServicePort 9333 127.0.0.1:9334
     HiddenServicePort 19333 127.0.0.1:19334
 
 The directory can be different of course, but virtual port numbers should be equal to
-your bitcoind's P2P listen port (9333 by default), and target addresses and ports
+your lambdad's P2P listen port (9333 by default), and target addresses and ports
 should be equal to binding address and port for inbound Tor connections (127.0.0.1:9334 by default).
 
-    -externalip=X   You can tell bitcoin about its publicly reachable address using
+    -externalip=X   You can tell lambda about its publicly reachable address using
                     this option, and this can be a .onion address. Given the above
                     configuration, you can find your .onion address in
-                    /var/lib/tor/bitcoin-service/hostname. For connections
+                    /var/lib/tor/lambda-service/hostname. For connections
                     coming from unroutable addresses (such as 127.0.0.1, where the
                     Tor proxy typically runs), .onion addresses are given
                     preference for your node to advertise itself with.
@@ -69,56 +69,56 @@ should be equal to binding address and port for inbound Tor connections (127.0.0
 
 In a typical situation, where you're only reachable via Tor, this should suffice:
 
-    ./bitcoind -proxy=127.0.0.1:9050 -externalip=57qr3yd1nyntf5k.onion -listen
+    ./lambdad -proxy=127.0.0.1:9050 -externalip=57qr3yd1nyntf5k.onion -listen
 
 (obviously, replace the .onion address with your own). It should be noted that
 you still listen on all devices and another node could establish a clearnet
 connection, when knowing your address. To mitigate this, additionally bind the
 address of your Tor proxy:
 
-    ./bitcoind ... -bind=127.0.0.1
+    ./lambdad ... -bind=127.0.0.1
 
 If you don't care too much about hiding your node, and want to be reachable on IPv4
 as well, use `discover` instead:
 
-    ./bitcoind ... -discover
+    ./lambdad ... -discover
 
 and open port 9333 on your firewall (or use -upnp).
 
 If you only want to use Tor to reach .onion addresses, but not use it as a proxy
 for normal IPv4/IPv6 communication, use:
 
-    ./bitcoind -onion=127.0.0.1:9050 -externalip=57qr3yd1nyntf5k.onion -discover
+    ./lambdad -onion=127.0.0.1:9050 -externalip=57qr3yd1nyntf5k.onion -discover
 
 ## 3. Automatically listen on Tor
 
 Starting with Tor version 0.2.7.1 it is possible, through Tor's control socket
 API, to create and destroy 'ephemeral' onion services programmatically.
-Bitcoin Core has been updated to make use of this.
+Lambda Core has been updated to make use of this.
 
 This means that if Tor is running (and proper authentication has been configured),
-Bitcoin Core automatically creates an onion service to listen on. This will positively
+Lambda Core automatically creates an onion service to listen on. This will positively
 affect the number of available .onion nodes.
 
-This new feature is enabled by default if Bitcoin Cash Node is listening (`-listen`),
+This new feature is enabled by default if Lambda Node is listening (`-listen`),
 and requires a Tor connection to work. It can be explicitly disabled with
 `-listenonion=0` and, if not disabled, configured using the `-torcontrol` and
 `-torpassword` settings. To show verbose debugging information, pass `-debug=tor`.
 
 Connecting to Tor's control socket API requires one of two authentication methods
-to be configured. For cookie authentication the user running bitcoind must have
+to be configured. For cookie authentication the user running lambdad must have
 write access to the `CookieAuthFile` specified in Tor configuration. In some cases,
 this is preconfigured and the creation of a onion service is automatic. If
 permission problems are seen with `-debug=tor` they can be resolved by adding both
-the user running Tor and the user running bitcoind to the same group and setting
-permissions appropriately. On Debian-based systems the user running bitcoind can
+the user running Tor and the user running lambdad to the same group and setting
+permissions appropriately. On Debian-based systems the user running lambdad can
 be added to the debian-tor group, which has the appropriate permissions. An
 alternative authentication method is the use of the `-torpassword` flag and a
 `hash-password` which can be enabled and specified in Tor configuration.
 
 ## 4. Privacy recommendations
 
-- Do not add anything but Bitcoin Cash Node ports to the onion service created
+- Do not add anything but Lambda Node ports to the onion service created
   in section 2.
   If you run a web service too, create a new onion service for that.
   Otherwise it is trivial to link them, which may reduce privacy. Hidden

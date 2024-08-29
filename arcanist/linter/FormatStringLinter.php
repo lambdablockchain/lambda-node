@@ -47,7 +47,7 @@ final class FormatStringLinter extends ArcanistExternalLinter {
 
   public function getInstallInstructions() {
     return pht('The test/lint/lint-format-strings.py script is part of the '.
-      'bitcoin-abc project');
+      'lambda-abc project');
   }
 
   public function shouldExpectCommandErrors() {

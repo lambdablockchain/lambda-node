@@ -1,6 +1,6 @@
-# Copyright (c) 2018 The Bitcoin developers
+# Copyright (c) 2018 The Lambda developers
 
-project(bitcoin-test)
+project(lambda-test)
 
 option(ENABLE_PROPERTY_BASED_TESTS "Enable property based tests" OFF)
 
@@ -42,15 +42,15 @@ gen_json_header(JSON_HEADERS
 )
 
 include(TestSuite)
-create_test_suite(bitcoin)
-add_dependencies(check check-bitcoin)
+create_test_suite(lambda)
+add_dependencies(check check-lambda)
 
-if(BUILD_BITCOIN_WALLET)
-  set(BITCOIN_WALLET_TEST_FIXTURE
+if(BUILD_LAMBDA_WALLET)
+  set(LAMBDA_WALLET_TEST_FIXTURE
     ../wallet/test/init_test_fixture.cpp
     ../wallet/test/wallet_test_fixture.cpp
   )
-  set(BITCOIN_WALLET_TESTS
+  set(LAMBDA_WALLET_TESTS
     ../wallet/test/db_tests.cpp
     ../wallet/test/coinselector_tests.cpp
     ../wallet/test/init_tests.cpp
@@ -64,10 +64,10 @@ endif()
 if(ENABLE_PROPERTY_BASED_TESTS)
   find_package(Rapidcheck REQUIRED)
 
-  set(BITCOIN_PROPERTY_BASED_TEST_FIXTURE
+  set(LAMBDA_PROPERTY_BASED_TEST_FIXTURE
     gen/crypto_gen.cpp
   )
-  set(BITCOIN_PROPERTY_BASED_TESTS
+  set(LAMBDA_PROPERTY_BASED_TESTS
     key_properties.cpp
   )
 endif()
@@ -98,7 +98,7 @@ gen_asmap_headers(ASMAP_HEADERS
   data/asmap.raw
 )
 
-add_boost_unit_tests_to_suite(bitcoin test_bitcoin
+add_boost_unit_tests_to_suite(lambda test_lambda
   check_assert.cpp
   jsonutil.cpp
   lib/transaction_utils.cpp
@@ -113,10 +113,10 @@ add_boost_unit_tests_to_suite(bitcoin test_bitcoin
   ${JSON_HEADERS}
 
   # Wallet test fixture
-  ${BITCOIN_WALLET_TEST_FIXTURE}
+  ${LAMBDA_WALLET_TEST_FIXTURE}
 
   # Properties based test fixture
-  ${BITCOIN_PROPERTY_BASED_TEST_FIXTURE}
+  ${LAMBDA_PROPERTY_BASED_TEST_FIXTURE}
 
   TESTS
     activation_tests.cpp
@@ -227,14 +227,14 @@ add_boost_unit_tests_to_suite(bitcoin test_bitcoin
     ../rpc/test/server_tests.cpp
 
     # Wallet tests
-    ${BITCOIN_WALLET_TESTS}
+    ${LAMBDA_WALLET_TESTS}
 
     # Properties based tests
-    ${BITCOIN_PROPERTY_BASED_TESTS}
+    ${LAMBDA_PROPERTY_BASED_TESTS}
 )
 
 if(ENABLE_PROPERTY_BASED_TESTS)
-  target_link_libraries(test_bitcoin Rapidcheck::rapidcheck)
+  target_link_libraries(test_lambda Rapidcheck::rapidcheck)
 endif()
 
 function(add_boost_test_runners_with_upgrade_activated SUITE EXECUTABLE)
@@ -263,13 +263,13 @@ function(add_boost_test_runners_with_upgrade_activated SUITE EXECUTABLE)
   endforeach()
 endfunction()
 
-add_boost_test_runners_with_upgrade_activated(bitcoin test_bitcoin)
+add_boost_test_runners_with_upgrade_activated(lambda test_lambda)
 
-target_link_libraries(test_bitcoin rpcclient server)
-if(TARGET bitcoinconsensus-shared)
-  target_link_libraries(test_bitcoin bitcoinconsensus-shared)
+target_link_libraries(test_lambda rpcclient server)
+if(TARGET lambdaconsensus-shared)
+  target_link_libraries(test_lambda lambdaconsensus-shared)
 else()
-  target_link_libraries(test_bitcoin bitcoinconsensus)
+  target_link_libraries(test_lambda lambdaconsensus)
 endif()
 
 add_subdirectory(fuzz)

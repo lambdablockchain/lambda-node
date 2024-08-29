@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2017-2019 The Bitcoin Core developers
+# Copyright (c) 2017-2019 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -10,7 +10,7 @@ import decimal
 import json
 import os
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import (
     assert_equal,
     assert_raises_rpc_error,
@@ -27,7 +27,7 @@ def EncodeDecimal(o):
     raise TypeError(repr(o) + " is not JSON serializable")
 
 
-class GetblockstatsTest(BitcoinTestFramework):
+class GetblockstatsTest(LambdaTestFramework):
 
     start_height = 101
     max_stat_pos = 2

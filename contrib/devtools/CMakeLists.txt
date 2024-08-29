@@ -1,4 +1,4 @@
-# Copyright (c) 2019 The Bitcoin developers
+# Copyright (c) 2019 The Lambda developers
 
 set(SPLIT_DEBUG_SCRIPT_TMP "tmp/split-debug.sh")
 configure_file(
@@ -49,7 +49,7 @@ add_dependencies(check-all check-devtools)
 include(PackageHelper)
 exclude_from_source_package(
 	# Files
-	"bitcoind-exit-on-log.sh"
+	"lambdad-exit-on-log.sh"
 	"circular-dependencies.py"
 	"copyright_header.py"
 	"extract_strings_qt.py"

@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2018 The Bitcoin Core developers
-// Copyright (c) 2018-2019 The Bitcoin developers
+// Copyright (c) 2009-2018 The Lambda Core developers
+// Copyright (c) 2018-2019 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -31,7 +31,7 @@ void InitLogging();
 void InitParameterInteraction();
 
 /**
- * Initialize bitcoin: Basic context setup.
+ * Initialize lambda: Basic context setup.
  * @note This can be done before daemonization.
  * Do not call Shutdown() if this function fails.
  * @pre Parameters should be parsed and config file should be read.
@@ -54,7 +54,7 @@ bool AppInitParameterInteraction(Config &config);
  */
 bool AppInitSanityChecks();
 /**
- * Lock bitcoin data directory.
+ * Lock lambda data directory.
  * @note This should only be done after daemonization.
  * Do not call Shutdown() if this function fails.
  * @pre Parameters should be parsed and config file should be read,
@@ -62,7 +62,7 @@ bool AppInitSanityChecks();
  */
 bool AppInitLockDataDirectory();
 /**
- * Bitcoin main initialization.
+ * Lambda main initialization.
  * @note This should only be done after daemonization.
  * @pre Parameters should be parsed and config file should be read,
  * AppInitLockDataDirectory should have been called.

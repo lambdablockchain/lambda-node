@@ -1,10 +1,10 @@
-// Copyright (c) 2011-2019 The Bitcoin Core developers
-// Copyright (c) 2021 The Bitcoin developers
+// Copyright (c) 2011-2019 The Lambda Core developers
+// Copyright (c) 2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
+#include <config/lambda-config.h>
 #endif
 
 #include <qt/walletmodel.h>
@@ -167,7 +167,7 @@ WalletModel::prepareTransaction(WalletModelTransaction &transaction,
             total += subtotal;
         }
 
-        // User-entered Bitcoin Cash address / amount:
+        // User-entered Lambda address / amount:
         else
 #endif
         {
@@ -253,8 +253,8 @@ WalletModel::sendCoins(WalletModelTransaction &transaction) {
 #endif
         {
             if (!rcp.message.isEmpty()) {
-                // Message from normal bitcoincash:URI
-                // (bitcoincash:123...?message=example)
+                // Message from normal lambda:URI
+                // (lambda:123...?message=example)
                 vOrderForm.emplace_back("Message", rcp.message.toStdString());
             }
         }

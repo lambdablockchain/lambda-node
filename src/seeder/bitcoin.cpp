@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2021 The Bitcoin developers
+// Copyright (c) 2017-2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -98,7 +98,7 @@ void CSeederNode::PushVersion() {
     const CAddress me(CService{}, ServiceFlags(NODE_NETWORK | NODE_BITCOIN_CASH));
     BeginMessage(NetMsgType::VERSION);
     const int nBestHeight = GetRequireHeight();
-    const std::string ver = strprintf("/bitcoin-cash-seeder:%i.%i.%i/",
+    const std::string ver = strprintf("/lambda-seeder:%i.%i.%i/",
                                       CLIENT_VERSION_MAJOR, CLIENT_VERSION_MINOR, CLIENT_VERSION_REVISION);
     const uint8_t fRelayTxs = 0;
     vSend << PROTOCOL_VERSION << nLocalServices << nTime << you << me

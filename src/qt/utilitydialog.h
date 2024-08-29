@@ -1,5 +1,5 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
-// Copyright (c) 2021 The Bitcoin developers
+// Copyright (c) 2011-2016 The Lambda Core developers
+// Copyright (c) 2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -8,7 +8,7 @@
 #include <QDialog>
 #include <QObject>
 
-class BitcoinGUI;
+class LambdaGUI;
 
 namespace interfaces {
 class Node;
@@ -28,7 +28,7 @@ public:
     ~HelpMessageDialog();
 
     static QString versionText();
-    static constexpr const char* headerText = "Usage:  bitcoin-qt [command-line options]\n";
+    static constexpr const char* headerText = "Usage:  lambda-qt [command-line options]\n";
 
 private:
     Ui::HelpMessageDialog *ui;
@@ -43,7 +43,7 @@ class ShutdownWindow : public QWidget {
 
 public:
     explicit ShutdownWindow(QWidget *parent = nullptr);
-    static QWidget *showShutdownWindow(BitcoinGUI *window);
+    static QWidget *showShutdownWindow(LambdaGUI *window);
 
 protected:
     void closeEvent(QCloseEvent *event) override;

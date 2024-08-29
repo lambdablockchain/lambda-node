@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Script to poll bitcoind for MTP to elapse and broadcast a transaction"""
+"""Script to poll lambdad for MTP to elapse and broadcast a transaction"""
 
 import aiohttp
 import asyncio
@@ -24,7 +24,7 @@ def get_time_str() -> str:
     return time.strftime('%a, %d %b %Y %H:%M:%S GMT', time.gmtime())
 
 
-class BitcoinDInfo:
+class LambdaDInfo:
     __slots__ = ('host', 'port', 'rpcuser', 'rpcpass', 'idctr')
 
     def __init__(self, host, port, rpcuser, rpcpass):
@@ -45,7 +45,7 @@ class BitcoinDInfo:
         return self.idctr
 
     def __str__(self) -> str:
-        return f"BitcoinD at {self.url}"
+        return f"LambdaD at {self.url}"
 
     def __repr__(self) -> str:
         return f"<{str(self)}>"
@@ -55,9 +55,9 @@ class BadStatus(RuntimeError):
     pass
 
 
-class BitcoinDHelper:
+class LambdaDHelper:
 
-    def __init__(self, info: BitcoinDInfo):
+    def __init__(self, info: LambdaDInfo):
         self.info = info
 
     async def invoke_rpc_method(self, method: str, params: list = []) -> Union[dict, list, int, str, float, type(None)]:
@@ -91,15 +91,15 @@ class BitcoinDHelper:
         return await self.invoke_rpc_method("sendrawtransaction", [txnhex, allowhighfees])
 
 
-async def poller(info: BitcoinDInfo, txnhex: str, mtptarget: int, sleeptime: float):
-    bd = BitcoinDHelper(info)
+async def poller(info: LambdaDInfo, txnhex: str, mtptarget: int, sleeptime: float):
+    bd = LambdaDHelper(info)
 
     while True:
         print(f"[{get_time_str()}]", end=" ")
         try:
             mtp = await bd.getmediantime()
         except (OSError, ValueError, KeyError, BadStatus) as e:
-            # bitcoind possibly temporarily down, restarted, restarting, etc. Just print a message and continue looping
+            # lambdad possibly temporarily down, restarted, restarting, etc. Just print a message and continue looping
             # after sleeping
             print(e)
         else:
@@ -121,15 +121,15 @@ def main():
     if len(sys.argv) not in (7, 8):
         sys.exit(f"Usage: {sys.argv[0]} <host> <port> <rpcuser> <rpcpass> <mtptarget> <txnhex> [sleeptime]\n"
                  """
-    <host>      - The IP address or host of the bitcoind HTTP-RPC server (e.g. localhost)
-    <port>      - The port for the bitcoind HTTP-RPC server (e.g. 9332)
-    <rpcuser>   - The -rpcuser specified in bitcoin.conf for the RPC server
-    <rpcpass>   - The -rpcpassword specified in bitcoin.conf for the RPC server
+    <host>      - The IP address or host of the lambdad HTTP-RPC server (e.g. localhost)
+    <port>      - The port for the lambdad HTTP-RPC server (e.g. 9332)
+    <rpcuser>   - The -rpcuser specified in lambda.conf for the RPC server
+    <rpcpass>   - The -rpcpassword specified in lambda.conf for the RPC server
     <mtptarget> - The MTP time after which we wish to broadcast the transaction
     <txnhex>    - The hexadecimal encoded transaction to broadcast (as would be given to sendrawtransaction RPC)
     [sleeptime] - The amount of time to sleep between polls of the MTP time via getblockchaininfo. Default: 5.0.
 """)
-    info = BitcoinDInfo(*sys.argv[1:5])
+    info = LambdaDInfo(*sys.argv[1:5])
     mtptarget = int(sys.argv[5])
     txnhex = sys.argv[6]
     assert bytes.fromhex(txnhex).hex() == txnhex

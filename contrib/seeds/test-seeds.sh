@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright (c) 2019 The Bitcoin developers
+# Copyright (c) 2019 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -59,41 +59,41 @@ case $1 in
 esac
 done
 
-BITCOIND="${BUILD_DIR}/src/bitcoind"
-BITCOIN_CLI="${BUILD_DIR}/src/bitcoin-cli"
-if [ ! -x "${BITCOIND}" ]; then
-  echo "${BITCOIND} does not exist or has incorrect permissions."
+LAMBDAD="${BUILD_DIR}/src/lambdad"
+LAMBDA_CLI="${BUILD_DIR}/src/lambda-cli"
+if [ ! -x "${LAMBDAD}" ]; then
+  echo "${LAMBDAD} does not exist or has incorrect permissions."
   exit 10
 fi
-if [ ! -x "${BITCOIN_CLI}" ]; then
-  echo "${BITCOIN_CLI} does not exist or has incorrect permissions."
+if [ ! -x "${LAMBDA_CLI}" ]; then
+  echo "${LAMBDA_CLI} does not exist or has incorrect permissions."
   exit 11
 fi
 
 TEMP_DATADIR=$(mktemp -d)
 : "${RPC_PORT:=${DEFAULT_RPC_PORT}}"
-BITCOIND="${BITCOIND} -datadir=${TEMP_DATADIR} ${OPTION_TESTNET} -rpcport=${RPC_PORT} -connect=0 -daemon"
-BITCOIN_CLI="${BITCOIN_CLI} -datadir=${TEMP_DATADIR} ${OPTION_TESTNET} -rpcport=${RPC_PORT}"
+LAMBDAD="${LAMBDAD} -datadir=${TEMP_DATADIR} ${OPTION_TESTNET} -rpcport=${RPC_PORT} -connect=0 -daemon"
+LAMBDA_CLI="${LAMBDA_CLI} -datadir=${TEMP_DATADIR} ${OPTION_TESTNET} -rpcport=${RPC_PORT}"
 
->&2 echo "Spinning up bitcoind..."
-${BITCOIND} || {
-  echo "Error starting bitcoind. Stopping script."
+>&2 echo "Spinning up lambdad..."
+${LAMBDAD} || {
+  echo "Error starting lambdad. Stopping script."
   exit 12
 }
 cleanup() {
   # Cleanup background processes spawned by this script.
-  >&2 echo "Cleaning up bitcoin daemon..."
-  ${BITCOIN_CLI} stop
+  >&2 echo "Cleaning up lambda daemon..."
+  ${LAMBDA_CLI} stop
   rm -rf "${TEMP_DATADIR}"
 }
 trap "cleanup" EXIT
 
 # Short sleep to make sure the RPC server is available
 sleep 0.1
-# Wait until bitcoind is fully spun up
+# Wait until lambdad is fully spun up
 WARMUP_TIMEOUT=60
 for _ in $(seq 1 ${WARMUP_TIMEOUT}); do
-  ${BITCOIN_CLI} getconnectioncount &> /dev/null
+  ${LAMBDA_CLI} getconnectioncount &> /dev/null
   RPC_READY=$?
   if [ "${RPC_READY}" -ne 0 ]; then
     >&2 printf "."
@@ -113,18 +113,18 @@ while read -r SEED; do
   >&2 echo "Testing seed '${SEED}'..."
 
   # Immediately connect to the seed peer
-  ${BITCOIN_CLI} addnode "${SEED}" onetry
+  ${LAMBDA_CLI} addnode "${SEED}" onetry
 
   # Fetch peer's connection status
-  CONNECTION_COUNT=$(${BITCOIN_CLI} getconnectioncount)
+  CONNECTION_COUNT=$(${LAMBDA_CLI} getconnectioncount)
   if [ "${CONNECTION_COUNT}" -eq 1 ]; then
     # Cleanup peer connection
-    ${BITCOIN_CLI} disconnectnode "${SEED}"
+    ${LAMBDA_CLI} disconnectnode "${SEED}"
 
     # Wait for peer to be disconnected
     CONNECTED_TIMEOUT=5
     for _ in $(seq 1 ${CONNECTED_TIMEOUT}); do
-      CONNECTION_COUNT=$(${BITCOIN_CLI} getconnectioncount)
+      CONNECTION_COUNT=$(${LAMBDA_CLI} getconnectioncount)
       if [ "${CONNECTION_COUNT}" -eq 0 ]; then
         break
       fi

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2016-2019 The Bitcoin Core developers
+# Copyright (c) 2016-2019 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Encode and decode BASE58, P2PKH and P2SH addresses."""
@@ -41,7 +41,7 @@ def base58_to_byte(s, verify_checksum=True):
     b''
 
     # 0x00759D6677091E973B9E9D99F19C68FBF43E3F05F95EABD8A1
-    >>> base58_to_byte('1BitcoinEaterAddressDontSendf59kuE', verify_checksum=True)
+    >>> base58_to_byte('1LambdaEaterAddressDontSendf59kuE', verify_checksum=True)
     (b'u\\x9dfw\\t\\x1e\\x97;\\x9e\\x9d\\x99\\xf1\\x9ch\\xfb\\xf4>?\\x05\\xf9', 0)
 
     >>> base58_to_byte('miPp79eFw9rjKFoUtcrqNMqXWqNVmnzfug')

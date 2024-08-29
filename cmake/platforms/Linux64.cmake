@@ -1,4 +1,4 @@
-# Copyright (c) 2019 The Bitcoin developers
+# Copyright (c) 2019 The Lambda developers
 
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_PROCESSOR x86_64)

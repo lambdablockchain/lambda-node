@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-# Copyright (c) 2015-2019 The Bitcoin Core developers
-# Copyright (c) 2020 The Bitcoin developers
+# Copyright (c) 2015-2019 The Lambda Core developers
+# Copyright (c) 2020 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test decoding scripts via decodescript RPC command."""
 
 from test_framework.messages import CTransaction, FromHex, ToHex
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import assert_equal, hex_str_to_bytes
 
 
-class DecodeScriptTest(BitcoinTestFramework):
+class DecodeScriptTest(LambdaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 1

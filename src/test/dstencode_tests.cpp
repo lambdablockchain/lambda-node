@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2019 The Bitcoin developers
+// Copyright (c) 2017-2019 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -37,9 +37,9 @@ BOOST_AUTO_TEST_CASE(test_addresses) {
     const CTxDestination dstScript = CScriptID(uint160(hash));
 
     std::string cashaddr_pubkey =
-        "bitcoincash:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a";
+        "lambda:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a";
     std::string cashaddr_script =
-        "bitcoincash:ppm2qsznhks23z7629mms6s4cwef74vcwvn0h829pq";
+        "lambda:ppm2qsznhks23z7629mms6s4cwef74vcwvn0h829pq";
     std::string base58_pubkey = "1BpEi6DfDAUFd7GtittLSdBeYJvcoaVggu";
     std::string base58_script = "3CWFddi6m4ndiGyKqzYvsFYagqDLPVMTzC";
 

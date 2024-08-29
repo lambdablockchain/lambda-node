@@ -1,5 +1,5 @@
 ---
-name: "bitcoin-cash-node-linux"
+name: "lambda-node-linux"
 enable_cache: true
 distro: "debian"
 suites:
@@ -35,13 +35,13 @@ packages:
 - "python3"
 # FIXME: these dependencies are only required to make CMake happy when building
 # native tools. They can be removed when the `NativeExecutable.cmake` gets
-# improved to avoid requiring all the bitcoin-cash-node dependencies.
+# improved to avoid requiring all the lambda-node dependencies.
 - "libboost-all-dev"
 - "libevent-dev"
 - "libssl-dev"
 remotes:
-- "url": "https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node.git"
-  "dir": "bitcoin"
+- "url": "https://github.com/lambdablockchain/lambda-node.git"
+  "dir": "lambda"
 files: []
 script: |
 
@@ -62,7 +62,7 @@ script: |
   # ARM assembly is supported but experimental, disable it for the release
   CMAKE_EXTRA_OPTIONS[arm-linux-gnueabihf]="-DSECP256K1_USE_ASM=OFF"
 
-  INSTALL_COMPONENTS="bitcoind bitcoin-qt bitcoin-seeder"
+  INSTALL_COMPONENTS="lambdad lambda-qt lambda-seeder"
 
   FAKETIME_HOST_PROGS=""
   FAKETIME_PROGS="date ar ranlib nm"
@@ -113,7 +113,7 @@ script: |
   create_per-host_faketime_wrappers "2000-01-01 12:00:00"
   export PATH=${WRAP_DIR}:${PATH}
 
-  cd bitcoin
+  cd lambda
   SOURCEDIR=`pwd`
   BASEPREFIX=`pwd`/depends
   # Build dependencies for each host
@@ -130,19 +130,19 @@ script: |
   mkdir -p source_package
   pushd source_package
   cmake -GNinja .. \
-    -DBUILD_BITCOIN_WALLET=OFF \
-    -DBUILD_BITCOIN_ZMQ=OFF \
-    -DBUILD_BITCOIN_SEEDER=OFF \
-    -DBUILD_BITCOIN_CLI=OFF \
-    -DBUILD_BITCOIN_TX=OFF \
-    -DBUILD_BITCOIN_QT=OFF \
-    -DBUILD_LIBBITCOINCONSENSUS=OFF \
+    -DBUILD_LAMBDA_WALLET=OFF \
+    -DBUILD_LAMBDA_ZMQ=OFF \
+    -DBUILD_LAMBDA_SEEDER=OFF \
+    -DBUILD_LAMBDA_CLI=OFF \
+    -DBUILD_LAMBDA_TX=OFF \
+    -DBUILD_LAMBDA_QT=OFF \
+    -DBUILD_LIBLAMBDACONSENSUS=OFF \
     -DENABLE_CLANG_TIDY=OFF \
     -DENABLE_QRCODE=OFF \
     -DENABLE_UPNP=OFF
 
   ninja package_source
-  SOURCEDIST=`echo bitcoin-cash-node-*.tar.gz`
+  SOURCEDIST=`echo lambda-node-*.tar.gz`
   mv ${SOURCEDIST} ..
   popd
   DISTNAME=`echo ${SOURCEDIST} | sed 's/.tar.*//'`
@@ -151,7 +151,7 @@ script: |
   mkdir -p temp
   pushd temp
   tar xf ../$SOURCEDIST
-  find bitcoin-cash-node-* | sort | tar --no-recursion --mode='u+rw,go+r-w,a+X' --owner=0 --group=0 -c -T - | gzip -9n > ../$SOURCEDIST
+  find lambda-node-* | sort | tar --no-recursion --mode='u+rw,go+r-w,a+X' --owner=0 --group=0 -c -T - | gzip -9n > ../$SOURCEDIST
   popd
 
   ORIGPATH="$PATH"

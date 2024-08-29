@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2020 The Bitcoin developers
+// Copyright (c) 2017-2020 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -75,7 +75,7 @@ BOOST_FIXTURE_TEST_SUITE(cashaddrenc_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(encode_decode_all_sizes) {
     FastRandomContext rand(true);
-    const std::string prefix = "bitcoincash";
+    const std::string prefix = "lambda";
 
     for (auto ps : valid_sizes) {
         std::vector<uint8_t> data =
@@ -213,7 +213,7 @@ BOOST_AUTO_TEST_CASE(check_type) {
     std::vector<uint8_t> data;
     data.resize(34);
 
-    const std::string prefix = "bitcoincash";
+    const std::string prefix = "lambda";
 
     for (uint8_t v = 0; v < 16; v++) {
         std::fill(begin(data), end(data), 0);
@@ -236,7 +236,7 @@ BOOST_AUTO_TEST_CASE(check_type) {
  */
 BOOST_AUTO_TEST_CASE(check_size) {
     const CTxDestination nodst = CNoDestination{};
-    const std::string prefix = "bitcoincash";
+    const std::string prefix = "lambda";
 
     std::vector<uint8_t> data;
 
@@ -284,27 +284,27 @@ BOOST_AUTO_TEST_CASE(test_encode_address) {
          213, 62, 197, 251, 195, 180, 45, 248, 237, 16}};
 
     std::vector<std::string> pubkey = {
-        "bitcoincash:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a",
-        "bitcoincash:qr95sy3j9xwd2ap32xkykttr4cvcu7as4y0qverfuy",
-        "bitcoincash:qqq3728yw0y47sqn6l2na30mcw6zm78dzqre909m2r"};
+        "lambda:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a",
+        "lambda:qr95sy3j9xwd2ap32xkykttr4cvcu7as4y0qverfuy",
+        "lambda:qqq3728yw0y47sqn6l2na30mcw6zm78dzqre909m2r"};
     std::vector<std::string> script = {
-        "bitcoincash:ppm2qsznhks23z7629mms6s4cwef74vcwvn0h829pq",
-        "bitcoincash:pr95sy3j9xwd2ap32xkykttr4cvcu7as4yc93ky28e",
-        "bitcoincash:pqq3728yw0y47sqn6l2na30mcw6zm78dzq5ucqzc37"};
+        "lambda:ppm2qsznhks23z7629mms6s4cwef74vcwvn0h829pq",
+        "lambda:pr95sy3j9xwd2ap32xkykttr4cvcu7as4yc93ky28e",
+        "lambda:pqq3728yw0y47sqn6l2na30mcw6zm78dzq5ucqzc37"};
 
     for (size_t i = 0; i < hash.size(); ++i) {
         const CTxDestination dstKey = CKeyID(uint160(hash[i]));
         BOOST_CHECK_EQUAL(pubkey[i], EncodeCashAddr(dstKey, *params));
 
         CashAddrContent keyContent{PUBKEY_TYPE, hash[i]};
-        BOOST_CHECK_EQUAL(pubkey[i], EncodeCashAddr("bitcoincash", keyContent));
+        BOOST_CHECK_EQUAL(pubkey[i], EncodeCashAddr("lambda", keyContent));
 
         const CTxDestination dstScript = CScriptID(uint160(hash[i]));
         BOOST_CHECK_EQUAL(script[i], EncodeCashAddr(dstScript, *params));
 
         CashAddrContent scriptContent{SCRIPT_TYPE, hash[i]};
         BOOST_CHECK_EQUAL(script[i],
-                          EncodeCashAddr("bitcoincash", scriptContent));
+                          EncodeCashAddr("lambda", scriptContent));
     }
 }
 
@@ -318,9 +318,9 @@ struct CashAddrTestVector {
 BOOST_AUTO_TEST_CASE(test_vectors) {
     std::vector<CashAddrTestVector> cases = {
         // 20 bytes
-        {"bitcoincash", PUBKEY_TYPE,
+        {"lambda", PUBKEY_TYPE,
          ParseHex("F5BF48B397DAE70BE82B3CCA4793F8EB2B6CDAC9"),
-         "bitcoincash:qr6m7j9njldwwzlg9v7v53unlr4jkmx6eylep8ekg2"},
+         "lambda:qr6m7j9njldwwzlg9v7v53unlr4jkmx6eylep8ekg2"},
         {"bchtest", SCRIPT_TYPE,
          ParseHex("F5BF48B397DAE70BE82B3CCA4793F8EB2B6CDAC9"),
          "bchtest:pr6m7j9njldwwzlg9v7v53unlr4jkmx6eyvwc0uz5t"},
@@ -334,9 +334,9 @@ BOOST_AUTO_TEST_CASE(test_vectors) {
          ParseHex("00aea9a2e5f0f876a588df5546e8742d1d87008f"),
          "bchreg:qqq2a2dzuhc0sa493r0423hgwsk3mpcq3upac4z3wr"},
         // 24 bytes
-        {"bitcoincash", PUBKEY_TYPE,
+        {"lambda", PUBKEY_TYPE,
          ParseHex("7ADBF6C17084BC86C1706827B41A56F5CA32865925E946EA"),
-         "bitcoincash:q9adhakpwzztepkpwp5z0dq62m6u5v5xtyj7j3h2ws4mr9g0"},
+         "lambda:q9adhakpwzztepkpwp5z0dq62m6u5v5xtyj7j3h2ws4mr9g0"},
         {"bchtest", SCRIPT_TYPE,
          ParseHex("7ADBF6C17084BC86C1706827B41A56F5CA32865925E946EA"),
          "bchtest:p9adhakpwzztepkpwp5z0dq62m6u5v5xtyj7j3h2u94tsynr"},
@@ -344,9 +344,9 @@ BOOST_AUTO_TEST_CASE(test_vectors) {
          ParseHex("7ADBF6C17084BC86C1706827B41A56F5CA32865925E946EA"),
          "prefix:09adhakpwzztepkpwp5z0dq62m6u5v5xtyj7j3h2p29kc2lp"},
         // 28 bytes
-        {"bitcoincash", PUBKEY_TYPE,
+        {"lambda", PUBKEY_TYPE,
          ParseHex("3A84F9CF51AAE98A3BB3A78BF16A6183790B18719126325BFC0C075B"),
-         "bitcoincash:qgagf7w02x4wnz3mkwnchut2vxphjzccwxgjvvjmlsxqwkcw59jxxuz"},
+         "lambda:qgagf7w02x4wnz3mkwnchut2vxphjzccwxgjvvjmlsxqwkcw59jxxuz"},
         {"bchtest", SCRIPT_TYPE,
          ParseHex("3A84F9CF51AAE98A3BB3A78BF16A6183790B18719126325BFC0C075B"),
          "bchtest:pgagf7w02x4wnz3mkwnchut2vxphjzccwxgjvvjmlsxqwkcvs7md7wt"},
@@ -354,10 +354,10 @@ BOOST_AUTO_TEST_CASE(test_vectors) {
          ParseHex("3A84F9CF51AAE98A3BB3A78BF16A6183790B18719126325BFC0C075B"),
          "prefix:0gagf7w02x4wnz3mkwnchut2vxphjzccwxgjvvjmlsxqwkc5djw8s9g"},
         // 32 bytes
-        {"bitcoincash", PUBKEY_TYPE,
+        {"lambda", PUBKEY_TYPE,
          ParseHex("3173EF6623C6B48FFD1A3DCC0CC6489B0A07BB47A37F47CFEF4FE69DE825"
                   "C060"),
-         "bitcoincash:"
+         "lambda:"
          "qvch8mmxy0rtfrlarg7ucrxxfzds5pamg73h7370aa87d80gyhqxq5nlegake"},
         {"bchtest", SCRIPT_TYPE,
          ParseHex("3173EF6623C6B48FFD1A3DCC0CC6489B0A07BB47A37F47CFEF4FE69DE825"
@@ -370,10 +370,10 @@ BOOST_AUTO_TEST_CASE(test_vectors) {
          "prefix:"
          "0vch8mmxy0rtfrlarg7ucrxxfzds5pamg73h7370aa87d80gyhqxqsh6jgp6w"},
         // 40 bytes
-        {"bitcoincash", PUBKEY_TYPE,
+        {"lambda", PUBKEY_TYPE,
          ParseHex("C07138323E00FA4FC122D3B85B9628EA810B3F381706385E289B0B256311"
                   "97D194B5C238BEB136FB"),
-         "bitcoincash:"
+         "lambda:"
          "qnq8zwpj8cq05n7pytfmskuk9r4gzzel8qtsvwz79zdskftrzxtar994cgutavfklv39g"
          "r3uvz"},
         {"bchtest", SCRIPT_TYPE,
@@ -389,10 +389,10 @@ BOOST_AUTO_TEST_CASE(test_vectors) {
          "0nq8zwpj8cq05n7pytfmskuk9r4gzzel8qtsvwz79zdskftrzxtar994cgutavfklvwsv"
          "ctzqy"},
         // 48 bytes
-        {"bitcoincash", PUBKEY_TYPE,
+        {"lambda", PUBKEY_TYPE,
          ParseHex("E361CA9A7F99107C17A622E047E3745D3E19CF804ED63C5C40C6BA763696"
                   "B98241223D8CE62AD48D863F4CB18C930E4C"),
-         "bitcoincash:"
+         "lambda:"
          "qh3krj5607v3qlqh5c3wq3lrw3wnuxw0sp8dv0zugrrt5a3kj6ucysfz8kxwv2k53krr7"
          "n933jfsunqex2w82sl"},
         {"bchtest", SCRIPT_TYPE,
@@ -408,10 +408,10 @@ BOOST_AUTO_TEST_CASE(test_vectors) {
          "0h3krj5607v3qlqh5c3wq3lrw3wnuxw0sp8dv0zugrrt5a3kj6ucysfz8kxwv2k53krr7"
          "n933jfsunqakcssnmn"},
         // 56 bytes
-        {"bitcoincash", PUBKEY_TYPE,
+        {"lambda", PUBKEY_TYPE,
          ParseHex("D9FA7C4C6EF56DC4FF423BAAE6D495DBFF663D034A72D1DC7D52CBFE7D1E"
                   "6858F9D523AC0A7A5C34077638E4DD1A701BD017842789982041"),
-         "bitcoincash:"
+         "lambda:"
          "qmvl5lzvdm6km38lgga64ek5jhdl7e3aqd9895wu04fvhlnare5937w4ywkq57juxsrhv"
          "w8ym5d8qx7sz7zz0zvcypqscw8jd03f"},
         {"bchtest", SCRIPT_TYPE,
@@ -427,11 +427,11 @@ BOOST_AUTO_TEST_CASE(test_vectors) {
          "0mvl5lzvdm6km38lgga64ek5jhdl7e3aqd9895wu04fvhlnare5937w4ywkq57juxsrhv"
          "w8ym5d8qx7sz7zz0zvcypqsgjrqpnw8"},
         // 64 bytes
-        {"bitcoincash", PUBKEY_TYPE,
+        {"lambda", PUBKEY_TYPE,
          ParseHex("D0F346310D5513D9E01E299978624BA883E6BDA8F4C60883C10F28C2967E"
                   "67EC77ECC7EEEAEAFC6DA89FAD72D11AC961E164678B868AEEEC5F2C1DA0"
                   "8884175B"),
-         "bitcoincash:"
+         "lambda:"
          "qlg0x333p4238k0qrc5ej7rzfw5g8e4a4r6vvzyrcy8j3s5k0en7calvclhw46hudk5fl"
          "ttj6ydvjc0pv3nchp52amk97tqa5zygg96mtky5sv5w"},
         {"bchtest", SCRIPT_TYPE,

@@ -1,4 +1,4 @@
-# Fuzz-testing Bitcoin Cash Node
+# Fuzz-testing Lambda Node
 
 A special test harness in `src/test/fuzz/` is provided for each fuzz target to
 provide an easy entry point for fuzzers and the like. In this document we'll
@@ -16,7 +16,7 @@ Extract the example seeds (or other starting inputs) into the inputs
 directory before starting fuzzing.
 
 ```
-git clone https://gitlab.com/bitcoin-cash-node/bchn-sw/qa-assets
+git clone https://gitlab.com/lambdablockchain/bchn-sw/qa-assets
 export DIR_FUZZ_IN=$PWD/qa-assets/fuzz_seed_corpus
 ```
 
@@ -43,7 +43,7 @@ export AFLPATH=$PWD
 
 ### Instrumentation
 
-To build Bitcoin Cash Node using AFL instrumentation (this assumes that the
+To build Lambda Node using AFL instrumentation (this assumes that the
 `AFLPATH` was set as above):
 
 ```
@@ -51,7 +51,7 @@ mkdir -p buildFuzzer
 cd buildFuzzer
 cmake -GNinja .. -DCCACHE=OFF -DCMAKE_C_COMPILER=afl-gcc -DCMAKE_CXX_COMPILER=afl-g++
 export AFL_HARDEN=1
-ninja bitcoin-fuzzers
+ninja lambda-fuzzers
 ```
 
 We disable ccache because we don't want to pollute the ccache with instrumented
@@ -93,7 +93,7 @@ cmake -GNinja .. \
   -DCMAKE_C_COMPILER=clang \
   -DCMAKE_CXX_COMPILER=clang++ \
   -DENABLE_SANITIZERS="fuzzer;address"
-ninja bitcoin-fuzzers
+ninja lambda-fuzzers
 ```
 
 The fuzzer needs some inputs to work on, but the inputs or seeds can be used

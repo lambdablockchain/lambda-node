@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-# Copyright (c) 2020 The Bitcoin Cash Node developers
+# Copyright (c) 2020 The Lambda Node developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test error modes for getblocktemplate."""
 
 import time
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import (
     connect_nodes_bi,
     disconnect_nodes,
@@ -15,7 +15,7 @@ from test_framework.util import (
 )
 
 
-class GetBlockTemplateTest(BitcoinTestFramework):
+class GetBlockTemplateTest(LambdaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2
@@ -33,8 +33,8 @@ class GetBlockTemplateTest(BitcoinTestFramework):
 
     def run_test(self):
 
-        # When bitcoind is just started it's in IBD
-        assert_raises_rpc_error(-10, "Bitcoin is downloading blocks...", self.nodes[0].getblocktemplate)
+        # When lambdad is just started it's in IBD
+        assert_raises_rpc_error(-10, "Lambda is downloading blocks...", self.nodes[0].getblocktemplate)
 
         # Mature some coins for easy spending, have a tx in the mempool
         self.generate(self.nodes[0], 101)
@@ -50,8 +50,8 @@ class GetBlockTemplateTest(BitcoinTestFramework):
         # when they don't know if they're on the latest tip
         # and/or can't propagate blocks
         disconnect_nodes(self.nodes[0], self.nodes[1])
-        assert_raises_rpc_error(-9, "Bitcoin is not connected!", self.nodes[0].getblocktemplate)
-        assert_raises_rpc_error(-9, "Bitcoin is not connected!", self.nodes[1].getblocktemplate)
+        assert_raises_rpc_error(-9, "Lambda is not connected!", self.nodes[0].getblocktemplate)
+        assert_raises_rpc_error(-9, "Lambda is not connected!", self.nodes[1].getblocktemplate)
 
         # Reconnect the nodes and check that getblocktemplate works again
         # and that they're in sync

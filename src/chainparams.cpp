@@ -1,6 +1,6 @@
 // Copyright (c) 2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
-// Copyright (c) 2017-2021 The Bitcoin developers
+// Copyright (c) 2009-2016 The Lambda Core developers
+// Copyright (c) 2017-2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -157,7 +157,7 @@ public:
         // we'll fall back to using them as a oneshot if they don't support the
         // service bits we want, but we should get them updated to support all
         // service bits wanted by any release ASAP to avoid it where possible.
-        // bitcoinforks seeders
+        // lambdaforks seeders
        
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<uint8_t>(1, 0);
@@ -302,7 +302,7 @@ public:
         // byte (i.e. "[shortest possible] encoded CScript format"), not a single byte with length followed by the
         // little-endian encoded version of the height as mentioned in BIP34. The BIP34 spec document itself ought to
         // be updated to reflect this.
-        // https://github.com/bitcoin/bitcoin/pull/14633
+        // https://github.com/lambda/lambda/pull/14633
        
         consensus.powLimit = uint256S("00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         // two weeks
@@ -347,7 +347,7 @@ public:
         //       For example, BU or other nodes do keep both sigop and sigcheck
         //       implementations in their execution paths so they will need to
         //       use 0 here to be able to synch to this chain.
-        //       See: https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node/-/issues/167
+        //       See: https://github.com/lambdablockchain/lambda-node/-/issues/167
        
 
         // Default limit for block size (in bytes) (testnet4 is smaller at 2MB)

@@ -1,6 +1,6 @@
 # UNIX BUILD NOTES
 
-Some notes on how to build Bitcoin Cash Node in Unix.
+Some notes on how to build Lambda Node in Unix.
 
 * For Ubuntu & Debian specific instructions, see [build-unix-deb.md](build-unix-deb.md)
   in this directory.
@@ -15,7 +15,7 @@ Some notes on how to build Bitcoin Cash Node in Unix.
 
 ## To Build
 
-To build Bitcoin Cash Node you first need to install all the needed dependencies.
+To build Lambda Node you first need to install all the needed dependencies.
 See [dependencies.md](dependencies.md) or your OS specific guide in build-*.md.
 If you wish to compile the dependencies from source yourself, please see
 instructions in [depends](/depends/README.md).
@@ -23,11 +23,11 @@ instructions in [depends](/depends/README.md).
 Please make sure that your compiler supports C++17.
 
 Assuming you have all the necessary dependencies installed the commands below will
-build the node, with the `bitcoin-qt` GUI-client as well.
+build the node, with the `lambda-qt` GUI-client as well.
 
 ```bash
-git clone https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node.git
-cd bitcoin-cash-node/
+git clone https://github.com/lambdablockchain/lambda-node.git
+cd lambda-node/
 mkdir build
 cd build
 cmake -GNinja ..
@@ -46,8 +46,8 @@ ninja install #optional
 
 ### Disable-wallet mode
 
-When the intention is to run only a P2P node without a wallet, Bitcoin Cash Node
-may be compiled in disable-wallet mode by passing `-DBUILD_BITCOIN_WALLET=OFF`
+When the intention is to run only a P2P node without a wallet, Lambda Node
+may be compiled in disable-wallet mode by passing `-DBUILD_LAMBDA_WALLET=OFF`
 on the `cmake` command line.
 
 Mining is also possible in disable-wallet mode using the `getblocktemplate` RPC call.
@@ -102,7 +102,7 @@ make build-linux-aarch64
 cd ..
 mkdir build
 cd build
-cmake -GNinja .. -DCMAKE_TOOLCHAIN_FILE=../cmake/platforms/LinuxAArch64.cmake -DBUILD_BITCOIN_ZMQ=OFF
+cmake -GNinja .. -DCMAKE_TOOLCHAIN_FILE=../cmake/platforms/LinuxAArch64.cmake -DBUILD_LAMBDA_ZMQ=OFF
 ninja
 ```
 
@@ -122,7 +122,7 @@ From the build subdirectory (see above), run `cmake -LH ..`.
 ### Memory Requirements
 
 C++ compilers are memory-hungry. It is recommended to have at least 1.5 GB of
-memory available when compiling Bitcoin Cash Node. On systems with less, gcc can
+memory available when compiling Lambda Node. On systems with less, gcc can
 be tuned to conserve memory with additional CXXFLAGS:
 
 ```bash
@@ -131,7 +131,7 @@ cmake -GNinja -DCXXFLAGS="--param ggc-min-expand=1 --param ggc-min-heapsize=3276
 
 ### Strip debug symbols
 
-The release is built with GCC and then `strip bitcoind` to strip the debug
+The release is built with GCC and then `strip lambdad` to strip the debug
 symbols, which reduces the executable size by about 90%.
 
 ## miniupnpc
@@ -148,7 +148,7 @@ START_WITH_UPNP        UPnP support turned on by default at runtime (default OFF
 
 ## Security
 
-To help make your Bitcoin Cash Node installation more secure by making certain
+To help make your Lambda Node installation more secure by making certain
 attacks impossible to exploit even if a vulnerability is found, binaries are hardened
 by default. This can be disabled by passing `-DENABLE_HARDENING=OFF`.
 
@@ -169,7 +169,7 @@ Hardening enables the following features:
     and use:
 
     ```bash
-    scanelf -e ./bitcoin
+    scanelf -e ./lambda
     ```
 
     The output should contain:
@@ -180,7 +180,7 @@ Hardening enables the following features:
     ```
 
 * _Non-executable Stack_: If the stack is executable then trivial stack-based buffer
-  overflow exploits are possible if vulnerable buffers are found. By default, Bitcoin
+  overflow exploits are possible if vulnerable buffers are found. By default, Lambda
   Cash Node should be built with a non-executable stack, but if one of the libraries
   it uses asks for an executable stack or someone makes a mistake and uses a compiler
   extension which requires an executable stack, it will silently build an executable
@@ -189,7 +189,7 @@ Hardening enables the following features:
     To verify that the stack is non-executable after compiling use:
 
     ```bash
-    scanelf -e ./bitcoin
+    scanelf -e ./lambda
     ```
 
     The output should contain:

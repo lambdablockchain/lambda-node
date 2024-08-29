@@ -17,9 +17,9 @@
       and `depends/` which are not from third-party sources.
       "Our" documents within `src/` and `depends/` should all be clean.
       NOTE: We do not run `arc lint` on the other source files anymore.
-    - Ensure that bitcoind and bitcoin-qt run with no issue on all supported
+    - Ensure that lambdad and lambda-qt run with no issue on all supported
       platforms.
-      Manually test bitcoin-qt by sending some transactions and navigating
+      Manually test lambda-qt by sending some transactions and navigating
       through the menus.
 3. Update the documents / code which needs to be updated every release
     - Update [bips.md](bips.md) and [LMA-upgrades.md](LMA-upgrades.md) to account
@@ -54,20 +54,20 @@
 1. Create Gitian Builds (see [gitian-building.md](gitian-building.md))
 2. Verify matching Gitian Builds, gather signatures
 3. Verify IBD bith with and without `-checkpoints=0 -assumevalid=0`
-4. Upload Gitian Builds to [bitcoincashnode.org](https://bitcoincashnode.org/)
-5. Create a [release](https://github.com/bitcoin-cash-node/bitcoin-cash-node)
+4. Upload Gitian Builds to [lambdanode.org](https://lambdanode.org/)
+5. Create a [release](https://github.com/lambdablockchain/lambda-node)
    on our GitHub mirror: `contrib/release/github-release.sh -a <path to release binaries> -t <release tag> -o <file containing your Github OAuth token>`
-6. Create [Ubuntu PPA packages](https://launchpad.net/~bitcoin-cash-node/+archive/ubuntu/ppa):
-   Maintainers need to clone [packaging](https://gitlab.com/bitcoin-cash-node/bchn-sw/packaging)
+6. Create [Ubuntu PPA packages](https://launchpad.net/~lambda-node/+archive/ubuntu/ppa):
+   Maintainers need to clone [packaging](https://gitlab.com/lambdablockchain/bchn-sw/packaging)
    and follow instructions to run `debian-packaging.sh` in that repository.
 7. Notify maintainers of AUR and Docker images to build their packages.
    They should be given 1-day advance notice if possible.
 
 ## After Release
 
-1. Update version number on www.bitcoincashnode.org
+1. Update version number on www.lambdanode.org
 2. Publish signed checksums (various places, e.g. blog, reddit, etc. etc.)
 3. Announce Release:
-    - [Reddit](https://www.reddit.com/r/bitcoincashnode/)
-    - Twitter @bitcoincashnode
-    - Public slack channels friendly to Bitcoin Cash Node announcements
+    - [Reddit](https://www.reddit.com/r/lambdanode/)
+    - Twitter @lambdanode
+    - Public slack channels friendly to Lambda Node announcements

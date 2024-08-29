@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# Copyright (c) 2015-2016 The Bitcoin Core developers
-# Copyright (c) 2017 The Bitcoin developers
+# Copyright (c) 2015-2016 The Lambda Core developers
+# Copyright (c) 2017 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """
@@ -38,7 +38,7 @@ from test_framework.p2p import (
     P2PInterface,
 )
 from test_framework.script import CScript, OP_RETURN, OP_TRUE
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.txtools import pad_tx
 from test_framework.util import (
     assert_equal,
@@ -54,7 +54,7 @@ class PreviousSpendableOutput():
         self.n = n
 
 
-# TestP2PConn: A peer we use to send messages to bitcoind, and store responses.
+# TestP2PConn: A peer we use to send messages to lambdad, and store responses.
 class TestP2PConn(P2PInterface):
 
     def __init__(self):
@@ -85,7 +85,7 @@ class TestP2PConn(P2PInterface):
             self.last_cmpctblock = None
 
 
-class FullBlockTest(BitcoinTestFramework):
+class FullBlockTest(LambdaTestFramework):
 
     def set_test_params(self):
         self.num_nodes = 1
@@ -100,7 +100,7 @@ class FullBlockTest(BitcoinTestFramework):
                                 self.excessive_block_size),
                             '-excessiveblocksize={}'.format(
                                 self.excessive_block_size),
-                            '-acceptnonstdtxn=1']]
+                            '-acceptnonstdtxn=0']]
         # UBSAN will cause this test to timeout without this.
         self.rpc_timeout = 180
 

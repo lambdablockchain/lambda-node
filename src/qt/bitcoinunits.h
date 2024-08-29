@@ -1,5 +1,5 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
-// Copyright (c) 2021 The Bitcoin developers
+// Copyright (c) 2011-2016 The Lambda Core developers
+// Copyright (c) 2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -14,17 +14,17 @@
 #include <QString>
 
 /**
- * Bitcoin unit definitions. Encapsulates parsing and formatting and serves as
+ * Lambda unit definitions. Encapsulates parsing and formatting and serves as
  * list model for drop-down selection boxes.
  */
-class BitcoinUnits : public QAbstractListModel {
+class LambdaUnits : public QAbstractListModel {
     Q_OBJECT
 
 public:
-    explicit BitcoinUnits(QObject *parent);
+    explicit LambdaUnits(QObject *parent);
 
     /**
-     * Bitcoin units (Bitcoin Cash unit work the same as Bitoin).
+     * Lambda units (Lambda unit work the same as Bitoin).
      * @note Source: https://en.bitcoin.it/wiki/Units.
      * Please add only sensible ones.
      */
@@ -83,15 +83,15 @@ public:
     [[nodiscard]]
     static QString removeSpaces(QString text) {
         text.remove(' ');
-        text.remove(BitcoinSpaces::thin);
-        if constexpr (BitcoinSpaces::thin != BitcoinSpaces::realThin) {
-            text.remove(BitcoinSpaces::realThin);
+        text.remove(LambdaSpaces::thin);
+        if constexpr (LambdaSpaces::thin != LambdaSpaces::realThin) {
+            text.remove(LambdaSpaces::realThin);
         }
         return text;
     }
 
 private:
-    QList<BitcoinUnits::Unit> unitlist;
+    QList<LambdaUnits::Unit> unitlist;
 };
 
-typedef BitcoinUnits::Unit BitcoinUnit;
+typedef LambdaUnits::Unit LambdaUnit;

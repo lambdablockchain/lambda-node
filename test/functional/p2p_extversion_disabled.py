@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-# Copyright (c) 2020 The Bitcoin developers
+# Copyright (c) 2020 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 import os
 import sys
 if sys.version_info[0] < 3:
     sys.exit("Use Python 3")
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import assert_equal
 
 
-class ExtVersionDisabledTest(BitcoinTestFramework):
+class ExtVersionDisabledTest(LambdaTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
         # Node 0 will have NODE_EXTVERSION service flag set

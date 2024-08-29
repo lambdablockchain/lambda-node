@@ -1,6 +1,6 @@
-# Copyright (c) 2018 The Bitcoin developers
+# Copyright (c) 2018 The Lambda developers
 
-project(bitcoin-qt)
+project(lambda-qt)
 
 include(BrewHelper)
 find_brew_prefix(QT5_PREFIX qt5)
@@ -15,23 +15,23 @@ find_package(Qt5 5.5.1 COMPONENTS ${QT_REQUIRED_COMPONENTS} REQUIRED HINTS "${QT
 # Localisation
 add_subdirectory(locale)
 
-add_custom_command(OUTPUT temp_bitcoin_locale.qrc
+add_custom_command(OUTPUT temp_lambda_locale.qrc
 	COMMAND cmake
 	ARGS
 		-E copy
-		"${CMAKE_CURRENT_SOURCE_DIR}/bitcoin_locale.qrc"
-		temp_bitcoin_locale.qrc
-	MAIN_DEPENDENCY bitcoin_locale.qrc
+		"${CMAKE_CURRENT_SOURCE_DIR}/lambda_locale.qrc"
+		temp_lambda_locale.qrc
+	MAIN_DEPENDENCY lambda_locale.qrc
 	VERBATIM
 )
 
-add_custom_command(OUTPUT qrc_bitcoin_locale.cpp
+add_custom_command(OUTPUT qrc_lambda_locale.cpp
 	COMMAND Qt5::rcc
 	ARGS
-		temp_bitcoin_locale.qrc
-		-name bitcoin_locale
-		-o qrc_bitcoin_locale.cpp
-	MAIN_DEPENDENCY temp_bitcoin_locale.qrc
+		temp_lambda_locale.qrc
+		-name lambda_locale
+		-o qrc_lambda_locale.cpp
+	MAIN_DEPENDENCY temp_lambda_locale.qrc
 	DEPENDS locales
 	VERBATIM
 )
@@ -77,15 +77,15 @@ set(CMAKE_CURRENT_BINARY_DIR ${SAVE_CMAKE_CURRENT_BINARY_DIR})
 set(CMAKE_AUTOMOC ON)
 
 # Handle qrc resources
-qt5_add_resources(QRC_BITCOIN_CPP bitcoin.qrc)
+qt5_add_resources(QRC_LAMBDA_CPP lambda.qrc)
 
-add_library(bitcoin-qt-base
+add_library(lambda-qt-base
 	bantablemodel.cpp
-	bitcoin.cpp
-	bitcoinaddressvalidator.cpp
-	bitcoinamountfield.cpp
-	bitcoingui.cpp
-	bitcoinunits.cpp
+	lambda.cpp
+	lambdaaddressvalidator.cpp
+	lambdaamountfield.cpp
+	lambdagui.cpp
+	lambdaunits.cpp
 	clientmodel.cpp
 	csvmodelwriter.cpp
 	guiutil.cpp
@@ -108,11 +108,11 @@ add_library(bitcoin-qt-base
 	${UI_GENERATED_HEADERS}
 
 	# Translations
-	${BITCOIN_QM_FILES}
+	${LAMBDA_QM_FILES}
 
 	# Handle qrc files
-	${QRC_BITCOIN_CPP}
-	qrc_bitcoin_locale.cpp
+	${QRC_LAMBDA_CPP}
+	qrc_lambda_locale.cpp
 )
 
 # Add the minimal integration plugin, and other plugins according to the target
@@ -131,7 +131,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	list(APPEND QT_PLUGIN_COMPONENTS QWindowsIntegrationPlugin)
 	list(APPEND QT_PLUGIN_PLATFORM_DEFINITIONS -DQT_QPA_PLATFORM_WINDOWS=1)
 
-	target_sources(bitcoin-qt-base PRIVATE winshutdownmonitor.cpp)
+	target_sources(lambda-qt-base PRIVATE winshutdownmonitor.cpp)
 endif()
 
 # OSX support
@@ -139,14 +139,14 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	list(APPEND QT_PLUGIN_COMPONENTS QCocoaIntegrationPlugin)
 	list(APPEND QT_PLUGIN_PLATFORM_DEFINITIONS -DQT_QPA_PLATFORM_COCOA=1)
 
-	target_sources(bitcoin-qt-base PRIVATE
+	target_sources(lambda-qt-base PRIVATE
 		macdockiconhandler.mm
 		macnotificationhandler.mm
 	)
 
-	set_property(TARGET bitcoin-qt-base PROPERTY AUTOMOC_MOC_OPTIONS "-DQ_OS_MAC")
+	set_property(TARGET lambda-qt-base PROPERTY AUTOMOC_MOC_OPTIONS "-DQ_OS_MAC")
 
-	target_link_libraries(bitcoin-qt-base
+	target_link_libraries(lambda-qt-base
 		"-framework Foundation"
 		"-framework ApplicationServices"
 		"-framework AppKit"
@@ -208,28 +208,28 @@ if(QT_STATIC_BUILD)
 	# including Qt's predefined plugins."
 	# So if the Qt build is static, the plugins should also be static and we
 	# need to define QT_STATICPLUGIN to tell the code to import <QTPlugin>.
-	target_compile_definitions(bitcoin-qt-base PUBLIC -DQT_STATICPLUGIN=1)
+	target_compile_definitions(lambda-qt-base PUBLIC -DQT_STATICPLUGIN=1)
 
 	# Add the platform plugin definition if required
 	# Setting this definition tells the code what is the target for Q_IMPORT_PLUGIN().
 	foreach(qt_platform_definition ${QT_PLUGIN_PLATFORM_DEFINITIONS})
-		target_compile_definitions(bitcoin-qt-base PUBLIC "${qt_platform_definition}")
+		target_compile_definitions(lambda-qt-base PUBLIC "${qt_platform_definition}")
 	endforeach()
 
 	# Link the required plugins
 	foreach(qt_plugin ${QT_PLUGIN_COMPONENTS})
-		target_link_libraries(bitcoin-qt-base Qt5::${qt_plugin})
+		target_link_libraries(lambda-qt-base Qt5::${qt_plugin})
 	endforeach()
 endif()
 
-target_link_libraries(bitcoin-qt-base
+target_link_libraries(lambda-qt-base
 	server
 	rpcclient
 	Qt5::Widgets
 	Qt5::Network
 )
 if(ENABLE_DBUS_NOTIFICATIONS)
-	target_link_libraries(bitcoin-qt-base Qt5::DBus)
+	target_link_libraries(lambda-qt-base Qt5::DBus)
 endif()
 
 if(ENABLE_BIP70)
@@ -237,19 +237,19 @@ if(ENABLE_BIP70)
 	find_package(Protobuf REQUIRED)
 	protobuf_generate_cpp(PROTOBUF_SOURCES PROTOBUF_HEADERS paymentrequest.proto)
 
-	add_library(bitcoin-qt-protobuf OBJECT
+	add_library(lambda-qt-protobuf OBJECT
 		# Protobuf codegen
 			${PROTOBUF_HEADERS}
 			${PROTOBUF_SOURCES}
 	)
 
-	target_include_directories(bitcoin-qt-protobuf PUBLIC ${Protobuf_INCLUDE_DIRS})
-	target_link_libraries(bitcoin-qt-protobuf ${Protobuf_LIBRARIES})
+	target_include_directories(lambda-qt-protobuf PUBLIC ${Protobuf_INCLUDE_DIRS})
+	target_link_libraries(lambda-qt-protobuf ${Protobuf_LIBRARIES})
 
 	# Don't run clang-tidy on generated files
 	if(ENABLE_CLANG_TIDY)
 		include(ClangTidy)
-		target_disable_clang_tidy(bitcoin-qt-protobuf)
+		target_disable_clang_tidy(lambda-qt-protobuf)
 	endif()
 
 	# OpenSSL functionality
@@ -262,22 +262,22 @@ if(ENABLE_BIP70)
 	set(CMAKE_REQUIRED_LIBRARIES ${OPENSSL_CRYPTO_LIBRARY})
 	check_symbol_exists(EVP_MD_CTX_new "openssl/evp.h" HAVE_DECL_EVP_MD_CTX_NEW)
 	if(HAVE_DECL_EVP_MD_CTX_NEW)
-		target_compile_definitions(bitcoin-qt-base PRIVATE HAVE_DECL_EVP_MD_CTX_NEW=1)
+		target_compile_definitions(lambda-qt-base PRIVATE HAVE_DECL_EVP_MD_CTX_NEW=1)
 	endif()
 
-	target_link_libraries(bitcoin-qt-base
+	target_link_libraries(lambda-qt-base
 		OpenSSL::SSL
-		bitcoin-qt-protobuf
+		lambda-qt-protobuf
 	)
 endif()
 
 # Wallet
-if(BUILD_BITCOIN_WALLET)
+if(BUILD_LAMBDA_WALLET)
 	# Automoc option.
 	set(AUTOMOC_MOC_OPTIONS -DENABLE_WALLET=1)
 
-	# Add wallet functionality to bitcoin-qt
-	target_sources(bitcoin-qt-base
+	# Add wallet functionality to lambda-qt
+	target_sources(lambda-qt-base
 		PRIVATE
 			addressbookpage.cpp
 			addresstablemodel.cpp
@@ -309,40 +309,40 @@ if(BUILD_BITCOIN_WALLET)
 			walletview.cpp
 	)
 
-	# Add BIP70 functionality to bitcoin-qt
+	# Add BIP70 functionality to lambda-qt
 	if(ENABLE_BIP70)
-		target_sources(bitcoin-qt-base
+		target_sources(lambda-qt-base
 			PRIVATE
 				paymentrequestplus.cpp
 		)
 	endif()
 
-	target_link_libraries(bitcoin-qt-base wallet)
+	target_link_libraries(lambda-qt-base wallet)
 
 	if(ENABLE_QRCODE)
 		find_package(QREncode REQUIRED)
-		target_link_libraries(bitcoin-qt-base QREncode::qrencode)
+		target_link_libraries(lambda-qt-base QREncode::qrencode)
 	endif()
 endif()
 
 # The executable
-add_executable(bitcoin-qt WIN32 main.cpp)
+add_executable(lambda-qt WIN32 main.cpp)
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-	target_sources(bitcoin-qt PRIVATE res/bitcoin-qt-res.rc)
+	target_sources(lambda-qt PRIVATE res/lambda-qt-res.rc)
 endif()
-target_link_libraries(bitcoin-qt bitcoin-qt-base)
+target_link_libraries(lambda-qt lambda-qt-base)
 
 include(BinaryTest)
-add_to_symbols_check(bitcoin-qt)
-add_to_security_check(bitcoin-qt)
+add_to_symbols_check(lambda-qt)
+add_to_security_check(lambda-qt)
 
 include(InstallationHelper)
-install_target(bitcoin-qt)
+install_target(lambda-qt)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-	set(BITCOINQT_BUNDLE_ICON "res/icons/bitcoin.icns")
-	get_filename_component(BITCOINQT_BUNDLE_ICON_NAME
-		"${BITCOINQT_BUNDLE_ICON}"
+	set(LAMBDAQT_BUNDLE_ICON "res/icons/lambda.icns")
+	get_filename_component(LAMBDAQT_BUNDLE_ICON_NAME
+		"${LAMBDAQT_BUNDLE_ICON}"
 		NAME
 	)
 
@@ -356,29 +356,29 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	set(EMPTY_LPROJ_FILE "${CMAKE_CURRENT_BINARY_DIR}/empty.lproj")
 	file(TOUCH "${EMPTY_LPROJ_FILE}")
 
-	target_sources(bitcoin-qt PRIVATE
-		"${BITCOINQT_BUNDLE_ICON}"
+	target_sources(lambda-qt PRIVATE
+		"${LAMBDAQT_BUNDLE_ICON}"
 		"${INFO_PLIST_STRINGS_PATH}"
 		"${EMPTY_LPROJ_FILE}"
 	)
 
-	string(JOIN ";" BITCOINQT_BUNDLE_RESOURCES
-		"${BITCOINQT_BUNDLE_ICON}"
+	string(JOIN ";" LAMBDAQT_BUNDLE_RESOURCES
+		"${LAMBDAQT_BUNDLE_ICON}"
 		"${EMPTY_LPROJ_FILE}"
 	)
 
-	set_target_properties(bitcoin-qt PROPERTIES
+	set_target_properties(lambda-qt PROPERTIES
 		MACOSX_BUNDLE ON
-		OUTPUT_NAME "${BITCOIN_QT_OSX_BUNDLE_NAME}"
+		OUTPUT_NAME "${LAMBDA_QT_OSX_BUNDLE_NAME}"
 		MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/share/qt/Info.plist.cmake.in"
-		MACOSX_BUNDLE_BUNDLE_NAME "${BITCOIN_QT_OSX_BUNDLE_NAME}"
-		MACOSX_BUNDLE_BUNDLE_VERSION "${bitcoin-cash-node_VERSION}"
-		MACOSX_BUNDLE_GUI_IDENTIFIER "org.bitcoincashnode.${BITCOIN_QT_OSX_BUNDLE_NAME}"
-		MACOSX_BUNDLE_ICON_FILE "${BITCOINQT_BUNDLE_ICON_NAME}"
-		MACOSX_BUNDLE_INFO_STRING "${bitcoin-cash-node_VERSION}, Copyright © 2009-${COPYRIGHT_YEAR} ${COPYRIGHT_HOLDERS_FINAL}"
-		MACOSX_BUNDLE_LONG_VERSION_STRING "${bitcoin-cash-node_VERSION}"
-		MACOSX_BUNDLE_SHORT_VERSION_STRING "${bitcoin-cash-node_VERSION}"
-		RESOURCE "${BITCOINQT_BUNDLE_RESOURCES}"
+		MACOSX_BUNDLE_BUNDLE_NAME "${LAMBDA_QT_OSX_BUNDLE_NAME}"
+		MACOSX_BUNDLE_BUNDLE_VERSION "${lambda-node_VERSION}"
+		MACOSX_BUNDLE_GUI_IDENTIFIER "org.lambdanode.${LAMBDA_QT_OSX_BUNDLE_NAME}"
+		MACOSX_BUNDLE_ICON_FILE "${LAMBDAQT_BUNDLE_ICON_NAME}"
+		MACOSX_BUNDLE_INFO_STRING "${lambda-node_VERSION}, Copyright © 2009-${COPYRIGHT_YEAR} ${COPYRIGHT_HOLDERS_FINAL}"
+		MACOSX_BUNDLE_LONG_VERSION_STRING "${lambda-node_VERSION}"
+		MACOSX_BUNDLE_SHORT_VERSION_STRING "${lambda-node_VERSION}"
+		RESOURCE "${LAMBDAQT_BUNDLE_RESOURCES}"
 	)
 	# The InfoPlist.strings files should be located in a resource subdirectory.
 	# This is not supported by the RESOURCE property and require the use of the
@@ -401,16 +401,16 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	# an application bundle is well-known and specified by Apple. Note that this
 	# will only work for building MacOS application bundle as the IOS structure
 	# is slightly different.
-	set(STRIPPED_BUNDLE "${CMAKE_CURRENT_BINARY_DIR}/stripped/${BITCOIN_QT_OSX_BUNDLE_NAME}.app")
+	set(STRIPPED_BUNDLE "${CMAKE_CURRENT_BINARY_DIR}/stripped/${LAMBDA_QT_OSX_BUNDLE_NAME}.app")
 	add_custom_command(
 		OUTPUT
 			"${STRIPPED_BUNDLE}"
 		COMMAND
-			${CMAKE_COMMAND} -E copy_directory "$<TARGET_BUNDLE_DIR:bitcoin-qt>" "${STRIPPED_BUNDLE}"
+			${CMAKE_COMMAND} -E copy_directory "$<TARGET_BUNDLE_DIR:lambda-qt>" "${STRIPPED_BUNDLE}"
 		COMMAND
-			${CMAKE_STRIP} -u -r "${STRIPPED_BUNDLE}/Contents/MacOS/${BITCOIN_QT_OSX_BUNDLE_NAME}"
+			${CMAKE_STRIP} -u -r "${STRIPPED_BUNDLE}/Contents/MacOS/${LAMBDA_QT_OSX_BUNDLE_NAME}"
 		DEPENDS
-			bitcoin-qt
+			lambda-qt
 	)
 
 	include(DoOrFail)

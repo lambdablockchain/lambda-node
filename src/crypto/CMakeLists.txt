@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2019 The Bitcoin developers
+# Copyright (c) 2017-2019 The Lambda developers
 
 project(crypto)
 

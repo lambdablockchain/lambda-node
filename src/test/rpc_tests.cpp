@@ -1,5 +1,5 @@
-// Copyright (c) 2012-2016 The Bitcoin Core developers
-// Copyright (c) 2020-2021 The Bitcoin developers
+// Copyright (c) 2012-2016 The Lambda Core developers
+// Copyright (c) 2020-2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -167,7 +167,7 @@ BOOST_AUTO_TEST_CASE(rpc_rawsign_missing_amount) {
     // Old format, missing amount parameter for prevout should generate
     // an RPC error.  This is because of new replay-protected tx's require
     // nonzero amount present in signed tx.
-    // See: https://github.com/Bitcoin-ABC/bitcoin-abc/issues/63
+    // See: https://github.com/Lambda-ABC/lambda-abc/issues/63
     // (We will re-use the tx + keys from the above rpc_rawsign test for
     // simplicity.)
     UniValue r;

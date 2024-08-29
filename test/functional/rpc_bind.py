@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-# Copyright (c) 2014-2019 The Bitcoin Core developers
+# Copyright (c) 2014-2019 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
-"""Test running bitcoind with the -rpcbind and -rpcallowip options."""
+"""Test running lambdad with the -rpcbind and -rpcallowip options."""
 
 from platform import uname
 import sys
 
 from test_framework.netutil import addr_to_hex, all_interfaces, get_bind_addrs, test_ipv6_local
-from test_framework.test_framework import BitcoinTestFramework, SkipTest
+from test_framework.test_framework import LambdaTestFramework, SkipTest
 from test_framework.util import (
     assert_equal,
     assert_raises_rpc_error,
@@ -18,7 +18,7 @@ from test_framework.util import (
 )
 
 
-class RPCBindTest(BitcoinTestFramework):
+class RPCBindTest(LambdaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.bind_to_localhost_only = False
@@ -88,7 +88,7 @@ class RPCBindTest(BitcoinTestFramework):
             raise SkipTest("This test can only be run on Linux.")
 
         # WSL in currently not supported (refer to
-        # https://reviews.bitcoinabc.org/T400 for details).
+        # https://reviews.lambdaabc.org/T400 for details).
         # This condition should be removed once netstat support is provided by
         # Microsoft.
         if "microsoft" in uname().version.lower():

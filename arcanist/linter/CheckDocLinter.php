@@ -44,7 +44,7 @@ final class CheckDocLinter extends GlobalExternalLinter {
   }
 
   public function getInstallInstructions() {
-    return pht('The test/lint/check-doc.py script is part of the bitcoin-abc '.
+    return pht('The test/lint/check-doc.py script is part of the lambda-abc '.
       'project');
   }
 

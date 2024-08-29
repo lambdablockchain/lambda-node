@@ -1,5 +1,5 @@
 # Fuzzer test harness
-add_custom_target(bitcoin-fuzzers)
+add_custom_target(lambda-fuzzers)
 
 macro(add_fuzz_target TARGET EXE_NAME)
 	add_executable(${TARGET} EXCLUDE_FROM_ALL
@@ -10,7 +10,7 @@ macro(add_fuzz_target TARGET EXE_NAME)
 
 	target_link_libraries(${TARGET} server common)
 
-	add_dependencies(bitcoin-fuzzers ${TARGET})
+	add_dependencies(lambda-fuzzers ${TARGET})
 endmacro()
 
 include(SanitizeHelper)

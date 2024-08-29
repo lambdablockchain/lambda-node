@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-# Copyright (c) 2014-2015 The Bitcoin Core developers
-# Copyright (c) 2015-2017 The Bitcoin Unlimited developers
-# Copyright (c) 2020 The Bitcoin developers
+# Copyright (c) 2014-2015 The Lambda Core developers
+# Copyright (c) 2015-2017 The Lambda Unlimited developers
+# Copyright (c) 2020 The Lambda developers
 #
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -31,7 +31,7 @@ from test_framework.script import (
     OP_1,
     OP_CHECKSIG,
 )
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import assert_raises_rpc_error
 
 
@@ -74,7 +74,7 @@ def create_broken_transaction(prevtx, n, sig, value, out=PADDED_ANY_SPEND):
     return tx
 
 
-class ValidateblocktemplateTest(BitcoinTestFramework):
+class ValidateblocktemplateTest(LambdaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2

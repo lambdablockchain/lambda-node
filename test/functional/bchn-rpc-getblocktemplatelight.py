@@ -16,7 +16,7 @@ import tempfile
 import time
 from decimal import Decimal
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import assert_equal, assert_raises_rpc_error, assert_blocktemplate_equal
 from test_framework import messages, script, util, blocktools
 
@@ -98,12 +98,12 @@ def merkle_root_from_cb_and_branch(cbhash, branch):
     return messages.uint256_from_str(hashes[0])  # this is now the root
 
 
-class GBTLightTest(BitcoinTestFramework):
+class GBTLightTest(LambdaTestFramework):
     """ Functional tests for the getblocktemplatelight and submitblocklight RPC methods. """
 
     def set_test_params(self):
         self.setup_clean_chain = True
-        self.num_nodes = 2  # We need two nodes for getblocktemplatelight RPC to function (bitcoind node policy)
+        self.num_nodes = 2  # We need two nodes for getblocktemplatelight RPC to function (lambdad node policy)
         self._cache_size = 10
         my_args = [
             # We specify a cache size to a known value for this test.

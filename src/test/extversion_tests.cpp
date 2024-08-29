@@ -1,9 +1,9 @@
-// Copyright (c) 2020 The Bitcoin developers
+// Copyright (c) 2020 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 //
-// Based on the xversion (renamed to extversion) subsystem from Bitcoin Unlimited
-// Copyright (c) 2015-2020 The Bitcoin Unlimited developers
+// Based on the xversion (renamed to extversion) subsystem from Lambda Unlimited
+// Copyright (c) 2015-2020 The Lambda Unlimited developers
 // License: MIT
 
 #include <compat/endian.h>

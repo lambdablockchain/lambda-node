@@ -1,11 +1,11 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2016 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #pragma once
 
 // This class handles payment requests from clicking on
-// bitcoincash: URIs
+// lambda: URIs
 //
 // This is somewhat tricky, because we have to deal with the situation where the
 // user clicks on a link during startup/initialization, when the splash-screen
@@ -28,7 +28,7 @@
 //
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
+#include <config/lambda-config.h>
 #endif
 
 #ifdef ENABLE_BIP70

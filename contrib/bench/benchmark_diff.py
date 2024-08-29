@@ -2,10 +2,10 @@
 # Copyright (c) 2020 freetrader
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
-"""Compares bench_bitcoin outputs and displays percentage changes.
+"""Compares bench_lambda outputs and displays percentage changes.
 
 Changes are computed between a 'before_file' and 'after_file' which are
-the captured standard output of the `bench_bitcoin` program.
+the captured standard output of the `bench_lambda` program.
 
 Benchmarks that do not appear in both files are listed in a notice preceding
 the per-benchmark output unless `--quiet` option is used.
@@ -115,7 +115,7 @@ class BenchmarkFile(object):
         benchmarks_data = []
         with open(filename, newline='', encoding='utf-8') as csvfile:
             csv_reader = csv.reader(csvfile)
-            # Skip field comment header in bench_bitcoin's CSV output
+            # Skip field comment header in bench_lambda's CSV output
             next(csv_reader)
 
             for row in csv_reader:
@@ -262,7 +262,7 @@ def main():
                                      usage='%(prog)s [benchmark_diff.py options] before_file after_file',
                                      description=__doc__,
                                      epilog='''
-    `before_file` and `after_file` must be outputs of bench_bitcoin program and include the commented header line.''',
+    `before_file` and `after_file` must be outputs of bench_lambda program and include the commented header line.''',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--average', '-a', action='store_true',
                         help='Display computed average values (total / iterations)')

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-# Copyright 2019 The Bitcoin Developers
+# Copyright 2019 The Lambda Developers
 """Schnorr secp256k1 using OpenSSL
 
 WARNING: This module does not mlock() secrets; your private keys may end up on
 disk in swap! Also, operations are not constant time. Use with caution!
 
-Inspired by key.py from python-bitcoinlib.
+Inspired by key.py from python-lambdalib.
 """
 
 import ctypes

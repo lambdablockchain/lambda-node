@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
+// Copyright (c) 2009-2016 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -72,7 +72,7 @@ public:
 };
 
 /**
- * Bitcoin protocol message types. When adding new message types, don't forget
+ * Lambda protocol message types. When adding new message types, don't forget
  * to update allNetMessageTypes in protocol.cpp.
  */
 namespace NetMsgType {
@@ -80,19 +80,19 @@ namespace NetMsgType {
 /**
  * The version message provides information about the transmitting node to the
  * receiving node at the beginning of a connection.
- * @see https://bitcoin.org/en/developer-reference#version
+ * @see https://lambda.org/en/developer-reference#version
  */
 extern const char *const VERSION;
 /**
  * The verack message acknowledges a previously-received version message,
  * informing the connecting node that it can begin to send other messages.
- * @see https://bitcoin.org/en/developer-reference#verack
+ * @see https://lambda.org/en/developer-reference#verack
  */
 extern const char *const VERACK;
 /**
  * The addr (IP address) message relays connection information for peers on the
  * network.
- * @see https://bitcoin.org/en/developer-reference#addr
+ * @see https://lambda.org/en/developer-reference#addr
  */
 extern const char *const ADDR;
 /**
@@ -110,82 +110,82 @@ extern const char *const SENDADDRV2;
 /**
  * The inv message (inventory message) transmits one or more inventories of
  * objects known to the transmitting peer.
- * @see https://bitcoin.org/en/developer-reference#inv
+ * @see https://lambda.org/en/developer-reference#inv
  */
 extern const char *const INV;
 /**
  * The getdata message requests one or more data objects from another node.
- * @see https://bitcoin.org/en/developer-reference#getdata
+ * @see https://lambda.org/en/developer-reference#getdata
  */
 extern const char *const GETDATA;
 /**
  * The merkleblock message is a reply to a getdata message which requested a
  * block using the inventory type MSG_MERKLEBLOCK.
  * @since protocol version 70001 as described by BIP37.
- * @see https://bitcoin.org/en/developer-reference#merkleblock
+ * @see https://lambda.org/en/developer-reference#merkleblock
  */
 extern const char *const MERKLEBLOCK;
 /**
  * The getblocks message requests an inv message that provides block header
  * hashes starting from a particular point in the block chain.
- * @see https://bitcoin.org/en/developer-reference#getblocks
+ * @see https://lambda.org/en/developer-reference#getblocks
  */
 extern const char *const GETBLOCKS;
 /**
  * The getheaders message requests a headers message that provides block
  * headers starting from a particular point in the block chain.
  * @since protocol version 31800.
- * @see https://bitcoin.org/en/developer-reference#getheaders
+ * @see https://lambda.org/en/developer-reference#getheaders
  */
 extern const char *const GETHEADERS;
 /**
  * The tx message transmits a single transaction.
- * @see https://bitcoin.org/en/developer-reference#tx
+ * @see https://lambda.org/en/developer-reference#tx
  */
 extern const char *const TX;
 /**
  * The headers message sends one or more block headers to a node which
  * previously requested certain headers with a getheaders message.
  * @since protocol version 31800.
- * @see https://bitcoin.org/en/developer-reference#headers
+ * @see https://lambda.org/en/developer-reference#headers
  */
 extern const char *const HEADERS;
 /**
  * The block message transmits a single serialized block.
- * @see https://bitcoin.org/en/developer-reference#block
+ * @see https://lambda.org/en/developer-reference#block
  */
 extern const char *const BLOCK;
 /**
  * The getaddr message requests an addr message from the receiving node,
  * preferably one with lots of IP addresses of other receiving nodes.
- * @see https://bitcoin.org/en/developer-reference#getaddr
+ * @see https://lambda.org/en/developer-reference#getaddr
  */
 extern const char *const GETADDR;
 /**
  * The mempool message requests the TXIDs of transactions that the receiving
  * node has verified as valid but which have not yet appeared in a block.
  * @since protocol version 60002.
- * @see https://bitcoin.org/en/developer-reference#mempool
+ * @see https://lambda.org/en/developer-reference#mempool
  */
 extern const char *const MEMPOOL;
 /**
  * The ping message is sent periodically to help confirm that the receiving
  * peer is still connected.
- * @see https://bitcoin.org/en/developer-reference#ping
+ * @see https://lambda.org/en/developer-reference#ping
  */
 extern const char *const PING;
 /**
  * The pong message replies to a ping message, proving to the pinging node that
  * the ponging node is still alive.
  * @since protocol version 60001 as described by BIP31.
- * @see https://bitcoin.org/en/developer-reference#pong
+ * @see https://lambda.org/en/developer-reference#pong
  */
 extern const char *const PONG;
 /**
  * The notfound message is a reply to a getdata message which requested an
  * object the receiving node does not have available for relay.
  * @ince protocol version 70001.
- * @see https://bitcoin.org/en/developer-reference#notfound
+ * @see https://lambda.org/en/developer-reference#notfound
  */
 extern const char *const NOTFOUND;
 /**
@@ -194,7 +194,7 @@ extern const char *const NOTFOUND;
  * @since protocol version 70001 as described by BIP37.
  *   Only available with service bit NODE_BLOOM since protocol version
  *   70011 as described by BIP111.
- * @see https://bitcoin.org/en/developer-reference#filterload
+ * @see https://lambda.org/en/developer-reference#filterload
  */
 extern const char *const FILTERLOAD;
 /**
@@ -203,7 +203,7 @@ extern const char *const FILTERLOAD;
  * @since protocol version 70001 as described by BIP37.
  *   Only available with service bit NODE_BLOOM since protocol version
  *   70011 as described by BIP111.
- * @see https://bitcoin.org/en/developer-reference#filteradd
+ * @see https://lambda.org/en/developer-reference#filteradd
  */
 extern const char *const FILTERADD;
 /**
@@ -212,21 +212,21 @@ extern const char *const FILTERADD;
  * @since protocol version 70001 as described by BIP37.
  *   Only available with service bit NODE_BLOOM since protocol version
  *   70011 as described by BIP111.
- * @see https://bitcoin.org/en/developer-reference#filterclear
+ * @see https://lambda.org/en/developer-reference#filterclear
  */
 extern const char *const FILTERCLEAR;
 /**
  * The reject message informs the receiving node that one of its previous
  * messages has been rejected.
  * @since protocol version 70002 as described by BIP61.
- * @see https://bitcoin.org/en/developer-reference#reject
+ * @see https://lambda.org/en/developer-reference#reject
  */
 extern const char *const REJECT;
 /**
  * Indicates that a node prefers to receive new block announcements via a
  * "headers" message rather than an "inv".
  * @since protocol version 70012 as described by BIP130.
- * @see https://bitcoin.org/en/developer-reference#sendheaders
+ * @see https://lambda.org/en/developer-reference#sendheaders
  */
 extern const char *const SENDHEADERS;
 /**
@@ -290,12 +290,12 @@ enum ServiceFlags : uint64_t {
     // Nothing
     NODE_NONE = 0,
     // NODE_NETWORK means that the node is capable of serving the complete block
-    // chain. It is currently set by all Bitcoin Cash Node non pruned nodes, and is
+    // chain. It is currently set by all Lambda Node non pruned nodes, and is
     // unset by SPV clients or other light clients.
     NODE_NETWORK = (1 << 0),
     // NODE_GETUTXO means the node is capable of responding to the getutxo
-    // protocol request. Bitcoin Cash Node does not support this but a patch set
-    // called Bitcoin XT does. See BIP 64 for details on how this is
+    // protocol request. Lambda Node does not support this but a patch set
+    // called Lambda XT does. See BIP 64 for details on how this is
     // implemented.
     NODE_GETUTXO = (1 << 1),
     // NODE_BLOOM means the node is capable and willing to handle bloom-filtered
@@ -306,13 +306,13 @@ enum ServiceFlags : uint64_t {
     // NODE_XTHIN means the node supports Xtreme Thinblocks. If this is turned
     // off then the node will not service nor make xthin requests.
     NODE_XTHIN = (1 << 4),
-    // NODE_BITCOIN_CASH means the node supports Bitcoin Cash and the
+    // NODE_LAMBDA_CASH means the node supports Lambda and the
     // associated consensus rule changes.
     // This service bit is intended to be used prior until some time after the
-    // UAHF activation when the Bitcoin Cash network has adequately separated.
-    // TODO: remove (free up) the NODE_BITCOIN_CASH service bit once no longer
+    // UAHF activation when the Lambda network has adequately separated.
+    // TODO: remove (free up) the NODE_LAMBDA_CASH service bit once no longer
     // needed.
-    NODE_BITCOIN_CASH = (1 << 5),
+    NODE_LAMBDA_CASH = (1 << 5),
     // NODE_GRAPHENE means the node supports Graphene blocks
     // If this is turned off then the node will not service graphene requests nor
     // make graphene requests
@@ -333,7 +333,7 @@ enum ServiceFlags : uint64_t {
 
     // Bits 24-31 are reserved for temporary experiments. Just pick a bit that
     // isn't getting used, or one not being used much, and notify the
-    // bitcoin-development mailing list. Remember that service bits are just
+    // lambda-development mailing list. Remember that service bits are just
     // unauthenticated advertisements, so your code must be robust against
     // collisions and other cases where nodes may be advertising a service they
     // do not actually support. Other service bits should be allocated via the

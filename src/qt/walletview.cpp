@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2016 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -7,7 +7,7 @@
 #include <interfaces/node.h>
 #include <qt/addressbookpage.h>
 #include <qt/askpassphrasedialog.h>
-#include <qt/bitcoingui.h>
+#include <qt/lambdagui.h>
 #include <qt/clientmodel.h>
 #include <qt/guiutil.h>
 #include <qt/optionsmodel.h>
@@ -98,16 +98,16 @@ WalletView::WalletView(const PlatformStyle *_platformStyle,
 
 WalletView::~WalletView() {}
 
-void WalletView::setBitcoinGUI(BitcoinGUI *gui) {
+void WalletView::setLambdaGUI(LambdaGUI *gui) {
     if (gui) {
         // Clicking on a transaction on the overview page simply sends you to
         // transaction history page
         connect(overviewPage, &OverviewPage::transactionClicked, gui,
-                &BitcoinGUI::gotoHistoryPage);
+                &LambdaGUI::gotoHistoryPage);
 
         // Navigate to transaction history page after send
         connect(sendCoinsPage, &SendCoinsDialog::coinsSent, gui,
-                &BitcoinGUI::gotoHistoryPage);
+                &LambdaGUI::gotoHistoryPage);
 
         // Receive and report messages
         connect(
@@ -117,15 +117,15 @@ void WalletView::setBitcoinGUI(BitcoinGUI *gui) {
 
         // Pass through encryption status changed signals
         connect(this, &WalletView::encryptionStatusChanged, gui,
-                &BitcoinGUI::updateWalletStatus);
+                &LambdaGUI::updateWalletStatus);
 
         // Pass through transaction notifications
         connect(this, &WalletView::incomingTransaction, gui,
-                &BitcoinGUI::incomingTransaction);
+                &LambdaGUI::incomingTransaction);
 
         // Connect HD enabled state signal
         connect(this, &WalletView::hdEnabledStatusChanged, gui,
-                &BitcoinGUI::updateWalletStatus);
+                &LambdaGUI::updateWalletStatus);
     }
 }
 

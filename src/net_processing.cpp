@@ -1,7 +1,7 @@
 // Copyright (c) 2009-2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
+// Copyright (c) 2009-2016 The Lambda Core developers
 // Copyright (C) 2019-2020 Tom Zander <tomz@freedommail.ch>
-// Copyright (c) 2020-2021 The Bitcoin developers
+// Copyright (c) 2020-2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -50,7 +50,7 @@
 #include <typeinfo>
 
 #if defined(NDEBUG)
-#error "Bitcoin cannot be compiled without assertions."
+#error "Lambda cannot be compiled without assertions."
 #endif
 
 
@@ -2993,7 +2993,7 @@ static bool ProcessMessage(const Config &config, CNode *pfrom,
                             // Do not use rejection cache for witness
                             // transactions or witness-stripped transactions, as
                             // they can have been malleated. See
-                            // https://github.com/bitcoin/bitcoin/issues/8279
+                            // https://github.com/lambda/lambda/issues/8279
                             // for details.
                             assert(recentRejects);
                             recentRejects->insert(orphanId);
@@ -3053,7 +3053,7 @@ static bool ProcessMessage(const Config &config, CNode *pfrom,
             if (!state.CorruptionPossible()) {
                 // Do not use rejection cache for witness transactions or
                 // witness-stripped transactions, as they can have been
-                // malleated. See https://github.com/bitcoin/bitcoin/issues/8279
+                // malleated. See https://github.com/lambda/lambda/issues/8279
                 // for details.
                 assert(recentRejects);
                 recentRejects->insert(tx.GetId());
@@ -3821,7 +3821,7 @@ static bool ProcessMessage(const Config &config, CNode *pfrom,
             // NOTE: We must hold cs_main and pool.cs here to get a "transactional"
             // and consistent view of the mempool while we perform the validation
             // operation & add operations.
-            // See: https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node/-/merge_requests/700#note_417716740
+            // See: https://github.com/lambdablockchain/lambda-node/-/merge_requests/700#note_417716740
             // Also see: The comments in txmempool.h about mempool consistency guarantees.
             LOCK2(cs_main, g_mempool.cs);
             switch ( dsp.validate(g_mempool) ) {

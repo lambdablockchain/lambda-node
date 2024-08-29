@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2020 The Bitcoin developers
+# Copyright (c) 2020 The Lambda developers
 
 from pathlib import Path
 import sys

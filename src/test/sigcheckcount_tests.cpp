@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2020 The Bitcoin developers
+// Copyright (c) 2019-2020 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -274,7 +274,7 @@ BOOST_AUTO_TEST_CASE(test_evalscript) {
     }
 
     // OP_ROLL grinding, see
-    // https://bitslog.com/2017/04/17/new-quadratic-delays-in-bitcoin-scripts/
+    // https://bitslog.com/2017/04/17/new-quadratic-delays-in-lambda-scripts/
     {
         stacktype bigstack;
         bigstack.assign(999, {1});
@@ -286,7 +286,7 @@ BOOST_AUTO_TEST_CASE(test_evalscript) {
     }
 
     // OP_IF grinding, see
-    // https://bitslog.com/2017/04/17/new-quadratic-delays-in-bitcoin-scripts/
+    // https://bitslog.com/2017/04/17/new-quadratic-delays-in-lambda-scripts/
     {
         CScript script;
         script << ScriptInt::fromIntUnchecked(0);

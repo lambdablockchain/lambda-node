@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 The Bitcoin Cash Node developers
+# Copyright (c) 2021 The Lambda Node developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """ Test for the DoubleSpend Proof RPCs """
@@ -11,13 +11,13 @@ from io import BytesIO
 from test_framework.blocktools import create_raw_transaction
 from test_framework.messages import CDSProof, msg_dsproof
 from test_framework.p2p import P2PInterface, p2p_lock
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import (
     assert_equal, assert_greater_than, find_output, wait_until
 )
 
 
-class DoubleSpendProofRPCTest(BitcoinTestFramework):
+class DoubleSpendProofRPCTest(LambdaTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
 

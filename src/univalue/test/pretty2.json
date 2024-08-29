@@ -1,12 +1,12 @@
 [
     [
-        "Bitcoin Core",
-        "Bitcoin ABC",
-        "Bitcoin Cash Node"
+        "Lambda Core",
+        "Lambda ABC",
+        "Lambda Node"
     ],
-    "Bitcoin Classic",
-    "Bitcoin Unlimited",
-    "Bitcoin XT",
+    "Lambda Classic",
+    "Lambda Unlimited",
+    "Lambda XT",
     {
         "SPV": [
             "Electron Cash"

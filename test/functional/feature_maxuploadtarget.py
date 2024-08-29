@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2015-2016 The Bitcoin Core developers
+# Copyright (c) 2015-2016 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test behavior of -maxuploadtarget.
@@ -18,7 +18,7 @@ from test_framework.cdefs import LEGACY_MAX_BLOCK_SIZE
 from test_framework.blocktools import mine_big_block
 from test_framework.messages import CInv, MSG_BLOCK, msg_getdata
 from test_framework.p2p import P2PInterface
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import assert_equal
 
 
@@ -35,12 +35,12 @@ class TestP2PConn(P2PInterface):
         self.block_receive_map[message.block.sha256] += 1
 
 
-class MaxUploadTest(BitcoinTestFramework):
+class MaxUploadTest(LambdaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 1
         # Start a node with maxuploadtarget of 200 MB (/24h)
-        self.extra_args = [["-maxuploadtarget=200", "-acceptnonstdtxn=1"]]
+        self.extra_args = [["-maxuploadtarget=200", "-acceptnonstdtxn=0"]]
 
         # Cache for utxos, as the listunspent may take a long time later in the
         # test

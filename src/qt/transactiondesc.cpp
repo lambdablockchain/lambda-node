@@ -1,9 +1,9 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2016 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifdef HAVE_CONFIG_H
-#include <config/bitcoin-config.h>
+#include <config/lambda-config.h>
 #endif
 
 #include <qt/transactiondesc.h>
@@ -14,7 +14,7 @@
 #include <interfaces/node.h>
 #include <key_io.h>
 #include <policy/policy.h>
-#include <qt/bitcoinunits.h>
+#include <qt/lambdaunits.h>
 #include <qt/guiutil.h>
 #include <qt/paymentserver.h>
 #include <qt/transactionrecord.h>
@@ -155,7 +155,7 @@ QString TransactionDesc::toHTML(interfaces::Node &node,
         }
         strHTML += "<b>" + tr("Credit") + ":</b> ";
         if (status.is_in_main_chain) {
-            strHTML += BitcoinUnits::formatHtmlWithUnit(unit, nUnmatured) +
+            strHTML += LambdaUnits::formatHtmlWithUnit(unit, nUnmatured) +
                        " (" +
                        tr("matures in %n more block(s)", "",
                           status.blocks_to_maturity) +
@@ -169,7 +169,7 @@ QString TransactionDesc::toHTML(interfaces::Node &node,
         // Credit
         //
         strHTML += "<b>" + tr("Credit") + ":</b> " +
-                   BitcoinUnits::formatHtmlWithUnit(unit, nNet) + "<br>";
+                   LambdaUnits::formatHtmlWithUnit(unit, nNet) + "<br>";
     } else {
         isminetype fAllFromMe = ISMINE_SPENDABLE;
         for (const isminetype mine : wtx.txin_is_mine) {
@@ -228,12 +228,12 @@ QString TransactionDesc::toHTML(interfaces::Node &node,
 
                 strHTML +=
                     "<b>" + tr("Debit") + ":</b> " +
-                    BitcoinUnits::formatHtmlWithUnit(unit, -1 * txout.nValue) +
+                    LambdaUnits::formatHtmlWithUnit(unit, -1 * txout.nValue) +
                     "<br>";
                 if (toSelf) {
                     strHTML +=
                         "<b>" + tr("Credit") + ":</b> " +
-                        BitcoinUnits::formatHtmlWithUnit(unit, txout.nValue) +
+                        LambdaUnits::formatHtmlWithUnit(unit, txout.nValue) +
                         "<br>";
                 }
             }
@@ -243,17 +243,17 @@ QString TransactionDesc::toHTML(interfaces::Node &node,
                 Amount nChange = wtx.change;
                 Amount nValue = nCredit - nChange;
                 strHTML += "<b>" + tr("Total debit") + ":</b> " +
-                           BitcoinUnits::formatHtmlWithUnit(unit, -1 * nValue) +
+                           LambdaUnits::formatHtmlWithUnit(unit, -1 * nValue) +
                            "<br>";
                 strHTML += "<b>" + tr("Total credit") + ":</b> " +
-                           BitcoinUnits::formatHtmlWithUnit(unit, nValue) +
+                           LambdaUnits::formatHtmlWithUnit(unit, nValue) +
                            "<br>";
             }
 
             Amount nTxFee = nDebit - wtx.tx->GetValueOut();
             if (nTxFee > Amount::zero()) {
                 strHTML += "<b>" + tr("Transaction fee") + ":</b> " +
-                           BitcoinUnits::formatHtmlWithUnit(unit, -1 * nTxFee) +
+                           LambdaUnits::formatHtmlWithUnit(unit, -1 * nTxFee) +
                            "<br>";
             }
         } else {
@@ -264,7 +264,7 @@ QString TransactionDesc::toHTML(interfaces::Node &node,
             for (const CTxIn &txin : wtx.tx->vin) {
                 if (*(mine++)) {
                     strHTML += "<b>" + tr("Debit") + ":</b> " +
-                               BitcoinUnits::formatHtmlWithUnit(
+                               LambdaUnits::formatHtmlWithUnit(
                                    unit, -wallet.getDebit(txin, ISMINE_ALL)) +
                                "<br>";
                 }
@@ -273,7 +273,7 @@ QString TransactionDesc::toHTML(interfaces::Node &node,
             for (const CTxOut &txout : wtx.tx->vout) {
                 if (*(mine++)) {
                     strHTML += "<b>" + tr("Credit") + ":</b> " +
-                               BitcoinUnits::formatHtmlWithUnit(
+                               LambdaUnits::formatHtmlWithUnit(
                                    unit, wallet.getCredit(txout, ISMINE_ALL)) +
                                "<br>";
                 }
@@ -282,7 +282,7 @@ QString TransactionDesc::toHTML(interfaces::Node &node,
     }
 
     strHTML += "<b>" + tr("Net amount") + ":</b> " +
-               BitcoinUnits::formatHtmlWithUnit(unit, nNet, true) + "<br>";
+               LambdaUnits::formatHtmlWithUnit(unit, nNet, true) + "<br>";
 
     //
     // Message
@@ -303,7 +303,7 @@ QString TransactionDesc::toHTML(interfaces::Node &node,
     strHTML += "<b>" + tr("Output index") + ":</b> " +
                QString::number(rec->getOutputIndex()) + "<br>";
 
-    // Message from normal bitcoincash:URI (bitcoincash:123...?message=example)
+    // Message from normal lambda:URI (lambda:123...?message=example)
     for (const std::pair<std::string, std::string> &r : orderForm) {
         if (r.first == "Message") {
             strHTML += "<br><b>" + tr("Message") + ":</b><br>" +
@@ -351,7 +351,7 @@ QString TransactionDesc::toHTML(interfaces::Node &node,
         for (const CTxIn &txin : wtx.tx->vin) {
             if (wallet.txinIsMine(txin)) {
                 strHTML += "<b>" + tr("Debit") + ":</b> " +
-                           BitcoinUnits::formatHtmlWithUnit(
+                           LambdaUnits::formatHtmlWithUnit(
                                unit, -wallet.getDebit(txin, ISMINE_ALL)) +
                            "<br>";
             }
@@ -359,7 +359,7 @@ QString TransactionDesc::toHTML(interfaces::Node &node,
         for (const CTxOut &txout : wtx.tx->vout) {
             if (wallet.txoutIsMine(txout)) {
                 strHTML += "<b>" + tr("Credit") + ":</b> " +
-                           BitcoinUnits::formatHtmlWithUnit(
+                           LambdaUnits::formatHtmlWithUnit(
                                unit, wallet.getCredit(txout, ISMINE_ALL)) +
                            "<br>";
             }
@@ -391,7 +391,7 @@ QString TransactionDesc::toHTML(interfaces::Node &node,
                         EncodeCashAddr(address, wallet.getChainParams()));
                 }
                 strHTML = strHTML + " " + tr("Amount") + "=" +
-                          BitcoinUnits::formatHtmlWithUnit(unit, vout.nValue);
+                          LambdaUnits::formatHtmlWithUnit(unit, vout.nValue);
                 strHTML = strHTML + " IsMine=" +
                           (wallet.txoutIsMine(vout) & ISMINE_SPENDABLE
                                ? tr("true")

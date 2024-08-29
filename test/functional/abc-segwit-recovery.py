@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-# Copyright (c) 2019 The Bitcoin developers
+# Copyright (c) 2019 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """
 This test checks that blocks containing segwit recovery transactions will be accepted,
 that segwit recovery transactions are rejected from mempool acceptance (even with
--acceptnonstdtxn=1), and that segwit recovery transactions don't result in bans.
+-acceptnonstdtxn=0), and that segwit recovery transactions don't result in bans.
 """
 
 import time
@@ -33,7 +33,7 @@ from test_framework.script import (
     OP_HASH160,
     OP_TRUE,
 )
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import assert_raises_rpc_error
 
 TEST_TIME = int(time.time())
@@ -52,7 +52,7 @@ class PreviousSpendableOutput(object):
         self.n = n
 
 
-class SegwitRecoveryTest(BitcoinTestFramework):
+class SegwitRecoveryTest(LambdaTestFramework):
 
     def set_test_params(self):
         self.num_nodes = 2

@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2016 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -53,7 +53,7 @@ TransactionRecord::decomposeTransaction(const interfaces::WalletTx &wtx) {
                 sub.credit = txout.nValue;
                 sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
                 if (wtx.txout_address_is_mine[i]) {
-                    // Received by Bitcoin Address
+                    // Received by Lambda Address
                     sub.type = TransactionRecord::RecvWithAddress;
                     sub.address =
                         EncodeCashAddr(wtx.txout_address[i], Params());
@@ -121,7 +121,7 @@ TransactionRecord::decomposeTransaction(const interfaces::WalletTx &wtx) {
                 }
 
                 if (!boost::get<CNoDestination>(&wtx.txout_address[nOut])) {
-                    // Sent to Bitcoin Address
+                    // Sent to Lambda Address
                     sub.type = TransactionRecord::SendToAddress;
                     sub.address =
                         EncodeCashAddr(wtx.txout_address[nOut], Params());

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2015-2019 The Bitcoin Core developers
+# Copyright (c) 2015-2019 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test activation of the first version bits soft fork.
@@ -57,7 +57,7 @@ from test_framework.script import (
     OP_DROP,
     OP_TRUE,
 )
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.txtools import pad_tx
 from test_framework.util import assert_equal
 
@@ -179,7 +179,7 @@ def create_bip112txs(node, bip112inputs, varyOP_CSV,
     return txs
 
 
-class BIP68_112_113Test(BitcoinTestFramework):
+class BIP68_112_113Test(LambdaTestFramework):
     def set_test_params(self):
         self.num_nodes = 1
         self.setup_clean_chain = True

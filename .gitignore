@@ -1,15 +1,15 @@
 *.tar.gz
 
 *.exe
-src/bitcoin
-src/bitcoind
-src/bitcoin-cli
-src/bitcoin-seeder
-src/bitcoin-tx
-src/bitcoin-wallet
-src/test/test_bitcoin
-src/test/test_bitcoin_fuzzy
-src/qt/test/test_bitcoin-qt
+src/lambda
+src/lambdad
+src/lambda-cli
+src/lambda-seeder
+src/lambda-tx
+src/lambda-wallet
+src/test/test_lambda
+src/test/test_lambda_fuzzy
+src/qt/test/test_lambda-qt
 
 # autoreconf
 aclocal.m4
@@ -31,8 +31,8 @@ config.log
 config.status
 configure
 libtool
-src/config/bitcoin-config.h
-src/config/bitcoin-config.h.in
+src/config/lambda-config.h
+src/config/lambda-config.h.in
 src/config/stamp-h1
 share/setup.nsi
 share/qt/Info.plist
@@ -46,11 +46,11 @@ src/qt/forms/ui_*.h
 
 src/qt/test/moc*.cpp
 
-src/qt/bitcoin-qt.config
-src/qt/bitcoin-qt.creator
-src/qt/bitcoin-qt.creator.user
-src/qt/bitcoin-qt.files
-src/qt/bitcoin-qt.includes
+src/qt/lambda-qt.config
+src/qt/lambda-qt.creator
+src/qt/lambda-qt.creator.user
+src/qt/lambda-qt.files
+src/qt/lambda-qt.includes
 
 .deps
 .dirstamp
@@ -85,13 +85,13 @@ src/qt/bitcoin-qt.includes
 # Compilation and Qt preprocessor part
 *.qm
 Makefile
-bitcoin-qt
-Bitcoin-Qt.app
+lambda-qt
+Lambda-Qt.app
 background.tiff*
 
 # Unit-tests
 Makefile.test
-bitcoin-qt_test
+lambda-qt_test
 
 # Resources cpp
 qrc_*.cpp
@@ -104,7 +104,7 @@ build
 *.gcno
 *.gcda
 /*.info
-test_bitcoin.coverage/
+test_lambda.coverage/
 total.coverage/
 coverage_percent.txt
 
@@ -127,7 +127,7 @@ src/leveldb/TODO
 /doc/md/
 /doc/html/
 
-libbitcoinconsensus.pc
+liblambdaconsensus.pc
 contrib/devtools/split-debug.sh
 
 # vagrant

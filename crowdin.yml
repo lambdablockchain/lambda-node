@@ -1,4 +1,4 @@
-# Configuration for https://crowdin.com/project/bitcoin-cash-node
+# Configuration for https://crowdin.com/project/lambda-node
 
 project_id: 398054
 base_path: .
@@ -10,17 +10,17 @@ commit_message: |-
 
  Source file: `%original_file_name%`
 
- Translators, thank you for making Bitcoin Cash usable by everyone in the world!
+ Translators, thank you for making Lambda usable by everyone in the world!
 
  Commit created automatically by Crowdin.
 
- Test plan: `bitcoin-qt`
+ Test plan: `lambda-qt`
 
 append_commit_message: false
 
 files: [
  {
-  source: /src/qt/locale/bitcoin_en.ts,
-  translation: /src/qt/locale/bitcoin_%locale_with_underscore%.ts,
+  source: /src/qt/locale/lambda_en.ts,
+  translation: /src/qt/locale/lambda_%locale_with_underscore%.ts,
  }
 ]

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# Copyright (c) 2016-2019 The Bitcoin Core developers
-# Copyright (c) 2017 The Bitcoin developers
+# Copyright (c) 2016-2019 The Lambda Core developers
+# Copyright (c) 2017 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test compact blocks (BIP 152).
@@ -47,11 +47,11 @@ from test_framework.p2p import (
     P2PInterface,
 )
 from test_framework.script import CScript, OP_TRUE
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.txtools import pad_tx
 from test_framework.util import assert_equal, wait_until
 
-# TestP2PConn: A peer we use to send messages to bitcoind, and store responses.
+# TestP2PConn: A peer we use to send messages to lambdad, and store responses.
 
 
 class TestP2PConn(P2PInterface):
@@ -131,12 +131,12 @@ class TestP2PConn(P2PInterface):
                    timeout=timeout, lock=p2p_lock)
 
 
-class CompactBlocksTest(BitcoinTestFramework):
+class CompactBlocksTest(LambdaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2
-        self.extra_args = [["-acceptnonstdtxn=1"],
-                           ["-txindex", "-acceptnonstdtxn=1"]]
+        self.extra_args = [["-acceptnonstdtxn=0"],
+                           ["-txindex", "-acceptnonstdtxn=0"]]
         self.utxos = []
 
     def skip_test_if_missing_module(self):
@@ -289,7 +289,7 @@ class CompactBlocksTest(BitcoinTestFramework):
             check_announcement_of_new_block(
                 node, old_node, lambda p: "cmpctblock" in p.last_message)
 
-    # This test actually causes bitcoind to (reasonably!) disconnect us, so do
+    # This test actually causes lambdad to (reasonably!) disconnect us, so do
     # this last.
     def test_invalid_cmpctblock_message(self):
         self.generate(self.nodes[0], 101)
@@ -306,7 +306,7 @@ class CompactBlocksTest(BitcoinTestFramework):
             int(self.nodes[0].getbestblockhash(), 16), block.hashPrevBlock)
 
     # Compare the generated shortids to what we expect based on BIP 152, given
-    # bitcoind's choice of nonce.
+    # lambdad's choice of nonce.
     def test_compactblock_construction(self, node, test_node):
         # Generate a bunch of transactions.
         self.generate(node, 101)
@@ -406,7 +406,7 @@ class CompactBlocksTest(BitcoinTestFramework):
                 header_and_shortids.shortids.pop(0)
             index += 1
 
-    # Test that bitcoind requests compact blocks when we announce new blocks
+    # Test that lambdad requests compact blocks when we announce new blocks
     # via header or inv, and that responding to getblocktxn causes the block
     # to be successfully reconstructed.
     def test_compactblock_requests(self, node, test_node, version):
@@ -606,7 +606,7 @@ class CompactBlocksTest(BitcoinTestFramework):
         assert_equal(absolute_indices, sorted(expected_indices))
 
         # Now give an incorrect response.
-        # Note that it's possible for bitcoind to be smart enough to know we're
+        # Note that it's possible for lambdad to be smart enough to know we're
         # lying, since it could check to see if the shortid matches what we're
         # sending, and eg disconnect us for misbehavior.  If that behavior
         # change was made, we could just modify this test by having a
@@ -634,7 +634,7 @@ class CompactBlocksTest(BitcoinTestFramework):
         assert_equal(int(node.getbestblockhash(), 16), block.sha256)
 
     def test_getblocktxn_handler(self, node, test_node, version):
-        # bitcoind will not send blocktxn responses for blocks whose height is
+        # lambdad will not send blocktxn responses for blocks whose height is
         # more than 10 blocks deep.
         MAX_GETBLOCKTXN_DEPTH = 10
         chain_height = node.getblockcount()

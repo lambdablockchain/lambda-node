@@ -11,7 +11,7 @@ CMake is used to generate Ninja build files.
 
 Please briefly acquaint yourself with the Ninja documentation at <https://ninja-build.org/manual.html>
 
-## Setting up an out-of-tree Ninja build of Bitcoin Cash Node
+## Setting up an out-of-tree Ninja build of Lambda Node
 
 An out-of-tree build creates build products in a separate folder where they do
 not interfere with the source code working area.
@@ -83,16 +83,16 @@ Calling `ninja all` is equivalent to just running `ninja`.
 `ninja check` runs only basic unit tests on the daemon, the Qt wallet (if built),
 and other utilities.
 
-### `check-bitcoin`
+### `check-lambda`
 
 Builds and runs only the core application's C++ unit tests.
 
-### `check-bitcoin-upgrade-activated`
+### `check-lambda-upgrade-activated`
 
-Similar to `check-bitcoin`, but runs the tests in a mode simulating that the next
+Similar to `check-lambda`, but runs the tests in a mode simulating that the next
 upgrade has activated.
 
-### `check-bitcoin-util`
+### `check-lambda-util`
 
 Builds and runs application utility unit tests.
 
@@ -114,11 +114,11 @@ See [linting documentation](linting.md) for details.
 
 Runs a series of security tests for ELF binaries against the following executables:
 
-- bitcoin-cli
-- bitcoin-tx
-- bitcoind
-- bitcoin-qt
-- bitcoin-seeder
+- lambda-cli
+- lambda-tx
+- lambdad
+- lambda-qt
+- lambda-seeder
 
 If the checks are successful, the exit status of the script `security-check.py`
 script will be 0 and its output will be silent, otherwise there will be a log
@@ -130,7 +130,7 @@ Build and run LevelDB test suite.
 
 ### `check-rpcauth`
 
-Build and run Bitcoin RPC authentication tests.
+Build and run Lambda RPC authentication tests.
 
 ### `check-secp256k1`
 
@@ -197,20 +197,20 @@ Same as above but running long Python regression tests only (`--startfrom=40`).
 
 Generate coverage report for `<target>`. See [generate coverage report](coverage.md).
 
-### `test_bitcoin`
+### `test_lambda`
 
 Build the core application's C++ unit test runner (executable produced at
-`src/test/test_bitcoin`)
+`src/test/test_lambda`)
 
-### `test_bitcoin-qt`
+### `test_lambda-qt`
 
 Build the GUI wallet's C++ unit test runner (executable produced at
-`src/qt/test/test_bitcoin-qt`)
+`src/qt/test/test_lambda-qt`)
 
-### `test_bitcoin-seeder`
+### `test_lambda-seeder`
 
 Build the DNS seeder's C++ unit test runner (executable produced at
-`src/seeder/test/test_bitcoin-seeder`)
+`src/seeder/test/test_lambda-seeder`)
 
 ### `doc-html`
 
@@ -248,7 +248,7 @@ configured by cmake and ready to be built.
 
 ## Benchmarking targets
 
-### `bench-bitcoin`
+### `bench-lambda`
 
 Builds and executes all application benchmarks. Excludes some library dependency
 benchmarks (eg. secp256k1).
@@ -264,7 +264,7 @@ Again, timings will be machine-specific.
 
 ## Fuzzing targets
 
-### `bitcoin-fuzzers`
+### `lambda-fuzzers`
 
 Builds application fuzz testing executables.
 
@@ -283,7 +283,7 @@ Below are some of the cmake build options with example values.
 
 All these options are passed via `-D` (defines) to the `cmake` command.
 
-- -DBUILD_BITCOIN_SEEDER=OFF # to disable build of the seeder (it is not
+- -DBUILD_LAMBDA_SEEDER=OFF # to disable build of the seeder (it is not
   supported in Windows yet)
 
 - -DCMAKE_INSTALL_PREFIX=/home/user   # set install prefix to user home directory
@@ -316,4 +316,4 @@ All these options are passed via `-D` (defines) to the `cmake` command.
 
 - -DENABLE_MAN=OFF # Disable manpage generation/installation
 
-- -DDOC_ONLINE=ON # Adapt Markdown and HTML documentation for publication on docs.bitcoincashnode.org
+- -DDOC_ONLINE=ON # Adapt Markdown and HTML documentation for publication on docs.lambdanode.org

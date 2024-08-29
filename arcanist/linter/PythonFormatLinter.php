@@ -46,7 +46,7 @@ final class PythonFormatLinter extends ArcanistExternalLinter {
 
   public function getInstallInstructions() {
     return pht('The test/lint/lint-python-format.py script is part of the '.
-      'bitcoin-abc project');
+      'lambda-abc project');
   }
 
   public function shouldExpectCommandErrors() {

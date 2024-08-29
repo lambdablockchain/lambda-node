@@ -80,7 +80,7 @@ git reset --hard "${PARENT_COMMIT}"
 
 case "${COMMIT_TYPE}" in
   update-chainparams)
-    # Assumes bitcoind instances are already running on mainnet and testnet
+    # Assumes lambdad instances are already running on mainnet and testnet
     pushd "${CHAINPARAMS_SCRIPTS_DIR}"
     CHAINPARAMS_MAINNET_TXT="chainparams_main.txt"
     ./make_chainparams.py > "${CHAINPARAMS_MAINNET_TXT}"

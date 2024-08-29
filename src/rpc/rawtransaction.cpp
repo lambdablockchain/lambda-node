@@ -1,6 +1,6 @@
 // Copyright (c) 2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
-// Copyright (c) 2020-2021 The Bitcoin developers
+// Copyright (c) 2009-2016 The Lambda Core developers
+// Copyright (c) 2020-2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -38,10 +38,10 @@
 #include <univalue.h>
 
 static UniValue::Object TxToJSON(const Config &config, const CTransaction &tx, const BlockHash &hashBlock) {
-    // Call into TxToUniv() in bitcoin-common to decode the transaction hex.
+    // Call into TxToUniv() in lambda-common to decode the transaction hex.
     //
     // Blockchain contextual information (confirmations and blocktime) is not
-    // available to code in bitcoin-common, so we query them here and push the
+    // available to code in lambda-common, so we query them here and push the
     // data into the returned UniValue.
     UniValue::Object entry = TxToUniv(config, tx, uint256(), true, RPCSerializationFlags());
 
@@ -130,7 +130,7 @@ static UniValue getrawtransaction(const Config &config,
             "         \"type\" : \"pubkeyhash\",  (string) The type, eg "
             "'pubkeyhash'\n"
             "         \"addresses\" : [           (json array of string)\n"
-            "           \"address\"        (string) Bitcoin Cash address\n"
+            "           \"address\"        (string) Lambda address\n"
             "           ,...\n"
             "         ]\n"
             "       }\n"
@@ -492,7 +492,7 @@ CMutableTransaction ConstructTransaction(const CChainParams &params,
             CTxDestination destination = DecodeDestination(entry.first, params);
             if (!IsValidDestination(destination)) {
                 throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY,
-                                   std::string("Invalid Bitcoin Cash address: ") +
+                                   std::string("Invalid Lambda address: ") +
                                        entry.first);
             }
 
@@ -543,7 +543,7 @@ static UniValue createrawtransaction(const Config &config,
                         {
                             {"", RPCArg::Type::OBJ, /* opt */ true, /* default_val */ "", "",
                                 {
-                                    {"address", RPCArg::Type::AMOUNT, /* opt */ false, /* default_val */ "", "A key-value pair. The key (string) is the Bitcoin Cash address, the value (float or string) is the amount in " + CURRENCY_UNIT},
+                                    {"address", RPCArg::Type::AMOUNT, /* opt */ false, /* default_val */ "", "A key-value pair. The key (string) is the Lambda address, the value (float or string) is the amount in " + CURRENCY_UNIT},
                                 },
                                 },
                             {"", RPCArg::Type::OBJ, /* opt */ true, /* default_val */ "", "",
@@ -622,7 +622,7 @@ static UniValue decoderawtransaction(const Config &config,
             "'pubkeyhash'\n"
             "         \"addresses\" : [           (json array of string)\n"
             "           \"12tvKAXCxZjSmdNbao16dKXC8tRWfcF5oc\"   (string) "
-            "Bitcoin Cash address\n"
+            "Lambda address\n"
             "           ,...\n"
             "         ]\n"
             "       }\n"
@@ -663,7 +663,7 @@ static UniValue decodescript(const Config &config,
             "  \"type\":\"type\", (string) The output type\n"
             "  \"reqSigs\": n,    (numeric) The required signatures\n"
             "  \"addresses\": [   (json array of string)\n"
-            "     \"address\"     (string) Bitcoin Cash address\n"
+            "     \"address\"     (string) Lambda address\n"
             "     ,...\n"
             "  ],\n"
             "  \"p2sh\",\"address\" (string) address of P2SH script wrapping "
@@ -1207,7 +1207,7 @@ static UniValue decodepsbt(const Config &config,
     if (request.fHelp || request.params.size() != 1) {
         throw std::runtime_error(
             RPCHelpMan{"decodepsbt",
-                "\nReturn a JSON object representing the serialized, base64-encoded partially signed Bitcoin transaction.\n",
+                "\nReturn a JSON object representing the serialized, base64-encoded partially signed Lambda transaction.\n",
                 {
                     {"psbt", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "The PSBT base64 string"},
                 }}
@@ -1237,7 +1237,7 @@ static UniValue decodepsbt(const Config &config,
             "          \"hex\" : \"hex\",            (string) The hex\n"
             "          \"type\" : \"pubkeyhash\",    (string) The type, eg "
             "'pubkeyhash'\n"
-            "          \"address\" : \"address\"     (string) Bitcoin Cash address "
+            "          \"address\" : \"address\"     (string) Lambda address "
             "if there is one\n"
             "        }\n"
             "      },\n"
@@ -1479,7 +1479,7 @@ static UniValue combinepsbt(const Config &,
     if (request.fHelp || request.params.size() != 1) {
         throw std::runtime_error(
             RPCHelpMan{"combinepsbt",
-                "\nCombine multiple partially signed Bitcoin transactions into one transaction.\n"
+                "\nCombine multiple partially signed Lambda transactions into one transaction.\n"
                 "Implements the Combiner role.\n",
                 {
                     {"txs", RPCArg::Type::ARR, /* opt */ false, /* default_val */ "", "A json array of base64 strings of partially signed transactions",
@@ -1637,7 +1637,7 @@ static UniValue createpsbt(const Config &config,
                         {
                             {"", RPCArg::Type::OBJ, /* opt */ true, /* default_val */ "", "",
                                 {
-                                    {"address", RPCArg::Type::AMOUNT, /* opt */ false, /* default_val */ "", "A key-value pair. The key (string) is the Bitcoin Cash address, the value (float or string) is the amount in " + CURRENCY_UNIT},
+                                    {"address", RPCArg::Type::AMOUNT, /* opt */ false, /* default_val */ "", "A key-value pair. The key (string) is the Lambda address, the value (float or string) is the amount in " + CURRENCY_UNIT},
                                 },
                                 },
                             {"", RPCArg::Type::OBJ, /* opt */ true, /* default_val */ "", "",

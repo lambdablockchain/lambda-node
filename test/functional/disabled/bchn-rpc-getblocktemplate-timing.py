@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Copyright (c) 2019-2020 Jonathan Toomim
-# Copyright (c) 2020 The Bitcoin Cash Node developers
+# Copyright (c) 2020 The Lambda Node developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 '''
@@ -12,7 +12,7 @@ import threading
 import time
 import traceback
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.authproxy import JSONRPCException
 from decimal import Decimal
 
@@ -21,7 +21,7 @@ NUM_NODES = 4
 TX_PER_BLOCK = 2000
 
 
-class GBTTimingTest(BitcoinTestFramework):
+class GBTTimingTest(LambdaTestFramework):
     def skip_test_if_missing_module(self):
         self.skip_if_no_wallet()
 
@@ -213,7 +213,7 @@ class GBTTimingTest(BitcoinTestFramework):
             addresses = self.node_addresses[node]
             for i in range(0, count):
                 now = time.time()
-                # sleeping for 5 ms per tx ensures that bitcoind doesn't get starved for cs_main time and allows
+                # sleeping for 5 ms per tx ensures that lambdad doesn't get starved for cs_main time and allows
                 # transactions time to propagate to other nodes
                 time.sleep(0.005)
                 if i / (now - t) > rate:
@@ -224,7 +224,7 @@ class GBTTimingTest(BitcoinTestFramework):
                 except http.client.CannotSendRequest:
                     self.nodes[node].sendtoaddress(add, value, '', '', False, 2)
                 except JSONRPCException:
-                    print("Warning: this bitcoind appears to not support the 'fast' argument for sendtoaddress")
+                    print("Warning: this lambdad appears to not support the 'fast' argument for sendtoaddress")
                     self.nodes[node].sendtoaddress(add, value, '', '', False)
 
         threads = [threading.Thread(target=helper, args=(n, txcount))

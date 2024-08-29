@@ -1,6 +1,6 @@
 // Copyright (c) 2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
-// Copyright (c) 2020 The Bitcoin developers
+// Copyright (c) 2009-2016 The Lambda Core developers
+// Copyright (c) 2020 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -27,7 +27,7 @@ enum HTTPStatusCode {
     HTTP_SERVICE_UNAVAILABLE = 503,
 };
 
-//! Bitcoin RPC error codes
+//! Lambda RPC error codes
 enum RPCErrorCode {
     //! Standard JSON-RPC 2.0 errors
     // RPC_INVALID_REQUEST is internally mapped to HTTP_BAD_REQUEST (400).
@@ -37,7 +37,7 @@ enum RPCErrorCode {
     // It should not be used for application-layer errors.
     RPC_METHOD_NOT_FOUND = -32601,
     RPC_INVALID_PARAMS = -32602,
-    // RPC_INTERNAL_ERROR should only be used for genuine errors in bitcoind
+    // RPC_INTERNAL_ERROR should only be used for genuine errors in lambdad
     // (for example datadir corruption).
     RPC_INTERNAL_ERROR = -32603,
     RPC_PARSE_ERROR = -32700,
@@ -78,7 +78,7 @@ enum RPCErrorCode {
     RPC_TRANSACTION_ALREADY_IN_CHAIN = RPC_VERIFY_ALREADY_IN_CHAIN,
 
     //! P2P client errors
-    //! Bitcoin is not connected
+    //! Lambda is not connected
     RPC_CLIENT_NOT_CONNECTED = -9,
     //! Still downloading initial blocks
     RPC_CLIENT_IN_INITIAL_DOWNLOAD = -10,

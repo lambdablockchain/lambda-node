@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2021 The Bitcoin developers
+# Copyright (c) 2019-2021 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -12,11 +12,11 @@ configure_file(
 )
 add_custom_target(doc-md
 	COMMENT "Building Markdown documentation..."
-	DEPENDS bitcoind
-	DEPENDS bitcoin-qt
-	DEPENDS bitcoin-cli
-	DEPENDS bitcoin-tx
-	DEPENDS bitcoin-seeder
+	DEPENDS lambdad
+	DEPENDS lambda-qt
+	DEPENDS lambda-cli
+	DEPENDS lambda-tx
+	DEPENDS lambda-seeder
 	DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/gen-doc-md.sh"
 	COMMAND "${CMAKE_CURRENT_BINARY_DIR}/gen-doc-md.sh"
 )
@@ -28,7 +28,7 @@ add_custom_target(doc-html
 )
 
 option(ENABLE_MAN "Enable manpages" ON)
-if(ENABLE_MAN AND BUILD_BITCOIN_DAEMON)
+if(ENABLE_MAN AND BUILD_LAMBDA_DAEMON)
 	configure_file(
 		../cmake/utils/gen-doc-man-footer.sh.in
 		man/gen-doc-man-footer.sh
@@ -36,7 +36,7 @@ if(ENABLE_MAN AND BUILD_BITCOIN_DAEMON)
 	)
 	add_custom_command(
 		OUTPUT man/footer.h2m
-		DEPENDS bitcoind
+		DEPENDS lambdad
 		DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/man/gen-doc-man-footer.sh"
 		WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/man"
 		COMMAND ./gen-doc-man-footer.sh
@@ -49,103 +49,103 @@ if(ENABLE_MAN AND BUILD_BITCOIN_DAEMON)
 	include(GNUInstallDirs)
 	set(MAN_DESTINATION "${CMAKE_INSTALL_MANDIR}/man1")
 	add_custom_command(
-		OUTPUT man/bitcoind.1
-		DEPENDS bitcoind
+		OUTPUT man/lambdad.1
+		DEPENDS lambdad
 		DEPENDS man/footer.h2m
 		DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/man/gen-doc-man.sh"
 		WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/man"
-		COMMAND ./gen-doc-man.sh bitcoind
+		COMMAND ./gen-doc-man.sh lambdad
 	)
-	add_custom_target(doc-man-bitcoind
+	add_custom_target(doc-man-lambdad
 		ALL
-		DEPENDS man/bitcoind.1
+		DEPENDS man/lambdad.1
 	)
 	install(
-		FILES "${CMAKE_CURRENT_BINARY_DIR}/man/bitcoind.1"
+		FILES "${CMAKE_CURRENT_BINARY_DIR}/man/lambdad.1"
 		DESTINATION "${MAN_DESTINATION}"
-		COMPONENT bitcoind
+		COMPONENT lambdad
 	)
-	if(BUILD_BITCOIN_QT)
+	if(BUILD_LAMBDA_QT)
 		add_custom_command(
-			OUTPUT man/bitcoin-qt.1
-			DEPENDS bitcoin-qt
+			OUTPUT man/lambda-qt.1
+			DEPENDS lambda-qt
 			DEPENDS man/footer.h2m
 			DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/man/gen-doc-man.sh"
 			WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/man"
-			COMMAND ./gen-doc-man.sh qt/bitcoin-qt
+			COMMAND ./gen-doc-man.sh qt/lambda-qt
 		)
-		add_custom_target(doc-man-bitcoin-qt
+		add_custom_target(doc-man-lambda-qt
 			ALL
-			DEPENDS man/bitcoin-qt.1
+			DEPENDS man/lambda-qt.1
 		)
 		install(
-			FILES "${CMAKE_CURRENT_BINARY_DIR}/man/bitcoin-qt.1"
+			FILES "${CMAKE_CURRENT_BINARY_DIR}/man/lambda-qt.1"
 			DESTINATION "${MAN_DESTINATION}"
-			COMPONENT bitcoin-qt
+			COMPONENT lambda-qt
 		)
 	endif()
-	if(BUILD_BITCOIN_CLI)
+	if(BUILD_LAMBDA_CLI)
 		add_custom_command(
-			OUTPUT man/bitcoin-cli.1
-			DEPENDS bitcoin-cli
+			OUTPUT man/lambda-cli.1
+			DEPENDS lambda-cli
 			DEPENDS man/footer.h2m
 			DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/man/gen-doc-man.sh"
 			WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/man"
-			COMMAND ./gen-doc-man.sh bitcoin-cli
+			COMMAND ./gen-doc-man.sh lambda-cli
 		)
-		add_custom_target(doc-man-bitcoin-cli
+		add_custom_target(doc-man-lambda-cli
 			ALL
-			DEPENDS man/bitcoin-cli.1
+			DEPENDS man/lambda-cli.1
 		)
 		install(
-			FILES "${CMAKE_CURRENT_BINARY_DIR}/man/bitcoin-cli.1"
+			FILES "${CMAKE_CURRENT_BINARY_DIR}/man/lambda-cli.1"
 			DESTINATION "${MAN_DESTINATION}"
-			COMPONENT bitcoind
+			COMPONENT lambdad
 		)
 	endif()
-	if(BUILD_BITCOIN_TX)
+	if(BUILD_LAMBDA_TX)
 		add_custom_command(
-			OUTPUT man/bitcoin-tx.1
-			DEPENDS bitcoin-tx
+			OUTPUT man/lambda-tx.1
+			DEPENDS lambda-tx
 			DEPENDS man/footer.h2m
 			DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/man/gen-doc-man.sh"
 			WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/man"
-			COMMAND ./gen-doc-man.sh bitcoin-tx
+			COMMAND ./gen-doc-man.sh lambda-tx
 		)
-		add_custom_target(doc-man-bitcoin-tx
+		add_custom_target(doc-man-lambda-tx
 			ALL
-			DEPENDS man/bitcoin-tx.1
+			DEPENDS man/lambda-tx.1
 		)
 		install(
-			FILES "${CMAKE_CURRENT_BINARY_DIR}/man/bitcoin-tx.1"
+			FILES "${CMAKE_CURRENT_BINARY_DIR}/man/lambda-tx.1"
 			DESTINATION "${MAN_DESTINATION}"
-			COMPONENT bitcoind
+			COMPONENT lambdad
 		)
 	endif()
-	if(BUILD_BITCOIN_SEEDER)
+	if(BUILD_LAMBDA_SEEDER)
 		add_custom_command(
-			OUTPUT man/bitcoin-seeder.1
-			DEPENDS bitcoin-seeder
+			OUTPUT man/lambda-seeder.1
+			DEPENDS lambda-seeder
 			DEPENDS man/footer.h2m
 			DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/man/gen-doc-man.sh"
 			WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/man"
-			COMMAND ./gen-doc-man.sh seeder/bitcoin-seeder
+			COMMAND ./gen-doc-man.sh seeder/lambda-seeder
 		)
-		add_custom_target(doc-man-bitcoin-seeder
+		add_custom_target(doc-man-lambda-seeder
 			ALL
-			DEPENDS man/bitcoin-seeder.1)
+			DEPENDS man/lambda-seeder.1)
 		install(
-			FILES "${CMAKE_CURRENT_BINARY_DIR}/man/bitcoin-seeder.1"
+			FILES "${CMAKE_CURRENT_BINARY_DIR}/man/lambda-seeder.1"
 			DESTINATION "${MAN_DESTINATION}"
-			COMPONENT bitcoin-seeder
+			COMPONENT lambda-seeder
 		)
 	endif()
 	add_custom_target(doc-man
-		DEPENDS doc-man-bitcoind
-		DEPENDS doc-man-bitcoin-qt
-		DEPENDS doc-man-bitcoin-cli
-		DEPENDS doc-man-bitcoin-tx
-		DEPENDS doc-man-bitcoin-seeder
+		DEPENDS doc-man-lambdad
+		DEPENDS doc-man-lambda-qt
+		DEPENDS doc-man-lambda-cli
+		DEPENDS doc-man-lambda-tx
+		DEPENDS doc-man-lambda-seeder
 	)
 endif()
 

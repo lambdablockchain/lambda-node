@@ -1,9 +1,9 @@
-bitcoin-seeder
+lambda-seeder
 ==============
 
-Bitcoin-seeder is a crawler for the Bitcoin Cash network, which exposes a list
+Lambda-seeder is a crawler for the Lambda network, which exposes a list
 of reliable nodes via a built-in DNS server. It is derived from Pieter Wuille's
-bitcoin-seeder, modified for use on the Bitcoin Cash network.
+lambda-seeder, modified for use on the Lambda network.
 
 Features:
 
@@ -34,7 +34,7 @@ dnsseed.example.com.   86400    IN      NS     vps.example.com.
 
 On the system vps.example.com, you can now run dnsseed:
 
-./bitcoin-seeder -host=dnsseed.example.com -ns=vps.example.com
+./lambda-seeder -host=dnsseed.example.com -ns=vps.example.com
 
 If you want the DNS server to report SOA records, please provide an
 e-mail address (with the @ part replaced by .) using -mbox.
@@ -55,8 +55,8 @@ the -port=5353 option.
 Generate Seed Lists
 -------------------
 
-Bitcoin-seeder is also be used to generate the seed lists that are compiled
-into every Bitcoin Cash Node release. It produces the `dnsseed.dump` files that are
+Lambda-seeder is also be used to generate the seed lists that are compiled
+into every Lambda Node release. It produces the `dnsseed.dump` files that are
 used as inputs to the scripts in [contrib/seeds](/contrib/seeds) to generate
 the seed lists. To generate seed lists, the seeder should be run continuously
 for 30 days or more.

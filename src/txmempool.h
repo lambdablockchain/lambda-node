@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
-// Copyright (c) 2020-2021 The Bitcoin developers
+// Copyright (c) 2009-2016 The Lambda Core developers
+// Copyright (c) 2020-2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -366,8 +366,8 @@ public:
      * @par Consistency bug
      *
      * The second guarantee above is not currently enforced, but
-     * https://github.com/bitcoin/bitcoin/pull/14193 will fix it. No known code
-     * in bitcoin currently depends on second guarantee, but it is important to
+     * https://github.com/lambda/lambda/pull/14193 will fix it. No known code
+     * in lambda currently depends on second guarantee, but it is important to
      * fix for third party code that needs be able to frequently poll the
      * mempool without locking `cs_main` and without encountering missing
      * transactions during reorgs.

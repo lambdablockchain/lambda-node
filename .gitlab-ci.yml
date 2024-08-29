@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2021 The Bitcoin developers
+# Copyright (c) 2020-2021 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -23,7 +23,7 @@ code_quality:
     artifacts:
         paths: [gl-code-quality-report.json]
 
-image: bitcoincashnode/buildenv:debian-v2
+image: lambdanode/buildenv:debian-v2
 
 stages:
     - static_checks
@@ -135,7 +135,7 @@ static-run-linters:
         - ccache --zero-stats || true
 
         # Limit ccache to 3 GB (from default 5 GB).
-        # 'ninja all check bench_bitcoin' produces ~2.1GB cache (Jan 2021)
+        # 'ninja all check bench_lambda' produces ~2.1GB cache (Jan 2021)
         - ccache -M 3G
     after_script:
         # after_script somehow loses CCACHE environent variables.
@@ -232,11 +232,11 @@ build-debian-tests:
     needs: ["build-debian"]
     script:
         - (cd build; ninja -t restat)
-        - (cd build; ninja test_bitcoin)
+        - (cd build; ninja test_lambda)
 
     artifacts:
         paths:
-            - ./build/src/test/test_bitcoin
+            - ./build/src/test/test_lambda
             - ./build/src/lib*
     dependencies:
         - build-debian
@@ -246,7 +246,7 @@ test-debian-unittests:
     cache: {}
     needs: ["build-debian-tests"]
     script:
-        - ./build/src/test/test_bitcoin --logger=HRF:JUNIT,message,junit_unit_tests.xml
+        - ./build/src/test/test_lambda --logger=HRF:JUNIT,message,junit_unit_tests.xml
     dependencies:
         - build-debian-tests
     artifacts:
@@ -259,7 +259,7 @@ test-debian-benchmarks:
     needs: ["build-debian"]
     script:
         - (cd build; ninja -t restat)
-        - (cd build; ninja bitcoin-bench; src/bench/bench_bitcoin -evals=1)
+        - (cd build; ninja lambda-bench; src/bench/bench_lambda -evals=1)
     dependencies:
         - build-debian
 
@@ -269,9 +269,9 @@ test-debian-utils:
     needs: ["build-debian"]
     script:
         - (cd build; ninja -t restat)
-        - (cd build; ninja check-bitcoin-qt
-              check-bitcoin-seeder
-              check-bitcoin-util
+        - (cd build; ninja check-lambda-qt
+              check-lambda-seeder
+              check-lambda-util
               check-devtools
               check-leveldb
               check-rpcauth
@@ -338,7 +338,7 @@ build-debian-nowallet:
     extends: .cache-debian
     needs: []
     script:
-        - (cd build; cmake -GNinja .. -DENABLE_MAN=OFF -DBUILD_BITCOIN_WALLET=OFF)
+        - (cd build; cmake -GNinja .. -DENABLE_MAN=OFF -DBUILD_LAMBDA_WALLET=OFF)
         - (cd build; ninja)
 
     artifacts:
@@ -351,11 +351,11 @@ build-debian-nowallet-tests:
     needs: ["build-debian-nowallet"]
     script:
         - (cd build; ninja -t restat)
-        - (cd build; ninja test_bitcoin)
+        - (cd build; ninja test_lambda)
 
     artifacts:
         paths:
-            - ./build/src/test/test_bitcoin
+            - ./build/src/test/test_lambda
             - ./build/src/lib*
     dependencies:
         - build-debian-nowallet
@@ -365,7 +365,7 @@ test-debian-nowallet-unittests:
     cache: {}
     needs: ["build-debian-nowallet-tests"]
     script:
-        - ./build/src/test/test_bitcoin --logger=HRF:JUNIT,message,junit_unit_tests.xml
+        - ./build/src/test/test_lambda --logger=HRF:JUNIT,message,junit_unit_tests.xml
     dependencies:
         - build-debian-nowallet-tests
     artifacts:
@@ -441,11 +441,11 @@ build-debian-tests-clang:
     needs: ["build-debian-clang"]
     script:
         - (cd build; ninja -t restat)
-        - (cd build; ninja test_bitcoin)
+        - (cd build; ninja test_lambda)
 
     artifacts:
         paths:
-            - ./build/src/test/test_bitcoin
+            - ./build/src/test/test_lambda
             - ./build/src/lib*
     dependencies:
         - build-debian-clang
@@ -455,7 +455,7 @@ test-debian-unittests-clang:
     cache: {}
     needs: ["build-debian-tests-clang"]
     script:
-        - ./build/src/test/test_bitcoin --logger=HRF:JUNIT,message,junit_unit_tests.xml
+        - ./build/src/test/test_lambda --logger=HRF:JUNIT,message,junit_unit_tests.xml
     dependencies:
         - build-debian-tests-clang
     artifacts:
@@ -468,9 +468,9 @@ test-debian-utils-clang:
     needs: ["build-debian-clang"]
     script:
         - (cd build; ninja -t restat)
-        - (cd build; ninja check-bitcoin-qt
-              check-bitcoin-seeder
-              check-bitcoin-util
+        - (cd build; ninja check-lambda-qt
+              check-lambda-seeder
+              check-lambda-util
               check-devtools
               check-leveldb
               check-rpcauth
@@ -486,7 +486,7 @@ test-debian-benchmarks-clang:
     needs: ["build-debian-clang"]
     script:
         - (cd build; ninja -t restat)
-        - (cd build; ninja bitcoin-bench; src/bench/bench_bitcoin -evals=1)
+        - (cd build; ninja lambda-bench; src/bench/bench_lambda -evals=1)
     dependencies:
         - build-debian-clang
 
@@ -518,10 +518,10 @@ build-debian-debug-tests:
         - build-debian-debug
     script:
         - (cd build; ninja -t restat)
-        - (cd build; ninja test_bitcoin)
+        - (cd build; ninja test_lambda)
     artifacts:
         paths:
-            - ./build/src/test/test_bitcoin
+            - ./build/src/test/test_lambda
             - ./build/src/lib*
 
 test-debian-debug-unittests:
@@ -531,7 +531,7 @@ test-debian-debug-unittests:
     dependencies:
         - build-debian-debug-tests
     script:
-        - ./build/src/test/test_bitcoin
+        - ./build/src/test/test_lambda
             --logger=HRF:JUNIT,message,junit_unit_tests.xml
     artifacts:
         reports:
@@ -571,11 +571,11 @@ build-debian-debug-clang-tests:
         - build-debian-debug-clang
     script:
         - (cd build; ninja -t restat)
-        - (cd build; ninja test_bitcoin)
+        - (cd build; ninja test_lambda)
 
     artifacts:
         paths:
-            - ./build/src/test/test_bitcoin
+            - ./build/src/test/test_lambda
             - ./build/src/lib*
 
 test-debian-debug-clang-unittests:
@@ -585,7 +585,7 @@ test-debian-debug-clang-unittests:
     dependencies:
         - build-debian-debug-clang-tests
     script:
-        - ./build/src/test/test_bitcoin
+        - ./build/src/test/test_lambda
           --logger=HRF:JUNIT,message,junit_unit_tests.xml
     artifacts:
         reports:
@@ -610,8 +610,8 @@ build-win-64:
     script:
         - cd build
         - cmake -GNinja .. -DENABLE_MAN=OFF
-                           -DBUILD_BITCOIN_QT=OFF
-                           -DBUILD_BITCOIN_SEEDER=OFF
+                           -DBUILD_LAMBDA_QT=OFF
+                           -DBUILD_LAMBDA_SEEDER=OFF
                            -DCMAKE_TOOLCHAIN_FILE=../cmake/platforms/Win64.cmake
         - ninja
     dependencies:
@@ -637,8 +637,8 @@ build-arm:
     script:
         - cd build
         - cmake -GNinja .. -DENABLE_MAN=OFF
-                           -DBUILD_BITCOIN_QT=OFF
-                           -DBUILD_BITCOIN_SEEDER=OFF
+                           -DBUILD_LAMBDA_QT=OFF
+                           -DBUILD_LAMBDA_SEEDER=OFF
                            -DENABLE_GLIBC_BACK_COMPAT=ON
                            -DENABLE_STATIC_LIBSTDCXX=ON
                            -DCMAKE_TOOLCHAIN_FILE=../cmake/platforms/LinuxARM.cmake
@@ -667,7 +667,7 @@ build-aarch64:
         # The following tests are excluded:
         # - bchn-rpc-getblocktemplate-sigops - OOM issues for aarch64 (see #211)
         - cmake -GNinja .. -DENABLE_MAN=OFF
-                           -DBUILD_BITCOIN_ZMQ=OFF
+                           -DBUILD_LAMBDA_ZMQ=OFF
                            -DCMAKE_TOOLCHAIN_FILE=../cmake/platforms/LinuxAArch64.cmake
                            -DCMAKE_CROSSCOMPILING_EMULATOR=$(command -v qemu-aarch64-static)
                            -DEXCLUDE_FUNCTIONAL_TESTS=bchn-rpc-getblocktemplate-sigops
@@ -684,11 +684,11 @@ build-aarch64-tests:
     needs: ["build-aarch64"]
     script:
         - (cd build; ninja -t restat)
-        - (cd build; ninja test_bitcoin)
+        - (cd build; ninja test_lambda)
 
     artifacts:
         paths:
-            - ./build/src/test/test_bitcoin
+            - ./build/src/test/test_lambda
             - ./build/src/lib*
     dependencies:
         - build-aarch64
@@ -700,7 +700,7 @@ test-aarch64-unittests:
     variables:
         QEMU_LD_PREFIX: /usr/aarch64-linux-gnu
     script:
-        - $(command -v qemu-aarch64-static) ./build/src/test/test_bitcoin --logger=HRF:JUNIT,message,junit_unit_tests.xml
+        - $(command -v qemu-aarch64-static) ./build/src/test/test_lambda --logger=HRF:JUNIT,message,junit_unit_tests.xml
     dependencies:
         - build-aarch64-tests
     artifacts:
@@ -737,11 +737,11 @@ fuzz-libfuzzer:
     rules:
         - if: $CI_COMMIT_BRANCH == "master"
     script:
-        - git clone --branch master --single-branch --depth=1 https://gitlab.com/bitcoin-cash-node/bchn-sw/qa-assets
+        - git clone --branch master --single-branch --depth=1 https://gitlab.com/lambdablockchain/bchn-sw/qa-assets
         - mkdir buildFuzzer
         - cd buildFuzzer
         - cmake -GNinja .. -DENABLE_MAN=OFF -DCCACHE=OFF -DENABLE_SANITIZERS="fuzzer;address"
-        - ninja bitcoin-fuzzers link-fuzz-test_runner.py
+        - ninja lambda-fuzzers link-fuzz-test_runner.py
         - ./test/fuzz/test_runner.py -l DEBUG ../qa-assets/fuzz_seed_corpus/
 
 ## Deploy documentation

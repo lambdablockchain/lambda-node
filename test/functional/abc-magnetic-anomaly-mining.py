@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2014-2016 The Bitcoin Core developers
+# Copyright (c) 2014-2016 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """
@@ -11,10 +11,10 @@ import decimal
 import random
 import time
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 
 
-class CTORMiningTest(BitcoinTestFramework):
+class CTORMiningTest(LambdaTestFramework):
     def set_test_params(self):
         # Setup two nodes so we can getblocktemplate
         # it errors out if it is not connected to other nodes

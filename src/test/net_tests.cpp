@@ -1,5 +1,5 @@
-// Copyright (c) 2012-2016 The Bitcoin Core developers
-// Copyright (c) 2017-2019 The Bitcoin developers
+// Copyright (c) 2012-2016 The Lambda Core developers
+// Copyright (c) 2017-2019 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #include <net.h>
@@ -422,7 +422,7 @@ BOOST_AUTO_TEST_CASE(cnetaddr_unserialize_v2) {
     // Valid IPv6, contains embedded "internal".
     s << MakeSpan(ParseHex("02"                                  // network type (IPv6)
                            "10"                                  // address length
-                           "fd6b88c08724ca978112ca1bbdcafac2")); // address: 0xfd + sha256("bitcoin")[0:5] +
+                           "fd6b88c08724ca978112ca1bbdcafac2")); // address: 0xfd + sha256("lambda")[0:5] +
                                                                  // sha256(name)[0:10]
     s >> addr;
     BOOST_CHECK(addr.IsInternal());
@@ -597,12 +597,12 @@ BOOST_AUTO_TEST_CASE(test_userAgent) {
     gArgs.ForceSetMultiArg("-uacomment", uacomment);
 
     const std::string versionMessage =
-        "/Bitcoin Cash Node:" + std::to_string(CLIENT_VERSION_MAJOR) + "." +
+        "/Lambda Node:" + std::to_string(CLIENT_VERSION_MAJOR) + "." +
         std::to_string(CLIENT_VERSION_MINOR) + "." +
         std::to_string(CLIENT_VERSION_REVISION) + "(EB8.0; " + uacomment + ")/";
 
     const std::string versionMessage_strprintf =
-        strprintf("/Bitcoin Cash Node:%d.%d.%d(EB8.0; %s)/", CLIENT_VERSION_MAJOR, CLIENT_VERSION_MINOR, CLIENT_VERSION_REVISION, uacomment);
+        strprintf("/Lambda Node:%d.%d.%d(EB8.0; %s)/", CLIENT_VERSION_MAJOR, CLIENT_VERSION_MINOR, CLIENT_VERSION_REVISION, uacomment);
 
     BOOST_CHECK_EQUAL(versionMessage, versionMessage_strprintf); // verify our test methodology is sound - std::to_string is locale-dependent
     BOOST_CHECK_EQUAL(userAgent(config), versionMessage);

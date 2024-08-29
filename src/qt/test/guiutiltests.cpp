@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2021 The Bitcoin developers
+// Copyright (c) 2017-2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -45,7 +45,7 @@ void GUIUtilTests::toCurrentEncodingTest() {
     QVERIFY(GUIUtil::convertToCashAddr(params, "garbage") == "garbage");
 
     QString cashaddr_pubkey =
-        "bitcoincash:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a";
+        "lambda:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a";
     QString base58_pubkey = "1BpEi6DfDAUFd7GtittLSdBeYJvcoaVggu";
 
     QVERIFY(GUIUtil::convertToCashAddr(params, cashaddr_pubkey) ==

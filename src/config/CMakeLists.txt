@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2021 The Bitcoin developers
+# Copyright (c) 2017-2021 The Lambda developers
 
 # This generates config.h which provides numerous defines
 # about the state of the plateform we are building on.
@@ -8,9 +8,9 @@ include(CheckSymbolExists)
 include(CheckCXXSourceCompiles)
 
 # Version
-set(CLIENT_VERSION_MAJOR ${bitcoin-cash-node_VERSION_MAJOR})
-set(CLIENT_VERSION_MINOR ${bitcoin-cash-node_VERSION_MINOR})
-set(CLIENT_VERSION_REVISION ${bitcoin-cash-node_VERSION_PATCH})
+set(CLIENT_VERSION_MAJOR ${lambda-node_VERSION_MAJOR})
+set(CLIENT_VERSION_MINOR ${lambda-node_VERSION_MINOR})
+set(CLIENT_VERSION_REVISION ${lambda-node_VERSION_PATCH})
 
 option(CLIENT_VERSION_IS_RELEASE "Build a release version" OFF)
 
@@ -197,14 +197,14 @@ else()
 endif()
 
 # Activate wallet
-set(ENABLE_WALLET ${BUILD_BITCOIN_WALLET})
+set(ENABLE_WALLET ${BUILD_LAMBDA_WALLET})
 
 # Activate ZeroMQ
-set(ENABLE_ZMQ ${BUILD_BITCOIN_ZMQ})
+set(ENABLE_ZMQ ${BUILD_LAMBDA_ZMQ})
 
 # Try to find libqrencode
 # Only used in the wallet GUI
-if(ENABLE_QRCODE AND BUILD_BITCOIN_WALLET AND BUILD_BITCOIN_QT)
+if(ENABLE_QRCODE AND BUILD_LAMBDA_WALLET AND BUILD_LAMBDA_QT)
 	set(USE_QRCODE 1 CACHE INTERNAL "QR code is enabled")
 endif()
 
@@ -222,4 +222,4 @@ if(ENABLE_DBUS_NOTIFICATIONS)
 endif()
 
 # Generate the config
-configure_file(bitcoin-config.h.cmake.in bitcoin-config.h ESCAPE_QUOTES)
+configure_file(lambda-config.h.cmake.in lambda-config.h ESCAPE_QUOTES)

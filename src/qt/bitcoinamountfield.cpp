@@ -1,5 +1,5 @@
-// Copyright (c) 2011-2015 The Bitcoin Core developers
-// Copyright (c) 2021 The Bitcoin developers
+// Copyright (c) 2011-2015 The Lambda Core developers
+// Copyright (c) 2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -27,7 +27,7 @@ class AmountSpinBox : public QAbstractSpinBox {
 
 public:
     explicit AmountSpinBox(QWidget *parent)
-        : QAbstractSpinBox(parent), currentUnit(BitcoinUnits::BCH),
+        : QAbstractSpinBox(parent), currentUnit(LambdaUnits::BCH),
           singleStep(100000 * SATOSHI) {
         setAlignment(Qt::AlignRight);
 
@@ -40,7 +40,7 @@ public:
             return QValidator::Intermediate;
         }
         // All spaces are ignored.
-        QString digits = BitcoinUnits::removeSpaces(text);
+        QString digits = LambdaUnits::removeSpaces(text);
         // Return Invalid for non-numeric characters - this will prevent them from being typed/pasted into the input field.
         // Note the input field is intended for unsigned amounts only (in MoneyRange),
         // so plus/minus signs are also rejected even though the amount parser can handle them.
@@ -60,8 +60,8 @@ public:
         bool valid = false;
         Amount val = parse(input, &valid);
         if (valid) {
-            input = BitcoinUnits::format(currentUnit, val, false,
-                                         BitcoinUnits::separatorAlways);
+            input = LambdaUnits::format(currentUnit, val, false,
+                                         LambdaUnits::separatorAlways);
             lineEdit()->setText(input);
         }
     }
@@ -71,8 +71,8 @@ public:
     }
 
     void setValue(const Amount value) {
-        lineEdit()->setText(BitcoinUnits::format(
-            currentUnit, value, false, BitcoinUnits::separatorAlways));
+        lineEdit()->setText(LambdaUnits::format(
+            currentUnit, value, false, LambdaUnits::separatorAlways));
         Q_EMIT valueChanged();
     }
 
@@ -105,9 +105,9 @@ public:
             const QFontMetrics fm(fontMetrics());
             int h = lineEdit()->minimumSizeHint().height();
             int w = GUIUtil::TextWidth(
-                fm, BitcoinUnits::format(BitcoinUnits::BCH,
+                fm, LambdaUnits::format(LambdaUnits::BCH,
                                          MAX_MONEY, false,
-                                         BitcoinUnits::separatorAlways));
+                                         LambdaUnits::separatorAlways));
             // Cursor blinking space.
             w += 2;
 
@@ -152,7 +152,7 @@ private:
      * @note Must return 0 if !valid.
      */
     Amount parse(const QString &text, bool *valid_out = nullptr) const {
-        auto val = BitcoinUnits::parse(currentUnit, true, text);
+        auto val = LambdaUnits::parse(currentUnit, true, text);
         bool valid = val && MoneyRange(*val);
         if (valid_out) {
             *valid_out = valid;
@@ -166,7 +166,7 @@ protected:
             QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
             assert(keyEvent != nullptr);
             // Translate a comma into a period or vice versa, depending on locale.
-            bool preferComma = BitcoinUnits::decimalSeparatorIsComma();
+            bool preferComma = LambdaUnits::decimalSeparatorIsComma();
             if (keyEvent->key() == (preferComma ? Qt::Key_Period : Qt::Key_Comma)) {
                 QKeyEvent replacementKeyEvent(event->type(),
                                               preferComma ? Qt::Key_Comma : Qt::Key_Period,
@@ -209,7 +209,7 @@ Q_SIGNALS:
 
 #include <qt/bitcoinamountfield.moc>
 
-BitcoinAmountField::BitcoinAmountField(QWidget *parent)
+LambdaAmountField::LambdaAmountField(QWidget *parent)
     : QWidget(parent), amount(nullptr) {
     amount = new AmountSpinBox(this);
     amount->setLocale(QLocale::c());
@@ -219,7 +219,7 @@ BitcoinAmountField::BitcoinAmountField(QWidget *parent)
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->addWidget(amount);
     unit = new QValueComboBox(this);
-    unit->setModel(new BitcoinUnits(this));
+    unit->setModel(new LambdaUnits(this));
     layout->addWidget(unit);
     layout->addStretch(1);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -231,34 +231,34 @@ BitcoinAmountField::BitcoinAmountField(QWidget *parent)
 
     // If one if the widgets changes, the combined content changes as well
     connect(amount, &AmountSpinBox::valueChanged, this,
-            &BitcoinAmountField::valueChanged);
+            &LambdaAmountField::valueChanged);
     connect(
         unit,
         static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-        this, &BitcoinAmountField::unitChanged);
+        this, &LambdaAmountField::unitChanged);
 
     // Set default based on configuration
     unitChanged(unit->currentIndex());
 }
 
-void BitcoinAmountField::clear() {
+void LambdaAmountField::clear() {
     amount->clear();
     unit->setCurrentIndex(0);
 }
 
-void BitcoinAmountField::setEnabled(bool fEnabled) {
+void LambdaAmountField::setEnabled(bool fEnabled) {
     amount->setEnabled(fEnabled);
     unit->setEnabled(fEnabled);
 }
 
-bool BitcoinAmountField::validate() {
+bool LambdaAmountField::validate() {
     bool valid = false;
     value(&valid);
     setValid(valid);
     return valid;
 }
 
-void BitcoinAmountField::setValid(bool valid) {
+void LambdaAmountField::setValid(bool valid) {
     if (valid) {
         amount->setStyleSheet("");
     } else {
@@ -266,7 +266,7 @@ void BitcoinAmountField::setValid(bool valid) {
     }
 }
 
-bool BitcoinAmountField::eventFilter(QObject *object, QEvent *event) {
+bool LambdaAmountField::eventFilter(QObject *object, QEvent *event) {
     if (event->type() == QEvent::FocusIn) {
         // Clear invalid flag on focus
         setValid(true);
@@ -274,38 +274,38 @@ bool BitcoinAmountField::eventFilter(QObject *object, QEvent *event) {
     return QWidget::eventFilter(object, event);
 }
 
-QWidget *BitcoinAmountField::setupTabChain(QWidget *prev) {
+QWidget *LambdaAmountField::setupTabChain(QWidget *prev) {
     QWidget::setTabOrder(prev, amount);
     QWidget::setTabOrder(amount, unit);
     return unit;
 }
 
-Amount BitcoinAmountField::value(bool *valid_out) const {
+Amount LambdaAmountField::value(bool *valid_out) const {
     return amount->value(valid_out);
 }
 
-void BitcoinAmountField::setValue(const Amount value) {
+void LambdaAmountField::setValue(const Amount value) {
     amount->setValue(value);
 }
 
-void BitcoinAmountField::setReadOnly(bool fReadOnly) {
+void LambdaAmountField::setReadOnly(bool fReadOnly) {
     amount->setReadOnly(fReadOnly);
 }
 
-void BitcoinAmountField::unitChanged(int idx) {
+void LambdaAmountField::unitChanged(int idx) {
     // Use description tooltip for current unit for the combobox
     unit->setToolTip(unit->itemData(idx, Qt::ToolTipRole).toString());
 
     // Determine new unit ID
-    int newUnit = unit->itemData(idx, BitcoinUnits::UnitRole).toInt();
+    int newUnit = unit->itemData(idx, LambdaUnits::UnitRole).toInt();
 
     amount->setDisplayUnit(newUnit);
 }
 
-void BitcoinAmountField::setDisplayUnit(int newUnit) {
+void LambdaAmountField::setDisplayUnit(int newUnit) {
     unit->setValue(newUnit);
 }
 
-void BitcoinAmountField::setSingleStep(const Amount step) {
+void LambdaAmountField::setSingleStep(const Amount step) {
     amount->setSingleStep(step);
 }

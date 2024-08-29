@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2018 The Bitcoin Core developers
+// Copyright (c) 2009-2018 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -319,7 +319,7 @@ struct PartiallySignedTransaction {
 
     /**
      * Merge psbt into this. The two psbts must have the same underlying
-     * CTransaction (i.e. the same actual Bitcoin transaction.) Returns true if
+     * CTransaction (i.e. the same actual Lambda transaction.) Returns true if
      * the merge succeeded, false otherwise.
      */
     [[nodiscard]] bool Merge(const PartiallySignedTransaction &psbt);

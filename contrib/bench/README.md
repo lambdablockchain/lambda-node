@@ -26,7 +26,7 @@ Check out, build and run benchmarks on two branches, and compare their results.
 
 - If one branch is specified, it compares the currently checked out branch against that.
 - If no branches are specified, it compares the currently checked out branch against master.
-- If a `--filter` argument is specified, it's passed to `bench_bitcoin`'s `-filter`.
+- If a `--filter` argument is specified, it's passed to `bench_lambda`'s `-filter`.
 - If `--threshold` or `--colour` arguments are specified, they are treated as above.
 - If one of the branches is checked out already, it builds and benchmarks that one first, to make best use of any cached build artefacts.
 
@@ -42,10 +42,10 @@ Example usage (basic / advanced):
 
 ## `benchmark_diff.py`
 
-Compares bench_bitcoin outputs and displays percentage changes.
+Compares bench_lambda outputs and displays percentage changes.
 
 Changes are computed between a 'before_file' and 'after_file' which are
-the captured standard output of the `bench_bitcoin` program.
+the captured standard output of the `bench_lambda` program.
 
 Benchmarks that do not appear in both files are listed in a notice preceding
 the per-benchmark output unless `--quiet` option is used.

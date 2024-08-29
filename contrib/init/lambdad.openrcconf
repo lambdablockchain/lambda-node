@@ -1,0 +1,33 @@
+# /etc/conf.d/lambdad: config file for /etc/init.d/lambdad
+
+# Config file location
+#LAMBDAD_CONFIGFILE="/etc/lambda/lambda.conf"
+
+# What directory to write pidfile to?  (created and owned by $LAMBDAD_USER)
+#LAMBDAD_PIDDIR="/var/run/lambdad"
+
+# What filename to give the pidfile
+#LAMBDAD_PIDFILE="${LAMBDAD_PIDDIR}/lambdad.pid"
+
+# Where to write lambdad data (be mindful that the blockchain is large)
+#LAMBDAD_DATADIR="/var/lib/lambdad"
+
+# User and group to own lambdad process
+#LAMBDAD_USER="lambda"
+#LAMBDAD_GROUP="lambda"
+
+# Path to lambdad executable
+#LAMBDAD_BIN="/usr/bin/lambdad"
+
+# Nice value to run lambdad under
+#LAMBDAD_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+#LAMBDAD_OPTS=""
+
+# The timeout in seconds OpenRC will wait for lambdad to terminate
+# after a SIGTERM has been raised.
+# Note that this will be mapped as argument to start-stop-daemon's
+# '--retry' option, which means you can specify a retry schedule
+# here. For more information see man 8 start-stop-daemon.
+LAMBDAD_SIGTERM_TIMEOUT=60

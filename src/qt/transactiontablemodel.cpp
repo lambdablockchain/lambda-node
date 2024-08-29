@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2016 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -218,7 +218,7 @@ TransactionTableModel::TransactionTableModel(
       priv(new TransactionTablePriv(this)),
       fProcessingQueuedTransactions(false), platformStyle(_platformStyle) {
     columns << QString() << QString() << tr("Date") << tr("Type") << tr("Label")
-            << BitcoinUnits::getAmountColumnTitle(
+            << LambdaUnits::getAmountColumnTitle(
                    walletModel->getOptionsModel()->getDisplayUnit());
     priv->refreshWallet(walletModel->wallet());
 
@@ -236,7 +236,7 @@ TransactionTableModel::~TransactionTableModel() {
 /** Updates the column title to "Amount (DisplayUnit)" and emits
  * headerDataChanged() signal for table headers to react. */
 void TransactionTableModel::updateAmountColumnTitle() {
-    columns[Amount] = BitcoinUnits::getAmountColumnTitle(
+    columns[Amount] = LambdaUnits::getAmountColumnTitle(
         walletModel->getOptionsModel()->getDisplayUnit());
     Q_EMIT headerDataChanged(Qt::Horizontal, Amount, Amount);
 }
@@ -423,9 +423,9 @@ TransactionTableModel::addressColor(const TransactionRecord *wtx) const {
 
 QString TransactionTableModel::formatTxAmount(
     const TransactionRecord *wtx, bool showUnconfirmed,
-    BitcoinUnits::SeparatorStyle separators) const {
+    LambdaUnits::SeparatorStyle separators) const {
     QString str =
-        BitcoinUnits::format(walletModel->getOptionsModel()->getDisplayUnit(),
+        LambdaUnits::format(walletModel->getOptionsModel()->getDisplayUnit(),
                              wtx->credit + wtx->debit, false, separators);
     if (showUnconfirmed) {
         if (!wtx->status.countsForBalance) {
@@ -528,7 +528,7 @@ QVariant TransactionTableModel::data(const QModelIndex &index, int role) const {
                     return formatTxToAddress(rec, false);
                 case Amount:
                     return formatTxAmount(rec, true,
-                                          BitcoinUnits::separatorAlways);
+                                          LambdaUnits::separatorAlways);
             }
             break;
         case Qt::EditRole:
@@ -622,14 +622,14 @@ QVariant TransactionTableModel::data(const QModelIndex &index, int role) const {
                 details.append(" ");
             }
             details.append(
-                formatTxAmount(rec, false, BitcoinUnits::separatorNever));
+                formatTxAmount(rec, false, LambdaUnits::separatorNever));
             return details;
         }
         case ConfirmedRole:
             return rec->status.countsForBalance;
         case FormattedAmountRole:
             // Used for copy/export, so don't include separators
-            return formatTxAmount(rec, false, BitcoinUnits::separatorNever);
+            return formatTxAmount(rec, false, LambdaUnits::separatorNever);
         case StatusRole:
             return rec->status.status;
     }

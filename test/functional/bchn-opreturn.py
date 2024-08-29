@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018-2021 The Bitcoin developers
+# Copyright (c) 2018-2021 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """
 This test checks activation of multiple op_return
 """
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.messages import (
     COIN,
     COutPoint,
@@ -19,7 +19,7 @@ from test_framework.script import CScript, OP_RETURN
 from test_framework.util import satoshi_round, assert_raises_rpc_error
 
 
-class OpReturnTest(BitcoinTestFramework):
+class OpReturnTest(LambdaTestFramework):
 
     def set_test_params(self):
         self.num_nodes = 1

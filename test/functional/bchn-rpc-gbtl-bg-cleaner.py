@@ -12,19 +12,19 @@ import os
 import threading
 import time
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import assert_equal, assert_raises_rpc_error, wait_until, assert_blocktemplate_equal
 from test_framework import messages, blocktools
 
 
-class GBTLightBGCleanerTest(BitcoinTestFramework):
+class GBTLightBGCleanerTest(LambdaTestFramework):
     """ Functional tests for the getblocktemplatelight background "cleaner" thread that removes data from the
     gbt/ directory.  We set the timeout to a short time and then observe job data first going to the trash/ folder
     and then being removed completely. """
 
     def set_test_params(self):
         self.setup_clean_chain = True
-        self.num_nodes = 2  # We need connected nodes for getblocktemplatelight RPC to function (bitcoind node policy)
+        self.num_nodes = 2  # We need connected nodes for getblocktemplatelight RPC to function (lambdad node policy)
         self._cache_size = 5
         self._store_time = 10
         args = [

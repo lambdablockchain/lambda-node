@@ -1,5 +1,5 @@
 /* XPM */
-static char * bitcoin_abc256_xpm[] = {
+static char * lambda_abc256_xpm[] = {
 "256 256 58 1",
 " 	c None",
 ".	c #A31C36",

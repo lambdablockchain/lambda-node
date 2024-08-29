@@ -1,10 +1,10 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
-// Copyright (c) 2021 The Bitcoin developers
+// Copyright (c) 2011-2016 The Lambda Core developers
+// Copyright (c) 2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
+#include <config/lambda-config.h>
 #endif
 
 #include <qt/forms/ui_sendcoinsentry.h>
@@ -44,13 +44,13 @@ SendCoinsEntry::SendCoinsEntry(const PlatformStyle *_platformStyle,
     ui->addAsLabel->setPlaceholderText(
         tr("Enter a label for this address to add it to your address book"));
 
-    // normal Bitcoin Cash address field
+    // normal Lambda address field
     GUIUtil::setupAddressWidget(ui->payTo, this);
-    // just a label for displaying Bitcoin Cash address(es)
+    // just a label for displaying Lambda address(es)
     ui->payTo_is->setFont(GUIUtil::fixedPitchFont());
 
     // Connect signals
-    connect(ui->payAmount, &BitcoinAmountField::valueChanged, this,
+    connect(ui->payAmount, &LambdaAmountField::valueChanged, this,
             &SendCoinsEntry::payAmountChanged);
     connect(ui->checkboxSubtractFeeFromAmount, &QCheckBox::toggled, this,
             &SendCoinsEntry::subtractFeeFromAmountChanged);
@@ -103,7 +103,7 @@ void SendCoinsEntry::setModel(WalletModel *_model) {
         ui->messageTextLabel->setToolTip(
             tr("A message that was attached to the %1 URI which will be stored "
                "with the transaction for your reference. Note: This message "
-               "will not be sent over the Bitcoin network.")
+               "will not be sent over the Lambda network.")
                 .arg(QString::fromStdString(
                     _model->getChainParams().CashAddrPrefix())));
     }

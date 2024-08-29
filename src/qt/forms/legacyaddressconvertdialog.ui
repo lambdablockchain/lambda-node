@@ -12,7 +12,7 @@
       <bool>true</bool>
      </property>
      <property name="text">
-      <string>The legacy address you entered: &lt;b&gt;%1&lt;/b&gt;&lt;br&gt;will be converted to its corresponding Bitcoin Cash address: &lt;b&gt;%2&lt;/b&gt;</string>
+      <string>The legacy address you entered: &lt;b&gt;%1&lt;/b&gt;&lt;br&gt;will be converted to its corresponding Lambda address: &lt;b&gt;%2&lt;/b&gt;</string>
      </property>
     </widget>
    </item>

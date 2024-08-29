@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-# Copyright (c) 2015-2020 The Bitcoin Unlimited developers
-# Copyright (c) 2020 The Bitcoin developers
+# Copyright (c) 2015-2020 The Lambda Unlimited developers
+# Copyright (c) 2020 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 import sys
 if sys.version_info[0] < 3:
     sys.exit("Use Python 3")
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.p2p import P2PInterface, p2p_lock
 from test_framework.messages import NODE_NETWORK, msg_version, msg_extversion, msg_verack, MIN_VERSION_SUPPORTED, NODE_EXTVERSION
 from test_framework.util import assert_equal, wait_until
@@ -81,7 +81,7 @@ class BaseNode(P2PInterface):
         wait_until(test_function, timeout=timeout, lock=p2p_lock)
 
 
-class ExtVersionTest(BitcoinTestFramework):
+class ExtVersionTest(LambdaTestFramework):
     def set_test_params(self):
         self.num_nodes = 1
 

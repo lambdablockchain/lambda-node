@@ -46,9 +46,9 @@ def setup():
     if not os.path.isdir('gitian-builder'):
         subprocess.check_call(
             ['git', 'clone', 'https://github.com/devrandom/gitian-builder.git'])
-    if not os.path.isdir('bitcoin-cash-node'):
+    if not os.path.isdir('lambda-node'):
         subprocess.check_call(
-            ['git', 'clone', 'https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node.git'])
+            ['git', 'clone', 'https://github.com/lambdablockchain/lambda-node.git'])
     os.chdir('gitian-builder')
     make_image_prog = ['bin/make-base-vm',
                        '--distro', 'debian', '--suite', 'buster', '--arch', 'amd64']
@@ -68,64 +68,64 @@ def setup():
 def build():
     global args, workdir
 
-    base_output_dir = 'bitcoin-binaries/' + args.version
+    base_output_dir = 'lambda-binaries/' + args.version
     os.makedirs(base_output_dir + '/src', exist_ok=True)
     print('\nBuilding Dependencies\n')
     os.chdir('gitian-builder')
     os.makedirs('inputs', exist_ok=True)
 
-    subprocess.check_call(['make', '-C', '../bitcoin-cash-node/depends',
+    subprocess.check_call(['make', '-C', '../lambda-node/depends',
                            'download', 'SOURCES_PATH=' + os.getcwd() + '/cache/common'])
 
     output_dir_src = '../' + base_output_dir + '/src'
     if args.linux:
         print('\nCompiling ' + args.version + ' Linux')
-        subprocess.check_call(['bin/gbuild', '-j', args.jobs, '-m', args.memory, '--commit', 'bitcoin=' + args.commit,
-                               '--url', 'bitcoin=' + args.url, '../bitcoin-cash-node/contrib/gitian-descriptors/gitian-linux.yml'])
+        subprocess.check_call(['bin/gbuild', '-j', args.jobs, '-m', args.memory, '--commit', 'lambda=' + args.commit,
+                               '--url', 'lambda=' + args.url, '../lambda-node/contrib/gitian-descriptors/gitian-linux.yml'])
         subprocess.check_call(['bin/gsign', '-p', args.sign_prog, '--signer', args.signer, '--release', args.version +
-                               '-linux', '--destination', '../gitian.sigs/', '../bitcoin-cash-node/contrib/gitian-descriptors/gitian-linux.yml'])
+                               '-linux', '--destination', '../gitian.sigs/', '../lambda-node/contrib/gitian-descriptors/gitian-linux.yml'])
         output_dir_linux = '../' + base_output_dir + '/linux'
         os.makedirs(output_dir_linux, exist_ok=True)
         subprocess.check_call(
-            'mv build/out/bitcoin-*.tar.gz ' + output_dir_linux, shell=True)
+            'mv build/out/lambda-*.tar.gz ' + output_dir_linux, shell=True)
         subprocess.check_call(
-            'mv build/out/src/bitcoin-*.tar.gz ' + output_dir_src, shell=True)
+            'mv build/out/src/lambda-*.tar.gz ' + output_dir_src, shell=True)
         subprocess.check_call(
-            'mv result/bitcoin-*-linux-res.yml ' + output_dir_linux, shell=True)
+            'mv result/lambda-*-linux-res.yml ' + output_dir_linux, shell=True)
 
     if args.windows:
         print('\nCompiling ' + args.version + ' Windows')
-        subprocess.check_call(['bin/gbuild', '-j', args.jobs, '-m', args.memory, '--commit', 'bitcoin=' + args.commit,
-                               '--url', 'bitcoin=' + args.url, '../bitcoin-cash-node/contrib/gitian-descriptors/gitian-win.yml'])
+        subprocess.check_call(['bin/gbuild', '-j', args.jobs, '-m', args.memory, '--commit', 'lambda=' + args.commit,
+                               '--url', 'lambda=' + args.url, '../lambda-node/contrib/gitian-descriptors/gitian-win.yml'])
         subprocess.check_call(['bin/gsign', '-p', args.sign_prog, '--signer', args.signer, '--release', args.version +
-                               '-win-unsigned', '--destination', '../gitian.sigs/', '../bitcoin-cash-node/contrib/gitian-descriptors/gitian-win.yml'])
+                               '-win-unsigned', '--destination', '../gitian.sigs/', '../lambda-node/contrib/gitian-descriptors/gitian-win.yml'])
         output_dir_win = '../' + base_output_dir + '/win'
         os.makedirs(output_dir_win, exist_ok=True)
         subprocess.check_call(
-            'mv build/out/bitcoin-*-win-unsigned.tar.gz inputs/', shell=True)
+            'mv build/out/lambda-*-win-unsigned.tar.gz inputs/', shell=True)
         subprocess.check_call(
-            'mv build/out/bitcoin-*.zip build/out/bitcoin-*.exe ' + output_dir_win, shell=True)
+            'mv build/out/lambda-*.zip build/out/lambda-*.exe ' + output_dir_win, shell=True)
         subprocess.check_call(
-            'mv build/out/src/bitcoin-*.tar.gz ' + output_dir_src, shell=True)
+            'mv build/out/src/lambda-*.tar.gz ' + output_dir_src, shell=True)
         subprocess.check_call(
-            'mv result/bitcoin-*-win-res.yml ' + output_dir_win, shell=True)
+            'mv result/lambda-*-win-res.yml ' + output_dir_win, shell=True)
 
     if args.macos:
         print('\nCompiling ' + args.version + ' MacOS')
-        subprocess.check_call(['bin/gbuild', '-j', args.jobs, '-m', args.memory, '--commit', 'bitcoin=' + args.commit,
-                               '--url', 'bitcoin=' + args.url, '../bitcoin-cash-node/contrib/gitian-descriptors/gitian-osx.yml'])
+        subprocess.check_call(['bin/gbuild', '-j', args.jobs, '-m', args.memory, '--commit', 'lambda=' + args.commit,
+                               '--url', 'lambda=' + args.url, '../lambda-node/contrib/gitian-descriptors/gitian-osx.yml'])
         subprocess.check_call(['bin/gsign', '-p', args.sign_prog, '--signer', args.signer, '--release', args.version +
-                               '-osx-unsigned', '--destination', '../gitian.sigs/', '../bitcoin-cash-node/contrib/gitian-descriptors/gitian-osx.yml'])
+                               '-osx-unsigned', '--destination', '../gitian.sigs/', '../lambda-node/contrib/gitian-descriptors/gitian-osx.yml'])
         output_dir_osx = '../' + base_output_dir + '/osx'
         os.makedirs(output_dir_osx, exist_ok=True)
         subprocess.check_call(
-            'mv build/out/bitcoin-*-osx-unsigned.tar.gz inputs/', shell=True)
+            'mv build/out/lambda-*-osx-unsigned.tar.gz inputs/', shell=True)
         subprocess.check_call(
-            'mv build/out/bitcoin-*.tar.gz build/out/bitcoin-*.dmg ' + output_dir_osx, shell=True)
+            'mv build/out/lambda-*.tar.gz build/out/lambda-*.dmg ' + output_dir_osx, shell=True)
         subprocess.check_call(
-            'mv build/out/src/bitcoin-*.tar.gz ' + output_dir_src, shell=True)
+            'mv build/out/src/lambda-*.tar.gz ' + output_dir_src, shell=True)
         subprocess.check_call(
-            'mv result/bitcoin-*-osx-res.yml ' + output_dir_osx, shell=True)
+            'mv result/lambda-*-osx-res.yml ' + output_dir_osx, shell=True)
 
     os.chdir(workdir)
 
@@ -149,25 +149,25 @@ def sign():
 
     if args.windows:
         print('\nSigning ' + args.version + ' Windows')
-        subprocess.check_call('cp inputs/bitcoin-' + args.version +
-                              '-win-unsigned.tar.gz inputs/bitcoin-win-unsigned.tar.gz', shell=True)
+        subprocess.check_call('cp inputs/lambda-' + args.version +
+                              '-win-unsigned.tar.gz inputs/lambda-win-unsigned.tar.gz', shell=True)
         subprocess.check_call(['bin/gbuild', '-i', '--commit', 'signature=' + args.commit,
-                               '../bitcoin-cash-node/contrib/gitian-descriptors/gitian-win-signer.yml'])
+                               '../lambda-node/contrib/gitian-descriptors/gitian-win-signer.yml'])
         subprocess.check_call(['bin/gsign', '-p', args.sign_prog, '--signer', args.signer, '--release', args.version + '-win-signed',
-                               '--destination', '../gitian.sigs/', '../bitcoin-cash-node/contrib/gitian-descriptors/gitian-win-signer.yml'])
+                               '--destination', '../gitian.sigs/', '../lambda-node/contrib/gitian-descriptors/gitian-win-signer.yml'])
         subprocess.check_call(
-            'mv build/out/bitcoin-*win64-setup.exe ../bitcoin-binaries/' + args.version, shell=True)
+            'mv build/out/lambda-*win64-setup.exe ../lambda-binaries/' + args.version, shell=True)
 
     if args.macos:
         print('\nSigning ' + args.version + ' MacOS')
-        subprocess.check_call('cp inputs/bitcoin-' + args.version +
-                              '-osx-unsigned.tar.gz inputs/bitcoin-osx-unsigned.tar.gz', shell=True)
+        subprocess.check_call('cp inputs/lambda-' + args.version +
+                              '-osx-unsigned.tar.gz inputs/lambda-osx-unsigned.tar.gz', shell=True)
         subprocess.check_call(['bin/gbuild', '-i', '--commit', 'signature=' + args.commit,
-                               '../bitcoin-cash-node/contrib/gitian-descriptors/gitian-osx-signer.yml'])
+                               '../lambda-node/contrib/gitian-descriptors/gitian-osx-signer.yml'])
         subprocess.check_call(['bin/gsign', '-p', args.sign_prog, '--signer', args.signer, '--release', args.version + '-osx-signed',
-                               '--destination', '../gitian.sigs/', '../bitcoin-cash-node/contrib/gitian-descriptors/gitian-osx-signer.yml'])
-        subprocess.check_call('mv build/out/bitcoin-osx-signed.dmg ../bitcoin-binaries/' +
-                              args.version + '/bitcoin-' + args.version + '-osx.dmg', shell=True)
+                               '--destination', '../gitian.sigs/', '../lambda-node/contrib/gitian-descriptors/gitian-osx-signer.yml'])
+        subprocess.check_call('mv build/out/lambda-osx-signed.dmg ../lambda-binaries/' +
+                              args.version + '/lambda-' + args.version + '-osx.dmg', shell=True)
 
     os.chdir(workdir)
 
@@ -189,19 +189,19 @@ def verify():
 
     print('\nVerifying v' + args.version + ' Linux\n')
     subprocess.check_call(['bin/gverify', '-v', '-d', '../gitian.sigs/', '-r', args.version +
-                           '-linux', '../bitcoin-cash-node/contrib/gitian-descriptors/gitian-linux.yml'])
+                           '-linux', '../lambda-node/contrib/gitian-descriptors/gitian-linux.yml'])
     print('\nVerifying v' + args.version + ' Windows\n')
     subprocess.check_call(['bin/gverify', '-v', '-d', '../gitian.sigs/', '-r', args.version +
-                           '-win-unsigned', '../bitcoin-cash-node/contrib/gitian-descriptors/gitian-win.yml'])
+                           '-win-unsigned', '../lambda-node/contrib/gitian-descriptors/gitian-win.yml'])
     print('\nVerifying v' + args.version + ' MacOS\n')
     subprocess.check_call(['bin/gverify', '-v', '-d', '../gitian.sigs/', '-r', args.version +
-                           '-osx-unsigned', '../bitcoin-cash-node/contrib/gitian-descriptors/gitian-osx.yml'])
+                           '-osx-unsigned', '../lambda-node/contrib/gitian-descriptors/gitian-osx.yml'])
     print('\nVerifying v' + args.version + ' Signed Windows\n')
     subprocess.check_call(['bin/gverify', '-v', '-d', '../gitian.sigs/', '-r', args.version +
-                           '-win-signed', '../bitcoin-cash-node/contrib/gitian-descriptors/gitian-win-signer.yml'])
+                           '-win-signed', '../lambda-node/contrib/gitian-descriptors/gitian-win-signer.yml'])
     print('\nVerifying v' + args.version + ' Signed MacOS\n')
     subprocess.check_call(['bin/gverify', '-v', '-d', '../gitian.sigs/', '-r', args.version +
-                           '-osx-signed', '../bitcoin-cash-node/contrib/gitian-descriptors/gitian-osx-signer.yml'])
+                           '-osx-signed', '../lambda-node/contrib/gitian-descriptors/gitian-osx-signer.yml'])
 
     os.chdir(workdir)
 
@@ -215,7 +215,7 @@ def main():
                         help='Indicate that the version argument is for a commit or branch')
     parser.add_argument('-R', '--merge-request', action='store_true', dest='merge_request',
                         help='Indicate that the version argument is the number of a GitLab merge request')
-    parser.add_argument('-u', '--url', dest='url', default='https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node.git',
+    parser.add_argument('-u', '--url', dest='url', default='https://github.com/lambdablockchain/lambda-node.git',
                         help='Specify the URL of the repository. Default is %(default)s')
     parser.add_argument('-v', '--verify', action='store_true',
                         dest='verify', help='Verify the Gitian build')
@@ -312,13 +312,13 @@ def main():
     # If this is the first time you run gitian_build you never had a chance of initialize
     # the project repo inside gitian-builder directory, in fact this is usually done by
     # gitian-builder/bin/gbuild ruby script.
-    if not os.path.isdir('gitian-builder/inputs/bitcoin'):
+    if not os.path.isdir('gitian-builder/inputs/lambda'):
         subprocess.check_call(['mkdir', '-p', 'gitian-builder/inputs'])
         os.chdir('gitian-builder/inputs')
-        subprocess.check_call(['git', 'clone', args.url, 'bitcoin'])
+        subprocess.check_call(['git', 'clone', args.url, 'lambda'])
 
-    # Move to bitcoin-cash-node folder
-    os.chdir(os.path.join(workdir, 'bitcoin-cash-node'))
+    # Move to lambda-node folder
+    os.chdir(os.path.join(workdir, 'lambda-node'))
 
     # If merge request argument, the fetch the MR and get the head commit
     if args.merge_request:
@@ -327,11 +327,11 @@ def main():
         args.commit = subprocess.check_output(
             ['git', 'show', '-s', '--format=%H', 'FETCH_HEAD'], universal_newlines=True, encoding='utf8').strip()
 
-    # Still in bitcoin-cash-node/ ...
+    # Still in lambda-node/ ...
     subprocess.check_call(['git', 'fetch'])
     subprocess.check_call(['git', 'checkout', args.commit])
 
-    # Compare our own source code to bitcoin-cash-node version of gitian-build.py
+    # Compare our own source code to lambda-node version of gitian-build.py
     # and raise a warning if it differs.
     # Need to add newlines back in order to diff against file.
     our_source = [line + '\n' for line in
@@ -347,8 +347,8 @@ def main():
                   "         directory.")
             print('*' * 70 + RED[0] + BOLD[0])
 
-    # Update inputs/bitcoin/ to the commit to build
-    os.chdir(os.path.join(workdir, 'gitian-builder/inputs/bitcoin'))
+    # Update inputs/lambda/ to the commit to build
+    os.chdir(os.path.join(workdir, 'gitian-builder/inputs/lambda'))
 
     subprocess.check_call(['git', 'fetch'])
     if args.merge_request:

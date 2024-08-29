@@ -2,7 +2,7 @@
 # Compare two sets of benchmark results, highlighting the most significant
 # differences, and filtering out any differences between a minimal threshold.
 # To generate a set of benchmark results, simply save the result of several benchmark runs:
-#   src/bench/bench_bitcoin [-filter='benchmarkname'] | tee my_bench_result.txt
+#   src/bench/bench_lambda [-filter='benchmarkname'] | tee my_bench_result.txt
 # and call this script with
 #   contrib/bench/bench_compare.sh my_brench_result1.txt my_bench_result2.txt
 

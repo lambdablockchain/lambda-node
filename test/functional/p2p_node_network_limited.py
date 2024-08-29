@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2017 The Bitcoin Core developers
+# Copyright (c) 2017 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Tests NODE_NETWORK_LIMITED.
@@ -13,7 +13,7 @@ from test_framework.messages import (
     MSG_BLOCK,
     msg_getdata,
     msg_verack,
-    NODE_BITCOIN_CASH,
+    NODE_LAMBDA_CASH,
     NODE_BLOOM,
     NODE_NETWORK_LIMITED,
 )
@@ -21,7 +21,7 @@ from test_framework.p2p import (
     p2p_lock,
     P2PInterface,
 )
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import (
     assert_equal,
     connect_nodes_bi,
@@ -50,7 +50,7 @@ class P2PIgnoreInv(P2PInterface):
         self.send_message(getdata_request)
 
 
-class NodeNetworkLimitedTest(BitcoinTestFramework):
+class NodeNetworkLimitedTest(LambdaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 3
@@ -71,7 +71,7 @@ class NodeNetworkLimitedTest(BitcoinTestFramework):
     def run_test(self):
         node = self.nodes[0].add_p2p_connection(P2PIgnoreInv())
 
-        expected_services = NODE_BLOOM | NODE_BITCOIN_CASH | NODE_NETWORK_LIMITED
+        expected_services = NODE_BLOOM | NODE_LAMBDA_CASH | NODE_NETWORK_LIMITED
 
         self.log.info("Check that node has signalled expected services.")
         assert_equal(node.nServices, expected_services)

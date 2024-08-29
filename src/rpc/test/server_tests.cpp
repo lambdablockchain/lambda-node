@@ -1,4 +1,4 @@
-// Copyright (c) 2019 The Bitcoin developers
+// Copyright (c) 2019 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -17,7 +17,7 @@ BOOST_AUTO_TEST_CASE(server_IsDeprecatedRPCEnabled) {
     ArgsManager testArgs;
     testArgs.AddArg("-deprecatedrpc", "", ArgsManager::ALLOW_ANY, OptionsCategory::OPTIONS);
 
-    const char *argv_test[] = {"bitcoind", "-deprecatedrpc=foo",
+    const char *argv_test[] = {"lambdad", "-deprecatedrpc=foo",
                                "-deprecatedrpc=bar"};
 
     std::string error;

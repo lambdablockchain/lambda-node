@@ -1,5 +1,5 @@
-// Copyright (c) 2011-2015 The Bitcoin Core developers
-// Copyright (c) 2021 The Bitcoin developers
+// Copyright (c) 2011-2015 The Lambda Core developers
+// Copyright (c) 2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -17,14 +17,14 @@ QT_END_NAMESPACE
 
 /** Widget for entering bitcoin amounts.
  */
-class BitcoinAmountField : public QWidget {
+class LambdaAmountField : public QWidget {
     Q_OBJECT
 
     Q_PROPERTY(
         Amount value READ value WRITE setValue NOTIFY valueChanged USER true)
 
 public:
-    explicit BitcoinAmountField(QWidget *parent = nullptr);
+    explicit LambdaAmountField(QWidget *parent = nullptr);
 
     Amount value(bool *valid = nullptr) const;
     void setValue(const Amount value);

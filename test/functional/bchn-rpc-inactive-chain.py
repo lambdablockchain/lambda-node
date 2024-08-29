@@ -19,7 +19,7 @@
      - Ensure that `getblockstats` and `getchaintxstats` do not return
        results for an inactive chain."""
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import (
     assert_equal,
     assert_raises_rpc_error,
@@ -28,7 +28,7 @@ from test_framework.util import (
 )
 
 
-class RPCInactiveChain(BitcoinTestFramework):
+class RPCInactiveChain(LambdaTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
 

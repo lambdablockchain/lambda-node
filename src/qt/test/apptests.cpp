@@ -1,4 +1,4 @@
-// Copyright (c) 2018 The Bitcoin Core developers
+// Copyright (c) 2018 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -7,8 +7,8 @@
 #include <chainparams.h>
 #include <config.h>
 #include <httprpc.h>
-#include <qt/bitcoin.h>
-#include <qt/bitcoingui.h>
+#include <qt/lambda.h>
+#include <qt/lambdagui.h>
 #include <qt/networkstyle.h>
 #include <qt/rpcconsole.h>
 #include <rpc/server.h>
@@ -16,7 +16,7 @@
 #include <validation.h>
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
+#include <config/lambda-config.h>
 #endif
 #ifdef ENABLE_WALLET
 #include <wallet/db.h>
@@ -72,7 +72,7 @@ void TestRpcCommand(RPCConsole *console) {
 }
 } // namespace
 
-//! Entry point for BitcoinApplication tests.
+//! Entry point for LambdaApplication tests.
 void AppTests::appTests() {
 #ifdef Q_OS_MAC
     if (QApplication::platformName() == "minimal") {
@@ -82,7 +82,7 @@ void AppTests::appTests() {
         // (https://bugreports.qt.io/browse/QTBUG-49686).
         QWARN("Skipping AppTests on mac build with 'minimal' platform set due "
               "to Qt bugs. To run AppTests, invoke "
-              "with 'test_bitcoin-qt -platform cocoa' on mac, or else use a "
+              "with 'test_lambda-qt -platform cocoa' on mac, or else use a "
               "linux or windows build.");
         return;
     }
@@ -96,7 +96,7 @@ void AppTests::appTests() {
         QString::fromStdString(Params().NetworkIDString())));
     m_app.setupPlatformStyle();
     m_app.createWindow(&config, style.data());
-    connect(&m_app, &BitcoinApplication::windowShown, this,
+    connect(&m_app, &LambdaApplication::windowShown, this,
             &AppTests::guiTests);
     expectCallback("guiTests");
     m_app.baseInitialize(config);
@@ -113,10 +113,10 @@ void AppTests::appTests() {
     UnloadBlockIndex();
 }
 
-//! Entry point for BitcoinGUI tests.
-void AppTests::guiTests(BitcoinGUI *window) {
+//! Entry point for LambdaGUI tests.
+void AppTests::guiTests(LambdaGUI *window) {
     HandleCallback callback{"guiTests", *this};
-    connect(window, &BitcoinGUI::consoleShown, this, &AppTests::consoleTests);
+    connect(window, &LambdaGUI::consoleShown, this, &AppTests::consoleTests);
     expectCallback("consoleTests");
     QAction *action = window->findChild<QAction *>("openRPCConsoleAction");
     action->activate(QAction::Trigger);

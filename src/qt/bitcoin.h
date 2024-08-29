@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2016 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -13,7 +13,7 @@
 #include <memory>
 #include <vector>
 
-class BitcoinGUI;
+class LambdaGUI;
 class ClientModel;
 class Config;
 class HTTPRPCRequestProcessor;
@@ -31,13 +31,13 @@ class Node;
 } // namespace interfaces
 
 /**
- * Class encapsulating Bitcoin Cash Node startup and shutdown.
+ * Class encapsulating Lambda Node startup and shutdown.
  * Allows running startup and shutdown in a different thread from the UI thread.
  */
-class BitcoinCashNode : public QObject {
+class LambdaNode : public QObject {
     Q_OBJECT
 public:
-    explicit BitcoinCashNode(interfaces::Node &node);
+    explicit LambdaNode(interfaces::Node &node);
 
 public Q_SLOTS:
     void initialize(Config *config, RPCServer *rpcServer,
@@ -56,12 +56,12 @@ private:
     interfaces::Node &m_node;
 };
 
-/** Main Bitcoin application object */
-class BitcoinApplication : public QApplication {
+/** Main Lambda application object */
+class LambdaApplication : public QApplication {
     Q_OBJECT
 public:
-    explicit BitcoinApplication(interfaces::Node &node, int &argc, char **argv);
-    ~BitcoinApplication();
+    explicit LambdaApplication(interfaces::Node &node, int &argc, char **argv);
+    ~LambdaApplication();
 
 #ifdef ENABLE_WALLET
     /// Create payment server
@@ -88,7 +88,7 @@ public:
     /// Get process return value
     int getReturnValue() const { return returnValue; }
 
-    /// Get window identifier of QMainWindow (BitcoinGUI)
+    /// Get window identifier of QMainWindow (LambdaGUI)
     WId getMainWinId() const;
 
     /// Setup platform style
@@ -107,14 +107,14 @@ Q_SIGNALS:
     void requestedShutdown();
     void stopThread();
     void splashFinished(QWidget *window);
-    void windowShown(BitcoinGUI *window);
+    void windowShown(LambdaGUI *window);
 
 private:
     QThread *coreThread;
     interfaces::Node &m_node;
     OptionsModel *optionsModel;
     ClientModel *clientModel;
-    BitcoinGUI *window;
+    LambdaGUI *window;
     QTimer *pollShutdownTimer;
 #ifdef ENABLE_WALLET
     PaymentServer *paymentServer{nullptr};

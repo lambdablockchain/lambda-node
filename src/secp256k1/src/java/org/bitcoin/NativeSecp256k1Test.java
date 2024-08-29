@@ -1,6 +1,6 @@
-package org.bitcoin;
+package org.lambda;
 
-import static org.bitcoin.NativeSecp256k1Util.*;
+import static org.lambda.NativeSecp256k1Util.*;
 
 /**
  * This class holds test cases defined for testing this library.

@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2019 The Bitcoin developers
+// Copyright (c) 2017-2019 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE(test_is_commitment) {
     BOOST_CHECK(!s.IsCommitment(data));
 
     // Commitment to a larger value.
-    std::string str = "Bitcoin: A peer-to-peer Electronic Cash System";
+    std::string str = "Lambda: A peer-to-peer Electronic Cash System";
     data = std::vector<uint8_t>(str.begin(), str.end());
     BOOST_CHECK(!s.IsCommitment(data));
 

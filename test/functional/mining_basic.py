@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2014-2016 The Bitcoin Core developers
+# Copyright (c) 2014-2016 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test mining RPCs
@@ -19,7 +19,7 @@ from test_framework.messages import (
 from test_framework.p2p import (
     P2PDataStore,
 )
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import (
     assert_equal,
     assert_raises_rpc_error,
@@ -37,7 +37,7 @@ def assert_template(node, block, expect, rehash=True):
     assert_equal(rsp, expect)
 
 
-class MiningTest(BitcoinTestFramework):
+class MiningTest(LambdaTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
         self.setup_clean_chain = False
@@ -290,7 +290,7 @@ class MiningTest(BitcoinTestFramework):
         self.nodes[1].disconnect_p2ps()
         self.stop_node(1)
         assert_raises_rpc_error(-9,  # RPC_CLIENT_NOT_CONNECTED
-                                "Bitcoin is not connected!",
+                                "Lambda is not connected!",
                                 node.getblocktemplate)
 
 

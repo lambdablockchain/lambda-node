@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2016 The Bitcoin Core developers
+// Copyright (c) 2012-2016 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -84,10 +84,10 @@ static bool TestSplitHost(const std::string &test, const std::string &host, int 
 }
 
 BOOST_AUTO_TEST_CASE(netbase_splithost) {
-    BOOST_CHECK(TestSplitHost("www.bitcoin.org", "www.bitcoin.org", -1));
-    BOOST_CHECK(TestSplitHost("[www.bitcoin.org]", "www.bitcoin.org", -1));
-    BOOST_CHECK(TestSplitHost("www.bitcoin.org:80", "www.bitcoin.org", 80));
-    BOOST_CHECK(TestSplitHost("[www.bitcoin.org]:80", "www.bitcoin.org", 80));
+    BOOST_CHECK(TestSplitHost("www.lambda.org", "www.lambda.org", -1));
+    BOOST_CHECK(TestSplitHost("[www.lambda.org]", "www.lambda.org", -1));
+    BOOST_CHECK(TestSplitHost("www.lambda.org:80", "www.lambda.org", 80));
+    BOOST_CHECK(TestSplitHost("[www.lambda.org]:80", "www.lambda.org", 80));
     BOOST_CHECK(TestSplitHost("127.0.0.1", "127.0.0.1", -1));
     BOOST_CHECK(TestSplitHost("127.0.0.1:9333", "127.0.0.1", 9333));
     BOOST_CHECK(TestSplitHost("[127.0.0.1]", "127.0.0.1", -1));

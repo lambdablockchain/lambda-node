@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2020-2021 The Bitcoin Cash Node developers
+# Copyright (c) 2020-2021 The Lambda Node developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """ Test for the DoubleSpend Proof facility """
@@ -13,7 +13,7 @@ from test_framework.key import ECKey
 from test_framework.messages import CTransaction, FromHex, ToHex, COIN
 from test_framework.p2p import P2PInterface, p2p_lock
 from test_framework.script import CScript, OP_TRUE, OP_FALSE, SignatureHashForkIdFromValues
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import (
     assert_greater_than, assert_equal, assert_raises, assert_raises_rpc_error, connect_nodes, disconnect_nodes,
     find_output, wait_until
@@ -35,16 +35,16 @@ def getSighashes(prevOutput, spender, fundingtx):
     )
 
 
-class DoubleSpendProofTest(BitcoinTestFramework):
+class DoubleSpendProofTest(LambdaTestFramework):
     def set_test_params(self):
         # We need >= 2 nodes because submitting a double spend through a single
         # node will still be refused before reaching mempool
         self.num_nodes = 4
         self.extra_args = [
-            ['-acceptnonstdtxn=1'],
-            ['-acceptnonstdtxn=1'],
-            ['-acceptnonstdtxn=1'],
-            ['-acceptnonstdtxn=1', '-doublespendproof=0']]
+            ['-acceptnonstdtxn=0'],
+            ['-acceptnonstdtxn=0'],
+            ['-acceptnonstdtxn=0'],
+            ['-acceptnonstdtxn=0', '-doublespendproof=0']]
 
     def skip_test_if_missing_module(self):
         self.skip_if_no_wallet()

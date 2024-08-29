@@ -1,24 +1,24 @@
 # Shared Libraries
 
-## bitcoinconsensus
+## lambdaconsensus
 
 The purpose of this library is to make the verification functionality that is
-critical to Bitcoin Cash's consensus available to other applications, e.g. to
+critical to Lambda's consensus available to other applications, e.g. to
 language bindings.
 
 ### API
 
-The interface is defined in the C header `bitcoinconsensus.h` located in
-`src/script/bitcoinconsensus.h`.
+The interface is defined in the C header `lambdaconsensus.h` located in
+`src/script/lambdaconsensus.h`.
 
 #### Version
 
-`bitcoinconsensus_version` returns an `unsigned int` with the API version
+`lambdaconsensus_version` returns an `unsigned int` with the API version
 *(currently at an experimental `0`)*.
 
 #### Script Validation
 
-`bitcoinconsensus_verify_script` returns an `int` with the status of the verification.
+`lambdaconsensus_verify_script` returns an `int` with the status of the verification.
 It will be `1` if the input script correctly spends the previous output `scriptPubKey`.
 
 ##### Parameters
@@ -31,47 +31,47 @@ It will be `1` if the input script correctly spends the previous output `scriptP
 - `unsigned int txToLen` - The number of bytes for the `txTo`.
 - `unsigned int nIn` - The index of the input in `txTo` that spends the `scriptPubKey`.
 - `unsigned int flags` - The script validation flags *(see below)*.
-- `bitcoinconsensus_error* err` - Will have the error/success code for the
+- `lambdaconsensus_error* err` - Will have the error/success code for the
   operation *(see below)*.
 
 ##### Script Flags
 
-- `bitcoinconsensus_SCRIPT_FLAGS_VERIFY_NONE`
-- `bitcoinconsensus_SCRIPT_FLAGS_VERIFY_P2SH` - Evaluate P2SH ([BIP16](https://github.com/bitcoin/bips/blob/master/bip-0016.mediawiki))
+- `lambdaconsensus_SCRIPT_FLAGS_VERIFY_NONE`
+- `lambdaconsensus_SCRIPT_FLAGS_VERIFY_P2SH` - Evaluate P2SH ([BIP16](https://github.com/lambda/bips/blob/master/bip-0016.mediawiki))
   subscripts
-- `bitcoinconsensus_SCRIPT_FLAGS_VERIFY_DERSIG` - Enforce strict DER ([BIP66](https://github.com/bitcoin/bips/blob/master/bip-0066.mediawiki))
+- `lambdaconsensus_SCRIPT_FLAGS_VERIFY_DERSIG` - Enforce strict DER ([BIP66](https://github.com/lambda/bips/blob/master/bip-0066.mediawiki))
   compliance
-- `bitcoinconsensus_SCRIPT_FLAGS_VERIFY_CHECKLOCKTIMEVERIFY` - Enable CHECKLOCKTIMEVERIFY
-  ([BIP65](https://github.com/bitcoin/bips/blob/master/bip-0065.mediawiki))
-- `bitcoinconsensus_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY` - Enable CHECKSEQUENCEVERIFY
-  ([BIP112](https://github.com/bitcoin/bips/blob/master/bip-0112.mediawiki))
-- `bitcoinconsensus_SCRIPT_FLAGS_VERIFY_WITNESS` - Enable WITNESS ([BIP141](https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki))
-- `bitcoinconsensus_SCRIPT_ENABLE_SIGHASH_FORKID` - Enable SIGHASH_FORKID replay
-  protection ([UAHF](https://gitlab.com/bitcoin-cash-node/bchn-sw/bitcoincash-upgrade-specifications/-/blob/master/spec/uahf-technical-spec.md#req-6-2-mandatory-signature-shift-via-hash-type))
+- `lambdaconsensus_SCRIPT_FLAGS_VERIFY_CHECKLOCKTIMEVERIFY` - Enable CHECKLOCKTIMEVERIFY
+  ([BIP65](https://github.com/lambda/bips/blob/master/bip-0065.mediawiki))
+- `lambdaconsensus_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY` - Enable CHECKSEQUENCEVERIFY
+  ([BIP112](https://github.com/lambda/bips/blob/master/bip-0112.mediawiki))
+- `lambdaconsensus_SCRIPT_FLAGS_VERIFY_WITNESS` - Enable WITNESS ([BIP141](https://github.com/lambda/bips/blob/master/bip-0141.mediawiki))
+- `lambdaconsensus_SCRIPT_ENABLE_SIGHASH_FORKID` - Enable SIGHASH_FORKID replay
+  protection ([UAHF](https://gitlab.com/lambdablockchain/bchn-sw/lambda-upgrade-specifications/-/blob/master/spec/uahf-technical-spec.md#req-6-2-mandatory-signature-shift-via-hash-type))
 
 ##### Errors
 
-- `bitcoinconsensus_ERR_OK` - No errors with input parameters *(see the return
-  value of `bitcoinconsensus_verify_script` for the verification status)*
-- `bitcoinconsensus_ERR_TX_INDEX` - An invalid index for `txTo`
-- `bitcoinconsensus_ERR_TX_SIZE_MISMATCH` - `txToLen` did not match with the size
+- `lambdaconsensus_ERR_OK` - No errors with input parameters *(see the return
+  value of `lambdaconsensus_verify_script` for the verification status)*
+- `lambdaconsensus_ERR_TX_INDEX` - An invalid index for `txTo`
+- `lambdaconsensus_ERR_TX_SIZE_MISMATCH` - `txToLen` did not match with the size
   of `txTo`
-- `bitcoinconsensus_ERR_DESERIALIZE` - An error deserializing `txTo`
-- `bitcoinconsensus_ERR_AMOUNT_REQUIRED` - Input amount is required if WITNESS is
+- `lambdaconsensus_ERR_DESERIALIZE` - An error deserializing `txTo`
+- `lambdaconsensus_ERR_AMOUNT_REQUIRED` - Input amount is required if WITNESS is
   used
 
 ### Example Implementations
 
-- [Bitcoin Cash Node (BCHN)](https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node/-/blob/master/src/script/bitcoinconsensus.h)
-- [Bitcoin Unlimited (BUCash)](https://github.com/BitcoinUnlimited/BitcoinUnlimited/blob/release/src/script/bitcoinconsensus.h)
+- [Lambda Node (BCHN)](https://github.com/lambdablockchain/lambda-node/-/blob/master/src/script/lambdaconsensus.h)
+- [Lambda Unlimited (BUCash)](https://github.com/LambdaUnlimited/LambdaUnlimited/blob/release/src/script/lambdaconsensus.h)
 
-### Historic Example Implementations in Bitcoin (pre-dating Bitcoin Cash)
+### Historic Example Implementations in Lambda (pre-dating Lambda)
 
-- [Bitcoin Core](https://github.com/bitcoin/bitcoin/blob/master/src/script/bitcoinconsensus.h)
-- [NBitcoin](https://github.com/NicolasDorier/NBitcoin/blob/master/NBitcoin/Script.cs#L814)
+- [Lambda Core](https://github.com/lambda/lambda/blob/master/src/script/lambdaconsensus.h)
+- [NLambda](https://github.com/NicolasDorier/NLambda/blob/master/NLambda/Script.cs#L814)
   (.NET Bindings)
-- [node-libbitcoinconsensus](https://github.com/bitpay/node-libbitcoinconsensus)
+- [node-liblambdaconsensus](https://github.com/bitpay/node-liblambdaconsensus)
   (Node.js Bindings)
-- [java-libbitcoinconsensus](https://github.com/dexX7/java-libbitcoinconsensus)
+- [java-liblambdaconsensus](https://github.com/dexX7/java-liblambdaconsensus)
   (Java Bindings)
-- [bitcoinconsensus-php](https://github.com/Bit-Wasp/bitcoinconsensus-php) (PHP Bindings)
+- [lambdaconsensus-php](https://github.com/Bit-Wasp/lambdaconsensus-php) (PHP Bindings)

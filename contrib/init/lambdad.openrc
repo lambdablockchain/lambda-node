@@ -1,0 +1,92 @@
+#!/sbin/runscript
+
+# backward compatibility for existing gentoo layout 
+#
+if [ -d "/var/lib/lambda/.lambda" ]; then
+	LAMBDAD_DEFAULT_DATADIR="/var/lib/lambda/.lambda"
+else
+	LAMBDAD_DEFAULT_DATADIR="/var/lib/lambdad"
+fi
+
+LAMBDAD_CONFIGFILE=${LAMBDAD_CONFIGFILE:-/etc/lambda/lambda.conf}
+LAMBDAD_PIDDIR=${LAMBDAD_PIDDIR:-/var/run/lambdad}
+LAMBDAD_PIDFILE=${LAMBDAD_PIDFILE:-${LAMBDAD_PIDDIR}/lambdad.pid}
+LAMBDAD_DATADIR=${LAMBDAD_DATADIR:-${LAMBDAD_DEFAULT_DATADIR}}
+LAMBDAD_USER=${LAMBDAD_USER:-${LAMBDA_USER:-lambda}}
+LAMBDAD_GROUP=${LAMBDAD_GROUP:-lambda}
+LAMBDAD_BIN=${LAMBDAD_BIN:-/usr/bin/lambdad}
+LAMBDAD_NICE=${LAMBDAD_NICE:-${NICELEVEL:-0}}
+LAMBDAD_OPTS="${LAMBDAD_OPTS:-${LAMBDA_OPTS}}"
+
+name="Lambda Node Daemon"
+description="Lambda cryptocurrency P2P network daemon"
+
+command="/usr/bin/lambdad"
+command_args="-pid=\"${LAMBDAD_PIDFILE}\" \
+		-conf=\"${LAMBDAD_CONFIGFILE}\" \
+		-datadir=\"${LAMBDAD_DATADIR}\" \
+		-daemon \
+		${LAMBDAD_OPTS}"
+
+required_files="${LAMBDAD_CONFIGFILE}"
+start_stop_daemon_args="-u ${LAMBDAD_USER} \
+			-N ${LAMBDAD_NICE} -w 2000"
+pidfile="${LAMBDAD_PIDFILE}"
+
+# The retry schedule to use when stopping the daemon. Could be either
+# a timeout in seconds or multiple signal/timeout pairs (like
+# "SIGKILL/180 SIGTERM/300")
+retry="${LAMBDAD_SIGTERM_TIMEOUT}"
+
+depend() {
+	need localmount net
+}
+
+# verify
+# 1) that the datadir exists and is writable (or create it)
+# 2) that a directory for the pid exists and is writable
+# 3) ownership and permissions on the config file
+start_pre() {
+	checkpath \
+	-d \
+	--mode 0750 \
+	--owner "${LAMBDAD_USER}:${LAMBDAD_GROUP}" \
+	"${LAMBDAD_DATADIR}"
+
+	checkpath \
+	-d \
+	--mode 0755 \
+	--owner "${LAMBDAD_USER}:${LAMBDAD_GROUP}" \
+	"${LAMBDAD_PIDDIR}"
+
+	checkpath -f \
+	-o ${LAMBDAD_USER}:${LAMBDAD_GROUP} \
+	-m 0660 \
+	${LAMBDAD_CONFIGFILE}
+
+	checkconfig || return 1
+}
+
+checkconfig()
+{
+	if ! grep -qs '^rpcpassword=' "${LAMBDAD_CONFIGFILE}" ; then
+		eerror ""
+		eerror "ERROR: You must set a secure rpcpassword to run lambdad."
+		eerror "The setting must appear in ${LAMBDAD_CONFIGFILE}"
+		eerror ""
+		eerror "This password is security critical to securing wallets "
+		eerror "and must not be the same as the rpcuser setting."
+		eerror "You can generate a suitable random password using the following "
+		eerror "command from the shell:"
+		eerror ""
+		eerror "bash -c 'tr -dc a-zA-Z0-9 < /dev/urandom | head -c32 && echo'"
+		eerror ""
+		eerror "It is recommended that you also set alertnotify so you are "
+		eerror "notified of problems:"
+		eerror ""
+		eerror "ie: alertnotify=echo %%s | mail -s \"Lambda Alert\"" \
+			"admin@foo.com"
+		eerror ""
+		return 1
+	fi
+}

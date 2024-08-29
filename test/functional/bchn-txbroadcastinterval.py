@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2020 The Bitcoin Cash Node developers
+# Copyright (c) 2020 The Lambda Node developers
 # Author matricz
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -12,7 +12,7 @@ import time
 
 from test_framework.cdefs import MAX_INV_BROADCAST_INTERVAL
 from test_framework.p2p import P2PInterface, p2p_lock
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import wait_until, connect_nodes, disconnect_nodes
 from scipy import stats
 
@@ -36,7 +36,7 @@ class InvReceiver(P2PInterface):
             self.invDelays.append(timediff)
 
 
-class TxBroadcastIntervalTest(BitcoinTestFramework):
+class TxBroadcastIntervalTest(LambdaTestFramework):
 
     # This test will have a node create a number of transactions and relay them
     # to the P2P InvReceivers (one inbound and one outbound) according to test

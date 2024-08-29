@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The Bitcoin Core developers
+# Copyright (c) 2018 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
-"""Verify that starting bitcoin with -h works as expected."""
+"""Verify that starting lambda with -h works as expected."""
 import subprocess
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import assert_equal
 
 
-class HelpTest(BitcoinTestFramework):
+class HelpTest(LambdaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 1
@@ -19,7 +19,7 @@ class HelpTest(BitcoinTestFramework):
         # Don't start the node
 
     def run_test(self):
-        self.log.info("Start bitcoin with -h for help text")
+        self.log.info("Start lambda with -h for help text")
         self.nodes[0].start(extra_args=['-h'],
                             stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         # Node should exit immediately and output help to stdout.
@@ -30,7 +30,7 @@ class HelpTest(BitcoinTestFramework):
         self.log.info("Help text received: {} (...)".format(output[0:60]))
         self.nodes[0].running = False
 
-        self.log.info("Start bitcoin with -version for version information")
+        self.log.info("Start lambda with -version for version information")
         self.nodes[0].start(extra_args=['-version'],
                             stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         # Node should exit immediately and output version to stdout.
@@ -42,7 +42,7 @@ class HelpTest(BitcoinTestFramework):
 
         # Test that arguments not in the help results in an error
         self.log.info(
-            "Start bitcoind with -fakearg to make sure it does not start")
+            "Start lambdad with -fakearg to make sure it does not start")
         self.nodes[0].start(extra_args=['-fakearg'],
                             stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         # Node should exit immediately and output an error to stderr

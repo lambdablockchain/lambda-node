@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2020 The Bitcoin developers
+// Copyright (c) 2017-2020 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -7,7 +7,7 @@
 #include <fs.h>
 #include <logging.h>
 #include <protocol.h>
-#include <seeder/bitcoin.h>
+#include <seeder/lambda.h>
 #include <seeder/db.h>
 #include <seeder/dns.h>
 #include <streams.h>
@@ -79,7 +79,7 @@ public:
                 PACKAGE_NAME " Seeder " + FormatFullVersion() + "\n";
             if (HelpRequested(gArgs)) {
                 strUsage +=
-                    "\nUsage:  bitcoin-seeder -host=<host> -ns=<ns> "
+                    "\nUsage:  lambda-seeder -host=<host> -ns=<ns> "
                     "[-mbox=<mbox>] [-threads=<threads>] [-port=<port>]\n\n" +
                     gArgs.GetHelpMessage();
             }

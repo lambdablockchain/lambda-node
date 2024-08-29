@@ -1,11 +1,11 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
-// Copyright (c) 2021 The Bitcoin developers
+// Copyright (c) 2011-2016 The Lambda Core developers
+// Copyright (c) 2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <qt/recentrequeststablemodel.h>
 
-#include <qt/bitcoinunits.h>
+#include <qt/lambdaunits.h>
 #include <qt/guiutil.h>
 #include <qt/optionsmodel.h>
 
@@ -74,12 +74,12 @@ QVariant RecentRequestsTableModel::data(const QModelIndex &index,
                     role == Qt::DisplayRole) {
                     return tr("(no amount requested)");
                 } else if (role == Qt::EditRole) {
-                    return BitcoinUnits::format(
+                    return LambdaUnits::format(
                         walletModel->getOptionsModel()->getDisplayUnit(),
                         rec->recipient.amount, false,
-                        BitcoinUnits::separatorNever);
+                        LambdaUnits::separatorNever);
                 } else {
-                    return BitcoinUnits::format(
+                    return LambdaUnits::format(
                         walletModel->getOptionsModel()->getDisplayUnit(),
                         rec->recipient.amount);
                 }
@@ -119,7 +119,7 @@ void RecentRequestsTableModel::updateAmountColumnTitle() {
  * reference available. */
 QString RecentRequestsTableModel::getAmountTitle() {
     return (this->walletModel->getOptionsModel() != nullptr)
-               ? tr("Requested") + " (" + BitcoinUnits::ticker(this->walletModel->getOptionsModel()->getDisplayUnit()) + ")"
+               ? tr("Requested") + " (" + LambdaUnits::ticker(this->walletModel->getOptionsModel()->getDisplayUnit()) + ")"
                : "";
 }
 

@@ -1,12 +1,12 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
-// Copyright (c) 2021 The Bitcoin developers
+// Copyright (c) 2011-2016 The Lambda Core developers
+// Copyright (c) 2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <qt/transactionview.h>
 
 #include <qt/addresstablemodel.h>
-#include <qt/bitcoinunits.h>
+#include <qt/lambdaunits.h>
 #include <qt/csvmodelwriter.h>
 #include <qt/editaddressdialog.h>
 #include <qt/guiutil.h>
@@ -380,7 +380,7 @@ void TransactionView::changedAmount() {
         return;
     }
 
-    if (auto amount_parsed = BitcoinUnits::parse(model->getOptionsModel()->getDisplayUnit(), true, amountWidget->text())) {
+    if (auto amount_parsed = LambdaUnits::parse(model->getOptionsModel()->getDisplayUnit(), true, amountWidget->text())) {
         transactionProxyModel->setMinAmount(*amount_parsed);
     } else {
         transactionProxyModel->setMinAmount(Amount::zero());
@@ -413,7 +413,7 @@ void TransactionView::exportClicked() {
     writer.addColumn(tr("Type"), TransactionTableModel::Type, Qt::EditRole);
     writer.addColumn(tr("Label"), 0, TransactionTableModel::LabelRole);
     writer.addColumn(tr("Address"), 0, TransactionTableModel::AddressRole);
-    writer.addColumn(BitcoinUnits::getAmountColumnTitle(
+    writer.addColumn(LambdaUnits::getAmountColumnTitle(
                          model->getOptionsModel()->getDisplayUnit()),
                      0, TransactionTableModel::FormattedAmountRole);
     writer.addColumn(tr("ID"), 0, TransactionTableModel::TxIDRole);

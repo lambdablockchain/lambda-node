@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2019 The Bitcoin developers
+# Copyright (c) 2019 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test the response of wallet to a variety of weird / nonstandard coins
@@ -18,7 +18,7 @@ from test_framework.script import (
     OP_PUSHDATA1,
     hash160,
 )
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import (
     assert_raises_rpc_error,
     assert_equal,
@@ -33,11 +33,11 @@ from test_framework.messages import (
 SATOSHI = Decimal('0.00000001')
 
 
-class WalletStandardnessTest(BitcoinTestFramework):
+class WalletStandardnessTest(LambdaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2
-        self.extra_args = [['-acceptnonstdtxn=0'], ['-acceptnonstdtxn=1']]
+        self.extra_args = [['-acceptnonstdtxn=0'], ['-acceptnonstdtxn=0']]
 
     def skip_test_if_missing_module(self):
         self.skip_if_no_wallet()

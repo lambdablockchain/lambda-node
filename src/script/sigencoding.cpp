@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
-// Copyright (c) 2017-2019 The Bitcoin developers
+// Copyright (c) 2009-2016 The Lambda Core developers
+// Copyright (c) 2017-2019 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -20,7 +20,7 @@ typedef boost::sliced_range<const valtype> slicedvaltype;
  * otherwise negative number follows, in which case a single 0 byte is
  * necessary and even required).
  *
- * See https://bitcointalk.org/index.php?topic=8392.msg127623#msg127623
+ * See https://lambdatalk.org/index.php?topic=8392.msg127623#msg127623
  *
  * This function is consensus-critical since BIP66.
  */
@@ -164,7 +164,7 @@ static bool CheckRawECDSASignatureEncoding(const slicedvaltype &sig,
         // In an ECDSA-only context, 64-byte signatures are forbidden.
         return set_error(serror, ScriptError::SIG_BADLENGTH);
     }
-    // https://bitcoin.stackexchange.com/a/12556:
+    // https://lambda.stackexchange.com/a/12556:
     if ((flags & (SCRIPT_VERIFY_DERSIG | SCRIPT_VERIFY_LOW_S |
                   SCRIPT_VERIFY_STRICTENC)) &&
         !IsValidDERSignatureEncoding(sig)) {

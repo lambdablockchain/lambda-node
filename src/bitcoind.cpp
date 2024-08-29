@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2018 The Bitcoin Core developers
+// Copyright (c) 2009-2018 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -35,10 +35,10 @@ const std::function<std::string(const char *)> G_TRANSLATION_FUN = nullptr;
  *
  * \section intro_sec Introduction
  *
- * This is the developer documentation of Bitcoin Cash Node
- * (https://www.bitcoincashnode.org/). Bitcoin Cash Node is a client for the
- * digital currency called Bitcoin Cash (https://www.bitcoincash.org/), which
- * enables instant payments to anyone, anywhere in the world. Bitcoin Cash uses
+ * This is the developer documentation of Lambda Node
+ * (https://www.lambdanode.org/). Lambda Node is a client for the
+ * digital currency called Lambda (https://www.lambda.org/), which
+ * enables instant payments to anyone, anywhere in the world. Lambda uses
  * peer-to-peer technology to operate with no central authority: managing
  * transactions and issuing money are carried out collectively by the network.
  *
@@ -177,7 +177,7 @@ static bool AppInit(int argc, char *argv[]) {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-            fprintf(stdout, "Bitcoin server starting\n");
+            fprintf(stdout, "Lambda server starting\n");
 
             // Daemonize
             if (daemon(1, 0)) {

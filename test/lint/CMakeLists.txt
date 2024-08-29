@@ -1,6 +1,6 @@
-# Copyright (c) 2020 The Bitcoin developers
+# Copyright (c) 2020 The Lambda developers
 
-project(bitcoin-lint)
+project(lambda-lint)
 
 include(TestSuite)
 create_test_suite(lint)

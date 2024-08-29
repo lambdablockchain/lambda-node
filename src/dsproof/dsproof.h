@@ -123,7 +123,7 @@ public:
     // -- Global enable/disable of the double spend proof subsystem.
 
     //! Returns true if this subsystem is enabled, false otherwise. The double spend proof subsystem can be disabled at
-    //! startup by passing -doublespendproof=0 to bitcoind. Default is enabled.
+    //! startup by passing -doublespendproof=0 to lambdad. Default is enabled.
     static bool IsEnabled() { return s_enabled; }
 
     //! Enable/disable the dsproof subsystem. Called by init.cpp at startup. Default is enabled. Note that this

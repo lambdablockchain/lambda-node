@@ -1,5 +1,5 @@
 {
   "load" : ["arcanist"],
   "lint.engine": "ExtendedConfigurationDrivenLintEngine",
-  "arcanist_configuration": "ArcanistBitcoinCashNodeConfiguration"
+  "arcanist_configuration": "ArcanistLambdaNodeConfiguration"
 }

@@ -1,5 +1,5 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
-// Copyright (c) 2020 The Bitcoin developers
+// Copyright (c) 2011-2016 The Lambda Core developers
+// Copyright (c) 2020 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -1314,7 +1314,7 @@ BOOST_FIXTURE_TEST_CASE(util_SettingsMerge, SettingsMergeTestingSetup) {
 
     // If check below fails, should manually dump the results with:
     //
-    //   SETTINGS_MERGE_TEST_OUT=results.txt src/test/test_bitcoin
+    //   SETTINGS_MERGE_TEST_OUT=results.txt src/test/test_lambda
     //   --run_test=util_tests/util_SettingsMerge
     //
     // And verify diff against previous results to make sure the changes are
@@ -2118,7 +2118,7 @@ BOOST_AUTO_TEST_CASE(test_ToUpper) {
 
 BOOST_AUTO_TEST_CASE(test_Capitalize) {
     BOOST_CHECK_EQUAL(Capitalize(""), "");
-    BOOST_CHECK_EQUAL(Capitalize("bitcoin"), "Bitcoin");
+    BOOST_CHECK_EQUAL(Capitalize("lambda"), "Lambda");
     BOOST_CHECK_EQUAL(Capitalize("\x00\xfe\xff"), "\x00\xfe\xff");
 }
 

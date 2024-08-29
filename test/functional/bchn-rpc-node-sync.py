@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-# Copyright (c) 2020 The Bitcoin Cash Node developers
+# Copyright (c) 2020 The Lambda Node developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test sync_all."""
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 
 
-class NodeSetupAndSyncTest(BitcoinTestFramework):
+class NodeSetupAndSyncTest(LambdaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2

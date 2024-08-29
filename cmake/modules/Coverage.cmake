@@ -1,4 +1,4 @@
-# Copyright (c) 2020 The Bitcoin developers
+# Copyright (c) 2020 The Lambda developers
 ###############################################################################
 # Provide support for building test coverage reports.
 #

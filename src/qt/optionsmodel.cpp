@@ -1,10 +1,10 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
-// Copyright (c) 2021 The Bitcoin developers
+// Copyright (c) 2011-2016 The Lambda Core developers
+// Copyright (c) 2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
+#include <config/lambda-config.h>
 #endif
 
 #include <qt/optionsmodel.h>
@@ -13,7 +13,7 @@
 #include <interfaces/node.h>
 #include <net.h>
 #include <netbase.h>
-#include <qt/bitcoinunits.h>
+#include <qt/lambdaunits.h>
 #include <qt/guiutil.h>
 #include <qt/intro.h>
 #include <txdb.h>       // for -dbcache defaults
@@ -73,16 +73,16 @@ void OptionsModel::Init(bool resetSettings) {
     fMinimizeOnClose = settings.value("fMinimizeOnClose").toBool();
 
     // Display
-    constexpr auto defaultDisplayUnit = BitcoinUnits::BCH;
+    constexpr auto defaultDisplayUnit = LambdaUnits::BCH;
     if (!settings.contains("nDisplayUnit_v2")) {
         settings.setValue("nDisplayUnit_v2", defaultDisplayUnit);
     }
     nDisplayUnit = settings.value("nDisplayUnit_v2").toInt();
-    if (!BitcoinUnits::valid(nDisplayUnit)) {
+    if (!LambdaUnits::valid(nDisplayUnit)) {
         // User might be running us after having run a new version that saved
         // a unit we don't know about, so just default back to BCH.
         qWarning() << "Unrecognized display unit (" << nDisplayUnit << ") read from settings, setting display unit back to"
-                   <<  BitcoinUnits::ticker(defaultDisplayUnit);
+                   <<  LambdaUnits::ticker(defaultDisplayUnit);
         nDisplayUnit = defaultDisplayUnit;
     }
 
@@ -590,7 +590,7 @@ void OptionsModel::checkAndMigrate() {
                               : 0;
     if (settingsVersion < CLIENT_VERSION) {
         // -dbcache was bumped from 100 to 300 in 0.13
-        // see https://github.com/bitcoin/bitcoin/pull/8273
+        // see https://github.com/lambda/lambda/pull/8273
         // force people to upgrade to the new value if they are using 100MB
         if (settingsVersion < 130000 && settings.contains("nDatabaseCache") &&
             settings.value("nDatabaseCache").toLongLong() == 100) {
@@ -619,7 +619,7 @@ void OptionsModel::checkAndMigrate() {
     // Satoshi (sats) unit type. See issue #47.
     if (settings.contains("nDisplayUnit") && !settings.contains("nDisplayUnit_v2")) {
         const int oldVal = settings.value("nDisplayUnit").toInt();
-        if (BitcoinUnits::valid(oldVal))
+        if (LambdaUnits::valid(oldVal))
             // legacy value is valid, use it.
             settings.setValue("nDisplayUnit_v2", oldVal);
     }

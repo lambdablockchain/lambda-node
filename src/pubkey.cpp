@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2016 The Bitcoin Core developers
+// Copyright (c) 2009-2016 The Lambda Core developers
 // Copyright (c) 2017 The Zcash developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -20,7 +20,7 @@ secp256k1_context *secp256k1_context_verify = nullptr;
  * violations.
  *
  * Supported violations include negative integers, excessive padding, garbage at
- * the end, and overly long length descriptors. This is safe to use in Bitcoin
+ * the end, and overly long length descriptors. This is safe to use in Lambda
  * because since the activation of BIP66, signatures are verified to be strict
  * DER before being passed to this module, and we know it supports all
  * violations present in the blockchain before that point.
@@ -188,7 +188,7 @@ bool CPubKey::VerifyECDSA(const uint256 &hash,
     }
     /**
      * libsecp256k1's ECDSA verification requires lower-S signatures, which have
-     * not historically been enforced in Bitcoin, so normalize them first.
+     * not historically been enforced in Lambda, so normalize them first.
      */
     secp256k1_ecdsa_signature_normalize(secp256k1_context_verify, &sig, &sig);
     return secp256k1_ecdsa_verify(secp256k1_context_verify, &sig, hash.begin(),

@@ -39,7 +39,7 @@ to clean up the patch automatically before submitting a pull request.
         - RIGHT: ChangeDirectory
     - DO NOT use obscure acronyms, DO uppercase any acronyms.
     - FINALLY, do not migrate existing code unless refactoring. It makes
-      forwarding-porting from Bitcoin Core and Bitcoin ABC more difficult.
+      forwarding-porting from Lambda Core and Lambda ABC more difficult.
 
 The naming convention roughly mirrors [Microsoft Naming Conventions](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/general-naming-conventions)
 
@@ -213,7 +213,7 @@ Script integration tests are built using `src/test/script_tests.cpp`:
 
 1. Uncomment the line with `#define UPDATE_JSON_TESTS`
 2. Add a new TestBuilder to the `script_build` test to cover your test case.
-3. `ninja check-bitcoin-script_tests`
+3. `ninja check-lambda-script_tests`
 4. Copy your newly generated test JSON from `<build-dir>/src/script_tests.json.gen`
    to `src/test/data/script_tests.json`.
 
@@ -222,7 +222,7 @@ the uncommented #define before code review.
 
 ### Testnet and Regtest modes
 
-Run with the `-testnet` option to run with "play bitcoins" on the test network,
+Run with the `-testnet` option to run with "play lambdas" on the test network,
 if you are testing multi-machine code that needs to operate across the internet.
 
 If you are testing something that can run on one machine, run with the `-regtest`
@@ -231,7 +231,7 @@ for tests that run in `-regtest` mode.
 
 ### DEBUG_LOCKORDER
 
-Bitcoin Cash Node is a multi-threaded application, and deadlocks or other
+Lambda Node is a multi-threaded application, and deadlocks or other
 multi-threading bugs can be very difficult to track down.
 The `-DCMAKE_BUILD_TYPE=Debug` cmake option adds `-DDEBUG_LOCKORDER` to the
 compiler flags. This inserts run-time checks to keep track of which locks are
@@ -246,10 +246,10 @@ which includes known Valgrind warnings in our dependencies that cannot be fixed
 in-tree. Example use:
 
 ```shell
-$ valgrind --suppressions=contrib/valgrind.supp src/test/test_bitcoin
+$ valgrind --suppressions=contrib/valgrind.supp src/test/test_lambda
 $ valgrind --suppressions=contrib/valgrind.supp --leak-check=full \
-      --show-leak-kinds=all src/test/test_bitcoin --log_level=test_suite
-$ valgrind -v --leak-check=full src/bitcoind -printtoconsole
+      --show-leak-kinds=all src/test/test_lambda --log_level=test_suite
+$ valgrind -v --leak-check=full src/lambdad -printtoconsole
 ```
 
 ### Compiling for test coverage
@@ -278,7 +278,7 @@ to the `cmake` command line.
 
 ### Sanitizers
 
-Bitcoin Cash Node can be compiled with various "sanitizers" enabled, which add
+Lambda Node can be compiled with various "sanitizers" enabled, which add
 instrumentation for issues regarding things like memory safety, thread race
 conditions, or undefined behavior. This is controlled with the
 `-DENABLE_SANITIZERS` cmake flag, which should be a semicolon separated list of
@@ -376,7 +376,7 @@ Additional resources:
 - [UndefinedBehaviorSanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)
 - [GCC Instrumentation Options](https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html)
 - [Google Sanitizers Wiki](https://github.com/google/sanitizers/wiki)
-- [Issue #12691: Enable -fsanitize flags in Travis](https://github.com/bitcoin/bitcoin/issues/12691)
+- [Issue #12691: Enable -fsanitize flags in Travis](https://github.com/lambda/lambda/issues/12691)
 
 ## Locking/mutex usage notes
 
@@ -415,7 +415,7 @@ and its `cs_KeyStore` lock for example).
 In closed-source environments in which everyone uses the same IDE it is common
 to add temporary files it produces to the project-wide `.gitignore` file.
 
-However, in open source software such as Bitcoin Cash Node, where everyone uses
+However, in open source software such as Lambda Node, where everyone uses
 their own editors/IDE/tools, it is less common. Only you know what files your
 editor produces and this may change from version to version. The canonical way
 to do this is thus to create your local gitignore. Add this to `~/.gitconfig`:
@@ -445,7 +445,7 @@ and commit them.
 ## Development guidelines
 
 A few non-style-related recommendations for developers, as well as points to
-pay attention to for reviewers of Bitcoin Cash Node code.
+pay attention to for reviewers of Lambda Node code.
 
 ### Wallet
 
@@ -667,13 +667,13 @@ source code.
 All headers should be lexically ordered inside their block.
 
 - Use include guards to avoid the problem of double inclusion. The header file
-  `foo/bar.h` should use the include guard identifier `BITCOIN_FOO_BAR_H`, e.g.
+  `foo/bar.h` should use the include guard identifier `LAMBDA_FOO_BAR_H`, e.g.
 
     ```c++
-    #ifndef BITCOIN_FOO_BAR_H
-    #define BITCOIN_FOO_BAR_H
+    #ifndef LAMBDA_FOO_BAR_H
+    #define LAMBDA_FOO_BAR_H
     ...
-    #endif // BITCOIN_FOO_BAR_H
+    #endif // LAMBDA_FOO_BAR_H
     ```
 
 ### GUI
@@ -704,13 +704,13 @@ All headers should be lexically ordered inside their block.
 
 Several parts of the repository are subtrees of software maintained elsewhere.
 
-Some of these are maintained by active developers of Bitcoin Core, in which case
+Some of these are maintained by active developers of Lambda Core, in which case
 changes should probably go directly upstream without being PRed directly against
 the project.  They will be merged back in the next subtree merge.
 
 Others are external projects without a tight relationship with our project.
 Changes to these should also be sent upstream but bugfixes may also be prudent to
-PR against Bitcoin Core so that they can be integrated quickly. Cosmetic changes
+PR against Lambda Core so that they can be integrated quickly. Cosmetic changes
 should be purely taken upstream.
 
 There is a tool in `test/lint/git-subtree-check.sh` to check a subtree directory
@@ -724,15 +724,15 @@ Current subtrees include:
     - **Note**: Follow the instructions in [Upgrading LevelDB](#upgrading-leveldb)
       when merging upstream changes to the leveldb subtree.
 - src/libsecp256k1
-    - Upstream at [https://github.com/bitcoin-core/secp256k1/](https://github.com/bitcoin-core/secp256k1/);
+    - Upstream at [https://github.com/lambda-core/secp256k1/](https://github.com/lambda-core/secp256k1/);
       actively maintaned by Core contributors.
 - src/crypto/ctaes
-    - Upstream at [https://github.com/bitcoin-core/ctaes](https://github.com/bitcoin-core/ctaes);
+    - Upstream at [https://github.com/lambda-core/ctaes](https://github.com/lambda-core/ctaes);
       actively maintained by Core contributors.
 - src/univalue
     - BCHN no longer has a single upstream for `src/univalue`, but maintains its
       own univalue code based on fixes from several repositories, namely [https://github.com/jgarzik/univalue](https://github.com/jgarzik/univalue),
-      Bitcoin Core's fork of univalue and the Bitcoin ABC repository.
+      Lambda Core's fork of univalue and the Lambda ABC repository.
 
 ### Upgrading LevelDB
 
@@ -743,7 +743,7 @@ you must be aware of.
 
 In most configurations we use the default LevelDB value for `max_open_files`,
 which is 1000 at the time of this writing. If LevelDB actually uses this many
-file descriptors it will cause problems with Bitcoin's `select()` loop, because
+file descriptors it will cause problems with Lambda's `select()` loop, because
 it may cause new sockets to be created where the fd value is >= 1024. For this
 reason, on 64-bit Unix systems we rely on an internal LevelDB optimization that
 uses `mmap()` + `close()` to open table files without actually retaining
@@ -754,7 +754,7 @@ In addition to reviewing the upstream changes in `env_posix.cc`, you can use `ls
 to check this. For example, on Linux this command will show open `.ldb` file counts:
 
 ```bash
-$ lsof -p $(pidof bitcoind) |\
+$ lsof -p $(pidof lambdad) |\
     awk 'BEGIN { fd=0; mem=0; } /ldb$/ { if ($4 == "mem") mem++; else fd++ } END { printf "mem = %s, fd = %s\n", mem, fd}'
 mem = 119, fd = 0
 ```
@@ -769,14 +769,14 @@ details.
 #### Consensus Compatibility
 
 It is possible for LevelDB changes to inadvertently change consensus
-compatibility between nodes. This happened in Bitcoin 0.8 (when LevelDB was
+compatibility between nodes. This happened in Lambda 0.8 (when LevelDB was
 first introduced). When upgrading LevelDB you should review the upstream changes
 to check for issues affecting consensus compatibility.
 
 For example, if LevelDB had a bug that accidentally prevented a key from being
 returned in an edge case, and that bug was fixed upstream, the bug "fix" would
 be an incompatible consensus change. In this situation the correct behavior
-would be to revert the upstream fix before applying the updates to Bitcoin
+would be to revert the upstream fix before applying the updates to Lambda
 Cash Node's copy of LevelDB. In general you should be wary of any upstream
 changes affecting what data is returned from LevelDB queries.
 
@@ -784,7 +784,7 @@ changes affecting what data is returned from LevelDB queries.
 
 - See CONTRIBUTING.md for instructions on setting up your repo correctly.
 
-- Your git remote origin should be set to: `git@gitlab.com:username/bitcoin-cash-node.git`
+- Your git remote origin should be set to: `git@gitlab.com:username/lambda-node.git`
   where `username` is your account name on GitLab. See CONTRIBUTING.md for details.
 
 - For resolving merge/rebase conflicts, it can be useful to enable diff3 style using
@@ -834,7 +834,7 @@ changes affecting what data is returned from LevelDB queries.
 
   ```
   [remote "upstream-merges"]
-          url = git@gitlab.com:bitcoin-cash-node/bitcoin-cash-node.git
+          url = git@gitlab.com:lambda-node/lambda-node.git
           fetch = +refs/merge-requests/*/head:refs/remotes/upstream-merges/merge-requests/*
   ```
 
@@ -876,7 +876,7 @@ A few guidelines for introducing and reviewing new RPC interfaces:
       name-based arguments are passed as 'null'.
 - Try not to overload methods on argument type. E.g. don't make `getblock(true)`
   and `getblock("hash")` do different things.
-    - *Rationale*: This is impossible to use with `bitcoin-cli`, and can be
+    - *Rationale*: This is impossible to use with `lambda-cli`, and can be
       surprising to users.
     - *Exception*: Some RPC calls can take both an `int` and `bool`, most notably
       when a bool was switched to a multi-value, or due to other historical reasons.
@@ -891,7 +891,7 @@ A few guidelines for introducing and reviewing new RPC interfaces:
       RPCs don't work.
 - Add every non-string RPC argument `(method, idx, name)` to the table `vRPCConvertParams`
   in `rpc/client.cpp`.
-    - *Rationale*: `bitcoin-cli` and the GUI debug console use this table to
+    - *Rationale*: `lambda-cli` and the GUI debug console use this table to
       determine how to convert a plaintext command line to JSON. If the types
       don't match, the method can be unusable from there.
 - A RPC method must either be a wallet method or a non-wallet method. Do not
@@ -907,7 +907,7 @@ A few guidelines for introducing and reviewing new RPC interfaces:
   `getblockchaininfo`'s state immediately prior to the call's execution. Wallet
   RPCs whose behavior does *not* depend on the current chainstate may omit this
   call.
-    - *Rationale*: In previous versions of Bitcoin Core, the wallet was always
+    - *Rationale*: In previous versions of Lambda Core, the wallet was always
       in-sync with the chainstate (by virtue of them all being updated in the
       same cs_main lock). In order to maintain the behavior that wallet RPCs
       return results as of at least the highest best-known block an RPC

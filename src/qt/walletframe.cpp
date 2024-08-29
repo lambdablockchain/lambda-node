@@ -1,10 +1,10 @@
-// Copyright (c) 2011-2019 The Bitcoin Core developers
+// Copyright (c) 2011-2019 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <qt/walletframe.h>
 
-#include <qt/bitcoingui.h>
+#include <qt/lambdagui.h>
 #include <qt/walletmodel.h>
 #include <qt/walletview.h>
 
@@ -14,7 +14,7 @@
 #include <cassert>
 #include <cstdio>
 
-WalletFrame::WalletFrame(const PlatformStyle *_platformStyle, BitcoinGUI *_gui)
+WalletFrame::WalletFrame(const PlatformStyle *_platformStyle, LambdaGUI *_gui)
     : QFrame(_gui), gui(_gui), platformStyle(_platformStyle) {
     // Leave HBox hook for adding a list view later
     QHBoxLayout *walletFrameLayout = new QHBoxLayout(this);
@@ -44,7 +44,7 @@ bool WalletFrame::addWallet(WalletModel *walletModel) {
     }
 
     WalletView *walletView = new WalletView(platformStyle, walletModel, this);
-    walletView->setBitcoinGUI(gui);
+    walletView->setLambdaGUI(gui);
     walletView->setClientModel(clientModel);
     walletView->showOutOfSyncWarning(bOutOfSync);
 

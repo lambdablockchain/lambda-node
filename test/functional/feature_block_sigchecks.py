@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2020 The Bitcoin Developers
+# Copyright (c) 2020 The Lambda Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """
@@ -30,7 +30,7 @@ from test_framework.script import (
     OP_RETURN,
     OP_TRUE,
 )
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.txtools import pad_tx
 from test_framework.util import assert_equal
 from collections import deque
@@ -77,7 +77,7 @@ def check_for_ban_on_rejected_tx(node, tx, reject_reason=None):
     """Check we are disconnected when sending a txn that the node rejects,
     then reconnect after.
 
-    (Can't actually get banned, since bitcoind won't ban local peers.)"""
+    (Can't actually get banned, since lambdad won't ban local peers.)"""
     node.p2p.send_txs_and_test(
         [tx], node, success=False, expect_disconnect=True, reject_reason=reject_reason)
     node.disconnect_p2ps()
@@ -88,7 +88,7 @@ def check_for_ban_on_rejected_block(node, block, reject_reason=None):
     """Check we are disconnected when sending a block that the node rejects,
     then reconnect after.
 
-    (Can't actually get banned, since bitcoind won't ban local peers.)"""
+    (Can't actually get banned, since lambdad won't ban local peers.)"""
     node.p2p.send_blocks_and_test(
         [block], node, success=False, reject_reason=reject_reason, expect_disconnect=True)
     node.disconnect_p2ps()
@@ -101,13 +101,13 @@ def check_for_no_ban_on_rejected_tx(node, tx, reject_reason=None):
         [tx], node, success=False, reject_reason=reject_reason)
 
 
-class BlockSigChecksTest(BitcoinTestFramework):
+class BlockSigChecksTest(LambdaTestFramework):
 
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 1
         self.block_heights = {}
-        self.extra_args = [['-acceptnonstdtxn=1',
+        self.extra_args = [['-acceptnonstdtxn=0',
                             "-excessiveblocksize={}".format(EXCESSIVEBLOCKSIZE),
                             "-blockmaxsize={}".format(MAXGENERATEDBLOCKSIZE)]]
 

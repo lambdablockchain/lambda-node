@@ -1,6 +1,6 @@
-# Copyright (c) 2017 The Bitcoin developers
+# Copyright (c) 2017 The Lambda developers
 
-project(bitcoind)
+project(lambdad)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -10,14 +10,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_VISIBILITY_PRESET hidden)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
-option(BUILD_BITCOIN_DAEMON "Build bitcoind" ON)
-option(BUILD_BITCOIN_WALLET "Activate the wallet functionality" ON)
-option(BUILD_BITCOIN_ZMQ "Activate the ZeroMQ functionalities" ON)
-option(BUILD_BITCOIN_CLI "Build bitcoin-cli" ON)
-option(BUILD_BITCOIN_TX "Build bitcoin-tx" ON)
-option(BUILD_BITCOIN_QT "Build bitcoin-qt" ON)
-option(BUILD_BITCOIN_SEEDER "Build bitcoin-seeder" ON)
-option(BUILD_LIBBITCOINCONSENSUS "Build the bitcoinconsenus shared library" ON)
+option(BUILD_LAMBDA_DAEMON "Build lambdad" ON)
+option(BUILD_LAMBDA_WALLET "Activate the wallet functionality" ON)
+option(BUILD_LAMBDA_ZMQ "Activate the ZeroMQ functionalities" ON)
+option(BUILD_LAMBDA_CLI "Build lambda-cli" ON)
+option(BUILD_LAMBDA_TX "Build lambda-tx" ON)
+option(BUILD_LAMBDA_QT "Build lambda-qt" ON)
+option(BUILD_LAMBDA_SEEDER "Build lambda-seeder" ON)
+option(BUILD_LIBLAMBDACONSENSUS "Build the lambdaconsenus shared library" ON)
 option(ENABLE_BIP70 "Enable BIP70 (payment protocol) support in GUI" ON)
 option(ENABLE_HARDENING "Harden the executables" ON)
 option(ENABLE_REDUCE_EXPORTS "Reduce the amount of exported symbols" OFF)
@@ -28,7 +28,7 @@ option(ENABLE_QRCODE "Enable QR code display" ON)
 option(ENABLE_UPNP "Enable UPnP support" ON)
 option(ENABLE_WERROR "Promote some compiler warnings to errors" OFF)
 option(START_WITH_UPNP "Make UPnP the default to map ports" OFF)
-option(ENABLE_CLANG_TIDY "Enable clang-tidy checks for Bitcoin Cash Node" OFF)
+option(ENABLE_CLANG_TIDY "Enable clang-tidy checks for Lambda Node" OFF)
 option(ENABLE_PROFILING "Select the profiling tool to use" OFF)
 option(USE_JEMALLOC_EXPERIMENTAL "Use jemalloc as an allocation library (experimental)" OFF)
 
@@ -48,9 +48,9 @@ endif(CCACHE)
 # Disable what we do not need for the native build.
 include(NativeExecutable)
 native_add_cmake_flags(
-  "-DBUILD_BITCOIN_WALLET=OFF"
-  "-DBUILD_BITCOIN_QT=OFF"
-  "-DBUILD_BITCOIN_ZMQ=OFF"
+  "-DBUILD_LAMBDA_WALLET=OFF"
+  "-DBUILD_LAMBDA_QT=OFF"
+  "-DBUILD_LAMBDA_ZMQ=OFF"
   "-DENABLE_QRCODE=OFF"
   "-DENABLE_UPNP=OFF"
   # Forward the current setting for clang-tidy
@@ -347,9 +347,9 @@ add_custom_command(
     ${CMAKE_COMMAND} -E remove "${BUILD_HEADER_TMP}"
 )
 
-# Because the Bitcoin Cash Node source code is disorganised, we
+# Because the Lambda Node source code is disorganised, we
 # end up with a bunch of libraries without any apparent
-# cohesive structure. This is inherited from Bitcoin Core
+# cohesive structure. This is inherited from Lambda Core
 # and reflecting this.
 # TODO: Improve the structure once cmake is rocking.
 
@@ -486,8 +486,8 @@ add_library(script
 
 target_link_libraries(script common)
 
-# libbitcoinconsensus
-add_library(bitcoinconsensus
+# liblambdaconsensus
+add_library(lambdaconsensus
   arith_uint256.cpp
   hash.cpp
   primitives/transaction.cpp
@@ -496,23 +496,23 @@ add_library(bitcoinconsensus
   util/strencodings.cpp
 )
 
-target_link_libraries(bitcoinconsensus script)
+target_link_libraries(lambdaconsensus script)
 
 include(InstallationHelper)
-if(BUILD_LIBBITCOINCONSENSUS)
-  target_compile_definitions(bitcoinconsensus
+if(BUILD_LIBLAMBDACONSENSUS)
+  target_compile_definitions(lambdaconsensus
     PUBLIC
-      BUILD_BITCOIN_INTERNAL
+      BUILD_LAMBDA_INTERNAL
       HAVE_CONSENSUS_LIB
   )
 
-  install_shared_library(bitcoinconsensus
-    script/bitcoinconsensus.cpp
-    PUBLIC_HEADER script/bitcoinconsensus.h
+  install_shared_library(lambdaconsensus
+    script/lambdaconsensus.cpp
+    PUBLIC_HEADER script/lambdaconsensus.h
   )
 endif()
 
-# Bitcoin server facilities
+# Lambda server facilities
 add_library(server
   addrdb.cpp
   addrman.cpp
@@ -583,7 +583,7 @@ find_package(Event ${EVENT_MIN_VERSION} REQUIRED COMPONENTS event)
 
 target_link_libraries(server
   Event::event
-  bitcoinconsensus
+  lambdaconsensus
   leveldb
   memenv
 )
@@ -620,31 +620,31 @@ add_subdirectory(bench)
 include(BinaryTest)
 
 # Wallet
-if(BUILD_BITCOIN_WALLET)
+if(BUILD_LAMBDA_WALLET)
   add_subdirectory(wallet)
   target_link_libraries(server wallet)
   # There is a circular dependency between wallet and server, see:
-  # https://github.com/bitcoin/bitcoin/pull/14437#discussion_r226237048
+  # https://github.com/lambda/lambda/pull/14437#discussion_r226237048
   target_link_libraries(wallet server)
 
-  # bitcoin-wallet
-  add_executable(bitcoin-wallet bitcoin-wallet.cpp)
+  # lambda-wallet
+  add_executable(lambda-wallet lambda-wallet.cpp)
   if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    target_sources(bitcoin-wallet PRIVATE bitcoin-wallet-res.rc)
+    target_sources(lambda-wallet PRIVATE lambda-wallet-res.rc)
   endif()
 
-  target_link_libraries(bitcoin-wallet wallet-tool server common bitcoinconsensus util)
+  target_link_libraries(lambda-wallet wallet-tool server common lambdaconsensus util)
 
-  add_to_symbols_check(bitcoin-wallet)
-  add_to_security_check(bitcoin-wallet)
+  add_to_symbols_check(lambda-wallet)
+  add_to_security_check(lambda-wallet)
 
-  install_target(bitcoin-wallet)
+  install_target(lambda-wallet)
 else()
   target_sources(server PRIVATE dummywallet.cpp)
 endif()
 
 # ZeroMQ
-if(BUILD_BITCOIN_ZMQ)
+if(BUILD_LAMBDA_ZMQ)
   add_subdirectory(zmq)
   target_link_libraries(server zmq)
 endif()
@@ -653,56 +653,56 @@ endif()
 add_library(rpcclient rpc/client.cpp)
 target_link_libraries(rpcclient univalue util)
 
-# bitcoin-seeder
-if(BUILD_BITCOIN_SEEDER)
+# lambda-seeder
+if(BUILD_LAMBDA_SEEDER)
   add_subdirectory(seeder)
 endif()
 
-# bitcoin-cli
-if(BUILD_BITCOIN_CLI)
-  add_executable(bitcoin-cli bitcoin-cli.cpp)
+# lambda-cli
+if(BUILD_LAMBDA_CLI)
+  add_executable(lambda-cli lambda-cli.cpp)
   if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    target_sources(bitcoin-cli PRIVATE bitcoin-cli-res.rc)
+    target_sources(lambda-cli PRIVATE lambda-cli-res.rc)
   endif()
 
-  target_link_libraries(bitcoin-cli common rpcclient Event::event)
+  target_link_libraries(lambda-cli common rpcclient Event::event)
 
-  add_to_symbols_check(bitcoin-cli)
-  add_to_security_check(bitcoin-cli)
+  add_to_symbols_check(lambda-cli)
+  add_to_security_check(lambda-cli)
 
-  install_target(bitcoin-cli)
+  install_target(lambda-cli)
 endif()
 
-# bitcoin-tx
-if(BUILD_BITCOIN_TX)
-  add_executable(bitcoin-tx bitcoin-tx.cpp)
+# lambda-tx
+if(BUILD_LAMBDA_TX)
+  add_executable(lambda-tx lambda-tx.cpp)
   if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    target_sources(bitcoin-tx PRIVATE bitcoin-tx-res.rc)
+    target_sources(lambda-tx PRIVATE lambda-tx-res.rc)
   endif()
 
-  target_link_libraries(bitcoin-tx bitcoinconsensus)
+  target_link_libraries(lambda-tx lambdaconsensus)
 
-  add_to_symbols_check(bitcoin-tx)
-  add_to_security_check(bitcoin-tx)
+  add_to_symbols_check(lambda-tx)
+  add_to_security_check(lambda-tx)
 
-  install_target(bitcoin-tx)
+  install_target(lambda-tx)
 endif()
 
-# bitcoind
-if(BUILD_BITCOIN_DAEMON)
-  add_executable(bitcoind bitcoind.cpp)
-  target_link_libraries(bitcoind server)
+# lambdad
+if(BUILD_LAMBDA_DAEMON)
+  add_executable(lambdad lambdad.cpp)
+  target_link_libraries(lambdad server)
   if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    target_sources(bitcoind PRIVATE bitcoind-res.rc)
+    target_sources(lambdad PRIVATE lambdad-res.rc)
   endif()
 
-  add_to_symbols_check(bitcoind)
-  add_to_security_check(bitcoind)
+  add_to_symbols_check(lambdad)
+  add_to_security_check(lambdad)
 
-  install_target(bitcoind)
+  install_target(lambdad)
 endif()
 
-# Bitcoin-qt
-if(BUILD_BITCOIN_QT)
+# Lambda-qt
+if(BUILD_LAMBDA_QT)
   add_subdirectory(qt)
 endif()

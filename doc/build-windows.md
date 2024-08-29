@@ -1,16 +1,16 @@
 # WINDOWS BUILD NOTES
 
-Below are some notes on how to build Bitcoin Cash Node for Windows.
+Below are some notes on how to build Lambda Node for Windows.
 
 Please note that from BCHN v0.21.3 onwards, building for Win32 is no longer
 officially supported (and build system capabilities related to this may
 be removed).
 
-The options known to work for building Bitcoin Cash Node on Windows are:
+The options known to work for building Lambda Node on Windows are:
 
 - On Linux, using the [Mingw-w64](https://www.mingw-w64.org/downloads/) cross compiler
   tool chain. Debian Buster is recommended and is the platform used to build the
-  Bitcoin Cash Node Windows release binaries.
+  Lambda Node Windows release binaries.
 - On Windows, using [Windows Subsystem for Linux (WSL)](https://msdn.microsoft.com/commandline/wsl/about)
   and the Mingw-w64 cross compiler tool chain. This is covered in these notes.
 
@@ -24,10 +24,10 @@ Other options which may work, but which have not been extensively tested are
 
 In any case please make sure that the compiler supports C++17.
 
-**Note** These notes cover building binaries from source, for running Bitcoin
-Cash Node natively under Windows. If you just want to run Bitcoin Cash Node,
-you can download binaries from the [Bitcoin Cash Node website](https://bitcoincashnode.org/en/download.html).
-If you wish to both compile and run Bitcoin Cash Node on Windows, *under WSL*,
+**Note** These notes cover building binaries from source, for running Lambda
+Cash Node natively under Windows. If you just want to run Lambda Node,
+you can download binaries from the [Lambda Node website](https://lambdanode.org/en/download.html).
+If you wish to both compile and run Lambda Node on Windows, *under WSL*,
 you can refer to the [Unix build guide](build-unix.md),
 and follow those instructions from within WSL.
 
@@ -101,16 +101,16 @@ Next, configure the `mingw-w64` to the posix[¹](#footnote1) compiler option.
     sudo update-alternatives --config x86_64-w64-mingw32-gcc # Set the default mingw32 gcc compiler option to posix.
 ```
 
-Note that for WSL 2 the Bitcoin Cash Node source path MUST be somewhere in the default
-mount file system, for example `/usr/src/bitcoin-cash-node`, AND not under `/mnt/d/`.
+Note that for WSL 2 the Lambda Node source path MUST be somewhere in the default
+mount file system, for example `/usr/src/lambda-node`, AND not under `/mnt/d/`.
 This means you cannot use a directory that is located directly on the host Windows
 file system to perform the build.
 
 Acquire the source in the usual way:
 
 ```bash
-    git clone https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node.git
-    cd bitcoin-cash-node
+    git clone https://github.com/lambdablockchain/lambda-node.git
+    cd lambda-node
 ```
 
 Once the source code is ready the build steps are below:
@@ -122,7 +122,7 @@ Once the source code is ready the build steps are below:
     cd ..
     mkdir build
     cd build
-    cmake -GNinja .. -DCMAKE_TOOLCHAIN_FILE=../cmake/platforms/Win64.cmake -DENABLE_MAN=OFF -DBUILD_BITCOIN_SEEDER=OFF # seeder not supported in Windows yet
+    cmake -GNinja .. -DCMAKE_TOOLCHAIN_FILE=../cmake/platforms/Win64.cmake -DENABLE_MAN=OFF -DBUILD_LAMBDA_SEEDER=OFF # seeder not supported in Windows yet
     ninja
     ninja package #to build the install-package
 ```
@@ -132,10 +132,10 @@ Once the source code is ready the build steps are below:
 After building using the Windows subsystem it can be useful to copy the compiled
 executables to a directory on the windows drive in the same directory structure
 as they appear in the release `.zip` archive. This can be done in the following
-way. This will install to `c:\workspace\bitcoin-cash-node`, for example:
+way. This will install to `c:\workspace\lambda-node`, for example:
 
 ```bash
-    cmake -GNinja .. -DCMAKE_TOOLCHAIN_FILE=../cmake/platforms/Win64.cmake -DENABLE_MAN=OFF -DBUILD_BITCOIN_SEEDER=OFF -DCMAKE_INSTALL_PREFIX=/mnt/c/workspace/bitcoin-cash-node
+    cmake -GNinja .. -DCMAKE_TOOLCHAIN_FILE=../cmake/platforms/Win64.cmake -DENABLE_MAN=OFF -DBUILD_LAMBDA_SEEDER=OFF -DCMAKE_INSTALL_PREFIX=/mnt/c/workspace/lambda-node
     sudo ninja install
 ```
 
@@ -183,7 +183,7 @@ First, install the general dependencies:
 ```
 
 The `cmake` version packaged with Ubuntu Bionic is too old for building Building
-Bitcoin Cash Node. To install the latest version:
+Lambda Node. To install the latest version:
 
 ```bash
     sudo apt-get install apt-transport-https ca-certificates gnupg software-properties-common wget
@@ -214,16 +214,16 @@ Next, configure the `mingw-w64` to the posix[¹](#footnote1) compiler option.
     sudo update-alternatives --config x86_64-w64-mingw32-gcc # Set the default mingw32 gcc compiler option to posix.
 ```
 
-Note that for WSL the Bitcoin Cash Node source path MUST be somewhere in the default
-mount file system, for example `/usr/src/bitcoin-cash-node`, AND not under `/mnt/d/`.
+Note that for WSL the Lambda Node source path MUST be somewhere in the default
+mount file system, for example `/usr/src/lambda-node`, AND not under `/mnt/d/`.
 This means you cannot use a directory that is located directly on the host Windows
 file system to perform the build.
 
 Acquire the source in the usual way:
 
 ```bash
-    git clone https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node.git
-    cd bitcoin-cash-node
+    git clone https://github.com/lambdablockchain/lambda-node.git
+    cd lambda-node
 ```
 
 Once the source code is ready the build steps are below:
@@ -235,7 +235,7 @@ Once the source code is ready the build steps are below:
     cd ..
     mkdir build
     cd build
-    cmake -GNinja .. -DCMAKE_TOOLCHAIN_FILE=../cmake/platforms/Win64.cmake -DENABLE_MAN=OFF -DBUILD_BITCOIN_SEEDER=OFF # seeder not supported in Windows yet
+    cmake -GNinja .. -DCMAKE_TOOLCHAIN_FILE=../cmake/platforms/Win64.cmake -DENABLE_MAN=OFF -DBUILD_LAMBDA_SEEDER=OFF # seeder not supported in Windows yet
     ninja
 ```
 
@@ -261,10 +261,10 @@ Then, back in the build directory, you can build the package with the command
 After building using the Windows subsystem it can be useful to copy the compiled
 executables to a directory on the windows drive in the same directory structure
 as they appear in the release `.zip` archive. This can be done in the following
-way. This will install to `c:\workspace\bitcoin-cash-node`, for example:
+way. This will install to `c:\workspace\lambda-node`, for example:
 
 ```bash
-    cmake -GNinja .. -DCMAKE_TOOLCHAIN_FILE=../cmake/platforms/Win64.cmake -DENABLE_MAN=OFF -DBUILD_BITCOIN_SEEDER=OFF -DCMAKE_INSTALL_PREFIX=/mnt/c/workspace/bitcoin-cash-node
+    cmake -GNinja .. -DCMAKE_TOOLCHAIN_FILE=../cmake/platforms/Win64.cmake -DENABLE_MAN=OFF -DBUILD_LAMBDA_SEEDER=OFF -DCMAKE_INSTALL_PREFIX=/mnt/c/workspace/lambda-node
     sudo ninja install
 ```
 
@@ -281,6 +281,6 @@ between either posix or win32 threads. The default option is win32 threads which
 is the more efficient since it will result in binary code that links directly with
 the Windows kernel32.lib. Unfortunately, the headers required to support win32
 threads conflict with some of the classes in the C++11 standard library, in particular
-`std::mutex`. It's not possible to build the Bitcoin Cash Node code using the win32
+`std::mutex`. It's not possible to build the Lambda Node code using the win32
 version of the Mingw-w64 cross compilers (at least not without modifying headers
-in the Bitcoin Cash Node source code).
+in the Lambda Node source code).

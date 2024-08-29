@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
+// Copyright (c) 2009-2016 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -137,7 +137,7 @@ public:
  * computation requirements to process incoming transactions.
  * From the peer-node's perspective, the SPV client is a "filtered node".
  * See BIP37 for details:
- * https://github.com/bitcoin/bips/blob/master/bip-0037.mediawiki
+ * https://github.com/lambda/bips/blob/master/bip-0037.mediawiki
  *
  * NOTE: The class assumes that the given CBlock has *at least* 1 transaction.
  * If the CBlock has 0 txs, it will hit an assertion.

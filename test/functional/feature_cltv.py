@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2015-2019 The Bitcoin Core developers
+# Copyright (c) 2015-2019 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test BIP65 (CHECKLOCKTIMEVERIFY).
@@ -27,7 +27,7 @@ from test_framework.script import (
     OP_DROP,
     OP_TRUE,
 )
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.txtools import pad_tx
 from test_framework.util import assert_equal
 
@@ -81,13 +81,13 @@ def cltv_lock_to_height(node, tx, to_address, amount, height=-1):
     return fundtx, spendtx
 
 
-class BIP65Test(BitcoinTestFramework):
+class BIP65Test(LambdaTestFramework):
     def set_test_params(self):
         self.num_nodes = 1
         self.extra_args = [[
             '-whitelist=127.0.0.1',
             '-par=1',  # Use only one script thread to get the exact reject reason for testing
-            '-acceptnonstdtxn=1',  # cltv_invalidate is nonstandard
+            '-acceptnonstdtxn=0',  # cltv_invalidate is nonstandard
         ]]
         self.setup_clean_chain = True
         self.rpc_timeout = 120

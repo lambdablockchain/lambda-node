@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2015 The Bitcoin Core developers
+// Copyright (c) 2009-2015 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -28,7 +28,7 @@ public:
     virtual std::set<CKeyID> GetKeys() const = 0;
 
     //! Support for BIP 0013 : see
-    //! https://github.com/bitcoin/bips/blob/master/bip-0013.mediawiki
+    //! https://github.com/lambda/bips/blob/master/bip-0013.mediawiki
     virtual bool AddCScript(const CScript &redeemScript) = 0;
     virtual std::set<CScriptID> GetCScripts() const = 0;
 

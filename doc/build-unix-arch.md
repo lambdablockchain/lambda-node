@@ -9,10 +9,10 @@ You will need the following dependencies:
 ```
 
 You can do without the `miniupnpc`, `zeromq`, and `help2man` packages, then you
-just need to respectively pass `-DENABLE_UPNP=OFF`, `-DBUILD_BITCOIN_ZMQ=OFF`,
+just need to respectively pass `-DENABLE_UPNP=OFF`, `-DBUILD_LAMBDA_ZMQ=OFF`,
 or `-DENABLE_MAN=OFF` on the `cmake` command line.
 
-If you want to build the GUI client `bitcoin-qt` Qt 5 is necessary.
+If you want to build the GUI client `lambda-qt` Qt 5 is necessary.
 To build with Qt 5 you need the following packages installed:
 
 ```bash
@@ -25,18 +25,18 @@ the `cmake` command line.
 ## Building
 
 Once you have installed the required dependencies (see sections above), you can
-build Bitcoin Cash Node as such:
+build Lambda Node as such:
 
 First fetch the code (if you haven't done so already).
 
 ```bash
-git clone https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node.git
+git clone https://github.com/lambdablockchain/lambda-node.git
 ```
 
 Change to the BCN directory, make `build` dir, and change to that directory
 
 ```bash
-cd bitcoin-cash-node/
+cd lambda-node/
 mkdir build
 cd build
 ```
@@ -48,12 +48,12 @@ or the node and the QT client.
 
 ```bash
 # to build just the node, no wallet functionality, choose this:
-cmake -GNinja .. -DBUILD_BITCOIN_WALLET=OFF -DBUILD_BITCOIN_QT=OFF
+cmake -GNinja .. -DBUILD_LAMBDA_WALLET=OFF -DBUILD_LAMBDA_QT=OFF
 ```
 
 ```bash
 # to build the node, with wallet functionality, but without GUI, choose this:
-cmake -GNinja .. -DBUILD_BITCOIN_QT=OFF
+cmake -GNinja .. -DBUILD_LAMBDA_QT=OFF
 ```
 
 ```bash
@@ -67,7 +67,7 @@ Next, finish the build
 ninja
 ```
 
-You will find the `bitcoind`, `bitcoin-cli`, `bitcoin-tx` (and optionally `bitcoin-qt`)
+You will find the `lambdad`, `lambda-cli`, `lambda-tx` (and optionally `lambda-qt`)
 binaries in `/build/src/(qt)`.
 
 Optionally, run the tests

@@ -16,7 +16,7 @@
                 "reqSigs": 1,
                 "type": "pubkey",
                 "addresses": [
-                    "bitcoincash:qz39zmnhqkpgvjn22mkjrggzq38r3rrzuv660a7t97"
+                    "lambda:qz39zmnhqkpgvjn22mkjrggzq38r3rrzuv660a7t97"
                 ]
             }
         }

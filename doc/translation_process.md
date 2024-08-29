@@ -1,20 +1,20 @@
 # Translations
 
-The Bitcoin Cash Node graphical user interface is translated on Crowdin:
+The Lambda Node graphical user interface is translated on Crowdin:
 
-  <https://crowdin.com/project/bitcoin-cash-node>
+  <https://crowdin.com/project/lambda-node>
 
 ## Contributing to translations
 
 ### Step 1: Join the Crowdin project
 
 To contribute to translations, you must create a Crowdin account and join the
-[BCHN project on Crowdin](https://crowdin.com/project/bitcoin-cash-node).
+[BCHN project on Crowdin](https://crowdin.com/project/lambda-node).
 
 ### Step 2: Activate your language
 
 If you already see your language in the
-[BCHN project on Crowdin](https://crowdin.com/project/bitcoin-cash-node), you
+[BCHN project on Crowdin](https://crowdin.com/project/lambda-node), you
 can proceed with the next step.
 
 If not, then a maintainer first needs to turn on your language in the Crowdin
@@ -27,8 +27,8 @@ but at the moment they are not maintained.
 
 ### Step 3: Translate strings
 
-On [Crowdin](https://crowdin.com/project/bitcoin-cash-node), click on your
-language and then on `bitcoin_en.ts` to begin translating. Select a source
+On [Crowdin](https://crowdin.com/project/lambda-node), click on your
+language and then on `lambda_en.ts` to begin translating. Select a source
 string you want to translate and enter your translation.
 
 At the bottom of the screen, you will find helpful automatic suggestions. Click
@@ -36,7 +36,7 @@ on a suggestion to use it, and adapt it as needed. The suggestions consist of
 translation memory and machine translations. Translation memory is previous
 translations of similar source strings, which includes other translations within
 BCHN,
-[imported translations from Bitcoin Core](https://crowdin.com/project/bchn-copy-of-bitcoin-core),
+[imported translations from Lambda Core](https://crowdin.com/project/bchn-copy-of-lambda-core),
 and other translations from other software projects on Crowdin. Machine
 translations are computer-generated suggestions.
 
@@ -51,7 +51,7 @@ in other sentences in the same language.
 For quality assurance purposes, every proposed translation must be verified by a
 proofreader before it can be included in the BCHN software. To do so, you first
 need to obtain the proofreader permission for your language. Contact us if you
-are a member of the Bitcoin Cash community we can trust and you want to be a
+are a member of the Lambda community we can trust and you want to be a
 proofreader for a particular language.
 
 As a proofreader, you can click the checkmark to mark a translation as verified.
@@ -67,11 +67,11 @@ moment.
 
 We use automated scripts to help extract translations in both Qt, and non-Qt
 source files. It is rarely necessary to manually edit the files in
-`src/qt/locale/`. The translation files adhere to the format `bitcoin_xx_YY.ts`
-or `bitcoin_xx.ts`.
+`src/qt/locale/`. The translation files adhere to the format `lambda_xx_YY.ts`
+or `lambda_xx.ts`.
 
-`src/qt/locale/bitcoin_en.ts` is used as the source for all other translations.
-To regenerate the `bitcoin_en.ts` file, run the following commands:
+`src/qt/locale/lambda_en.ts` is used as the source for all other translations.
+To regenerate the `lambda_en.ts` file, run the following commands:
 
 ```sh
 cd <build-dir>
@@ -82,13 +82,13 @@ Create a Merge Request to update the regenerated files in our Git repository.
 You can use the following commands to create the commit:
 
 ```sh
-git add src/qt/bitcoinstrings.cpp src/qt/locale/bitcoin_en.ts
+git add src/qt/lambdastrings.cpp src/qt/locale/lambda_en.ts
 git commit
 ```
 
 On Crowdin, go to
-[*Settings*, *Files*](https://crowdin.com/project/bitcoin-cash-node/settings#files),
-click *Update*, and upload the new version of `bitcoin_en.ts` you just
+[*Settings*, *Files*](https://crowdin.com/project/lambda-node/settings#files),
+click *Update*, and upload the new version of `lambda_en.ts` you just
 generated. Translators can now begin translating new/modified source strings.
 
 #### Notes
@@ -96,8 +96,8 @@ generated. Translators can now begin translating new/modified source strings.
 * A custom script is used to extract strings from the non-Qt parts. This script
   makes use of `gettext`, so make sure that utility is installed (i.e.,
   `apt-get install gettext` on Ubuntu/Debian). Once this has been updated,
-  `lupdate` (included in the Qt SDK) is used to update `bitcoin_en.ts`.
-* `contrib/bitcoin-qt.pro` takes care of generating `.qm` (binary compiled)
+  `lupdate` (included in the Qt SDK) is used to update `lambda_en.ts`.
+* `contrib/lambda-qt.pro` takes care of generating `.qm` (binary compiled)
   files from `.ts` (source files) files. It’s mostly automated, and you
   shouldn’t need to worry about it.
 * For general MRs, you shouldn’t include any updates to the translation source
@@ -109,7 +109,7 @@ generated. Translators can now begin translating new/modified source strings.
 When new plurals are added to the source file, it’s important to do the
 following steps:
 
-1. Open `bitcoin_en.ts` in Qt Linguist (included in the Qt SDK).
+1. Open `lambda_en.ts` in Qt Linguist (included in the Qt SDK).
 2. Search for `%n`, which will take you to the parts in the translation that
    use plurals.
 3. Look for empty `English Translation (Singular)` and
@@ -124,7 +124,7 @@ following steps:
 ### Importing verified translations from Crowdin into Git
 
 On Crowdin, go to
-[*Settings*, *Translations*](https://crowdin.com/project/bitcoin-cash-node/settings#translations),
+[*Settings*, *Translations*](https://crowdin.com/project/lambda-node/settings#translations),
 and click *Build & Download*. Replace the files in the `src/qt/locale/`
 directory with the files you just downloaded from Crowdin (some may need to be
 renamed). Commit the changes and submit them as a Merge Request.
@@ -132,36 +132,36 @@ renamed). Commit the changes and submit them as a Merge Request.
 Since *Export only approved translations* is enabled in the Crowdin project
 settings, any unverified translations won’t be included in your download.
 
-### Updating Bitcoin Core translation memory in Crowdin
+### Updating Lambda Core translation memory in Crowdin
 
 In order to provide translators with helpful automatic suggestions based on
-previous translation work in Bitcoin Core, BCHN maintains a copy of Bitcoin
+previous translation work in Lambda Core, BCHN maintains a copy of Lambda
 Core’s translations in a separate Crowdin project:
 
-  <https://crowdin.com/project/bchn-copy-of-bitcoin-core>
+  <https://crowdin.com/project/bchn-copy-of-lambda-core>
 
 To update these:
 
 1. Go to
-   [*Settings*, *Files*](https://crowdin.com/project/bchn-copy-of-bitcoin-core/settings#files),
-   and upload `src/qt/locale/bitcoin_en.ts` from the
-   [Bitcoin Core Git repository](https://github.com/bitcoin/bitcoin).
+   [*Settings*, *Files*](https://crowdin.com/project/bchn-copy-of-lambda-core/settings#files),
+   and upload `src/qt/locale/lambda_en.ts` from the
+   [Lambda Core Git repository](https://github.com/lambda/lambda).
 2. Go to
-   [*Settings*, *Translations*](https://crowdin.com/project/bchn-copy-of-bitcoin-core/settings#translations),
-   and upload the other `src/qt/locale/bitcoin_*.ts` files.
+   [*Settings*, *Translations*](https://crowdin.com/project/bchn-copy-of-lambda-core/settings#translations),
+   and upload the other `src/qt/locale/lambda_*.ts` files.
 3. Go to
-   [*Settings*, *General*](https://crowdin.com/project/bchn-copy-of-bitcoin-core/settings#general)
-   and change the version number to the last Bitcoin Core release.
+   [*Settings*, *General*](https://crowdin.com/project/bchn-copy-of-lambda-core/settings#general)
+   and change the version number to the last Lambda Core release.
 
-### Registering languages in Bitcoin-Qt
+### Registering languages in Lambda-Qt
 
 To create a new language template, you will need to edit the languages manifest
-file `src/qt/bitcoin_locale.qrc` and add a new entry. Below is an example of the
+file `src/qt/lambda_locale.qrc` and add a new entry. Below is an example of the
 English language entry.
 
 ```xml
 <qresource prefix="/translations">
-    <file alias="en">locale/bitcoin_en.qm</file>
+    <file alias="en">locale/lambda_en.qm</file>
     ...
 </qresource>
 ```

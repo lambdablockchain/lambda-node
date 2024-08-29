@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# Copyright (c) 2014-2019 The Bitcoin Core developers
-# Copyright (c) 2020-2021 The Bitcoin developers
+# Copyright (c) 2014-2019 The Lambda Core developers
+# Copyright (c) 2020-2021 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test the rawtranscation RPCs.
@@ -25,7 +25,7 @@ from test_framework.messages import (
     ToHex,
 )
 from test_framework.script import CScript
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.txtools import pad_raw_tx
 from test_framework.util import (
     assert_equal,
@@ -53,7 +53,7 @@ class multidict(dict):
 
 
 # Create one-input, one-output, no-fee transaction:
-class RawTransactionsTest(BitcoinTestFramework):
+class RawTransactionsTest(LambdaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 3
@@ -142,7 +142,7 @@ class RawTransactionsTest(BitcoinTestFramework):
                                 self.nodes[0].createrawtransaction, [], {'data': '9'})
         assert_raises_rpc_error(-8, "Data must be hexadecimal string",
                                 self.nodes[0].createrawtransaction, [], {'data': ''})
-        assert_raises_rpc_error(-5, "Invalid Bitcoin Cash address",
+        assert_raises_rpc_error(-5, "Invalid Lambda address",
                                 self.nodes[0].createrawtransaction, [], {'foo': 0})
         assert_raises_rpc_error(-3, "Invalid amount",
                                 self.nodes[0].createrawtransaction, [], {address: 'foo'})

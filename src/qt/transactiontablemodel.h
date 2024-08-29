@@ -1,10 +1,10 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2016 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #pragma once
 
-#include <qt/bitcoinunits.h>
+#include <qt/lambdaunits.h>
 
 #include <QAbstractTableModel>
 #include <QStringList>
@@ -110,8 +110,8 @@ private:
     QString formatTxToAddress(const TransactionRecord *wtx, bool tooltip) const;
     QString formatTxAmount(const TransactionRecord *wtx,
                            bool showUnconfirmed = true,
-                           BitcoinUnits::SeparatorStyle separators =
-                               BitcoinUnits::separatorStandard) const;
+                           LambdaUnits::SeparatorStyle separators =
+                               LambdaUnits::separatorStandard) const;
     QString formatTooltip(const TransactionRecord *rec) const;
     QVariant txStatusDecoration(const TransactionRecord *wtx) const;
     QVariant txWatchonlyDecoration(const TransactionRecord *wtx) const;

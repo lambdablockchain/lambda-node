@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-# Copyright (c) 2014-2019 The Bitcoin Core developers
-# Copyright (c) 2021 The Bitcoin developers
+# Copyright (c) 2014-2019 The Lambda Core developers
+# Copyright (c) 2021 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 from decimal import Decimal
 
 from test_framework.messages import CTransaction, FromHex
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import (
     assert_equal,
     assert_fee_amount,
@@ -27,7 +27,7 @@ def get_unspent(listunspent, amount):
         'Could not find unspent with amount={}'.format(amount))
 
 
-class RawTransactionsTest(BitcoinTestFramework):
+class RawTransactionsTest(LambdaTestFramework):
     def set_test_params(self):
         self.num_nodes = 4
         self.setup_clean_chain = True
@@ -260,7 +260,7 @@ class RawTransactionsTest(BitcoinTestFramework):
         assert_equal(utx['txid'], dec_tx['vin'][0]['txid'])
 
         assert_raises_rpc_error(
-            -5, "changeAddress must be a valid Bitcoin Cash address",
+            -5, "changeAddress must be a valid Lambda address",
             self.nodes[2].fundrawtransaction, rawTx, {'changeAddress': 'foobar'})
 
         #

@@ -1,5 +1,5 @@
-// Copyright (c) 2011-2019 The Bitcoin Core developers
-// Copyright (c) 2020-2021 The Bitcoin developers
+// Copyright (c) 2011-2019 The Lambda Core developers
+// Copyright (c) 2020-2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -56,21 +56,21 @@ class ClickableProgressBar;
 } // namespace GUIUtil
 
 /**
- * Bitcoin GUI main class. This class represents the main window of the Bitcoin
+ * Lambda GUI main class. This class represents the main window of the Lambda
  * UI. It communicates with both the client and wallet models to give the user
  * an up-to-date view of the current core state.
  */
-class BitcoinGUI : public QMainWindow {
+class LambdaGUI : public QMainWindow {
     Q_OBJECT
 
 public:
     static const std::string DEFAULT_UIPLATFORM;
 
-    explicit BitcoinGUI(interfaces::Node &node, const Config *,
+    explicit LambdaGUI(interfaces::Node &node, const Config *,
                         const PlatformStyle *platformStyle,
                         const NetworkStyle *networkStyle,
                         QWidget *parent = nullptr);
-    ~BitcoinGUI();
+    ~LambdaGUI();
 
     /**
      * Set the client model.

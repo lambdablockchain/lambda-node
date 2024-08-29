@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
-# Copyright (c) 2020 The Bitcoin Cash Node developers
+# Copyright (c) 2020 The Lambda Node developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Additional tests of ancestor/descendant limit & counting scenarios.
-Refers to BCHN GitLab https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node/-/issues/225
+Refers to BCHN GitLab https://github.com/lambdablockchain/lambda-node/-/issues/225
 and scenarios raised for investigation by TG @readdotcash in
-https://bitcoincashresearch.org/t/specific-needs-for-increasing-or-removing-chained-tx-limit/240"""
+https://lambdaresearch.org/t/specific-needs-for-increasing-or-removing-chained-tx-limit/240"""
 
 from decimal import Decimal
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import (
     assert_equal,
     satoshi_round,
 )
 
 
-class MempoolPackagesAdditionalTest(BitcoinTestFramework):
+class MempoolPackagesAdditionalTest(LambdaTestFramework):
 
     def set_test_params(self):
         self.num_nodes = 2

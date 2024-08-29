@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 The Bitcoin developers
+# Copyright (c) 2021 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """
@@ -47,7 +47,7 @@ from test_framework.script import (
     SIGHASH_FORKID,
     SignatureHashForkId,
 )
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import assert_equal
 
 # Overflow failure
@@ -61,14 +61,14 @@ IMPOSSIBLE_ENCODING_ERROR = 'mandatory-script-verify-flag-failed (The requested 
 INVALID_STACK_OPERATION = 'mandatory-script-verify-flag-failed (Operation not valid with the current stack size)'
 
 
-class Int64CScriptNum(BitcoinTestFramework):
+class Int64CScriptNum(LambdaTestFramework):
 
     def set_test_params(self):
         self.num_nodes = 1
         self.block_heights = {}
         self.extra_args = [
             # Node0 has bigint64 activated (activates at upgrade8)
-            ["-acceptnonstdtxn=1", "-expire=0"],
+            ["-acceptnonstdtxn=0", "-expire=0"],
         ]
 
     def bootstrap_p2p(self, *, num_connections=1):
@@ -513,7 +513,7 @@ class Int64CScriptNum(BitcoinTestFramework):
         # 2. Restart the node  with bigger script ints disabled.
         #    We specify -reindex-chainstate=1 in order to have it re-evaluate all txns, and reject what it doesn't
         #    understand.  It should roll-back the latest block since now that block is invalid.
-        self.restart_node(0, ["-acceptnonstdtxn=1", "-upgrade8activationtime=9999999999", "-expire=0",
+        self.restart_node(0, ["-acceptnonstdtxn=0", "-upgrade8activationtime=9999999999", "-expire=0",
                               "-reindex-chainstate=1"])
         assert_equal(node.getbestblockhash(), prevtiphash)
 

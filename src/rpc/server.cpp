@@ -1,6 +1,6 @@
 // Copyright (c) 2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2018 The Bitcoin Core developers
-// Copyright (c) 2018-2020 The Bitcoin developers
+// Copyright (c) 2009-2018 The Lambda Core developers
+// Copyright (c) 2018-2020 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -325,7 +325,7 @@ static UniValue stop(const Config &config, const JSONRPCRequest &jsonRequest) {
     if (jsonRequest.fHelp || jsonRequest.params.size() > 1) {
         throw std::runtime_error(RPCHelpMan{
             "stop",
-            "\nStop Bitcoin server.",
+            "\nStop Lambda server.",
             {},
             RPCResults{},
             RPCExamples{""},
@@ -338,7 +338,7 @@ static UniValue stop(const Config &config, const JSONRPCRequest &jsonRequest) {
     if (jsonRequest.params[0].isNum()) {
         MilliSleep(jsonRequest.params[0].get_int());
     }
-    return "Bitcoin server stopping";
+    return "Lambda server stopping";
 }
 
 static UniValue uptime(const Config &config,
@@ -603,9 +603,9 @@ std::vector<std::string> CRPCTable::listCommands() const {
 std::string HelpExampleCli(const std::string &methodname,
                            const std::string &args) {
     if (args.empty()) {
-        return "> bitcoin-cli " + methodname + "\n";
+        return "> lambda-cli " + methodname + "\n";
     } else {
-        return "> bitcoin-cli " + methodname + " " + args + "\n";
+        return "> lambda-cli " + methodname + " " + args + "\n";
     }
 }
 

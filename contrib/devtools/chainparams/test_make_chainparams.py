@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2019 The Bitcoin developers
+# Copyright (c) 2019 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -153,7 +153,7 @@ class GenerateChainParamsTests(unittest.TestCase):
         CheckMockFailure(
             self, args, "expected was 'getblockheader 0000000000000000003ef673ae12bc6017481830d37b9c52ce1e79c080e812b8'")
 
-    def test_bitcoin_cli_failures_testnet(self):
+    def test_lambda_cli_failures_testnet(self):
         for chain in ['main', 'test']:
             expectedBlock = 133990
             if chain == 'test':

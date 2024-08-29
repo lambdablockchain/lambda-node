@@ -4,7 +4,7 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Big number routines.
 
-This file is copied from python-bitcoinlib.
+This file is copied from python-lambdalib.
 """
 
 import struct
@@ -51,7 +51,7 @@ def bn2mpi(v):
     return s + ext + v_bin
 
 
-# bitcoin-specific little endian format, with implicit size
+# lambda-specific little endian format, with implicit size
 
 
 def mpi2vch(s):

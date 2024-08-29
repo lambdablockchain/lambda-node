@@ -1,5 +1,5 @@
-// Copyright (c) 2011-2014 The Bitcoin Core developers
-// Copyright (c) 2017-2021 The Bitcoin developers
+// Copyright (c) 2011-2014 The Lambda Core developers
+// Copyright (c) 2017-2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -24,11 +24,11 @@
   - All upper-case letters except for 'I' and 'O'
   - All lower-case letters except for 'l'
 */
-BitcoinAddressEntryValidator::BitcoinAddressEntryValidator(
+LambdaAddressEntryValidator::LambdaAddressEntryValidator(
     const std::string &cashaddrprefixIn, QObject *parent)
     : QValidator(parent), cashaddrprefix(cashaddrprefixIn) {}
 
-QValidator::State BitcoinAddressEntryValidator::validate(QString &input, [[maybe_unused]] int &pos) const {
+QValidator::State LambdaAddressEntryValidator::validate(QString &input, [[maybe_unused]] int &pos) const {
 
     // Empty address is "intermediate" input
     if (input.isEmpty()) {
@@ -79,10 +79,10 @@ QValidator::State BitcoinAddressEntryValidator::validate(QString &input, [[maybe
     return QValidator::Acceptable;
 }
 
-BitcoinAddressCheckValidator::BitcoinAddressCheckValidator(QWidget *parent)
+LambdaAddressCheckValidator::LambdaAddressCheckValidator(QWidget *parent)
     : QValidator(parent) {}
 
-QValidator::State BitcoinAddressCheckValidator::validate(QString &input, [[maybe_unused]] int &pos) const {
+QValidator::State LambdaAddressCheckValidator::validate(QString &input, [[maybe_unused]] int &pos) const {
     // If CashAddr address format is enabled and the address is a valid legacy address, just return Intermediate state.
     // fixup() handles legacy address conversion later.
     if (GetConfig().UseCashAddrEncoding()) {
@@ -103,7 +103,7 @@ QValidator::State BitcoinAddressCheckValidator::validate(QString &input, [[maybe
 }
 
 
-void BitcoinAddressCheckValidator::fixup(QString &input) const /*override*/ {
+void LambdaAddressCheckValidator::fixup(QString &input) const /*override*/ {
 
     // If CashAddr address format is enabled, check if a legacy address has been given
     bool isLegacy = true;
@@ -134,7 +134,7 @@ void BitcoinAddressCheckValidator::fixup(QString &input) const /*override*/ {
     }
 }
 
-bool BitcoinAddressCheckValidator::GetLegacyAddressUseAuth(const CTxDestination &destination) const {
+bool LambdaAddressCheckValidator::GetLegacyAddressUseAuth(const CTxDestination &destination) const {
 #ifdef ENABLE_WALLET
     QSettings settings;
     LegacyAddressType addressType = LegacyAddressType::P2PKH;
@@ -163,7 +163,7 @@ bool BitcoinAddressCheckValidator::GetLegacyAddressUseAuth(const CTxDestination 
 #endif //ENABLE_WALLET
 }
 
-bool BitcoinAddressCheckValidator::GetLegacyAddressConversionAuth(const QString &original, const QString &normalized) const {
+bool LambdaAddressCheckValidator::GetLegacyAddressConversionAuth(const QString &original, const QString &normalized) const {
 #ifdef ENABLE_WALLET
     LegacyAddressConvertDialog dlg(parentWidget());
     dlg.SetAddresses(original, normalized);
@@ -174,6 +174,6 @@ bool BitcoinAddressCheckValidator::GetLegacyAddressConversionAuth(const QString 
 #endif //ENABLE_WALLET
 }
 
-QWidget* BitcoinAddressCheckValidator::parentWidget() const {
+QWidget* LambdaAddressCheckValidator::parentWidget() const {
     return qobject_cast<QWidget *>(parent());
 }

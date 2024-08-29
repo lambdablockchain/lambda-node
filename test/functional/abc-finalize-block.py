@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The Bitcoin developers
+# Copyright (c) 2018 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test the finalizeblock RPC calls."""
 
 import time
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import (
     assert_equal,
     assert_raises_rpc_error,
@@ -19,7 +19,7 @@ RPC_FORK_PRIOR_FINALIZED_ERROR = 'bad-fork-prior-finalized'
 RPC_BLOCK_NOT_FOUND_ERROR = 'Block not found'
 
 
-class FinalizeBlockTest(BitcoinTestFramework):
+class FinalizeBlockTest(LambdaTestFramework):
     def set_test_params(self):
         self.num_nodes = 3
         self.extra_args = [["-finalizeheaders=0", "-finalizationdelay=0", "-whitelist=noban@127.0.0.1"],

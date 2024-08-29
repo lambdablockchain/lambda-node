@@ -1,17 +1,17 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
-// Copyright (c) 2021 The Bitcoin developers
+// Copyright (c) 2011-2016 The Lambda Core developers
+// Copyright (c) 2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
+#include <config/lambda-config.h>
 #endif
 
 #include <qt/addressbookpage.h>
 #include <qt/forms/ui_addressbookpage.h>
 
 #include <qt/addresstablemodel.h>
-#include <qt/bitcoingui.h>
+#include <qt/lambdagui.h>
 #include <qt/csvmodelwriter.h>
 #include <qt/editaddressdialog.h>
 #include <qt/guiutil.h>
@@ -107,7 +107,7 @@ AddressBookPage::AddressBookPage(const PlatformStyle *platformStyle, Mode _mode,
     switch (tab) {
         case SendingTab:
             ui->labelExplanation->setText(
-                tr("These are your Bitcoin Cash addresses for sending payments. "
+                tr("These are your Lambda addresses for sending payments. "
                    "Always check the amount and the receiving address before "
                    "sending coins."));
             ui->deleteAddress->setVisible(true);
@@ -115,7 +115,7 @@ AddressBookPage::AddressBookPage(const PlatformStyle *platformStyle, Mode _mode,
             break;
         case ReceivingTab:
             ui->labelExplanation->setText(
-                tr("These are your Bitcoin Cash addresses for receiving payments. "
+                tr("These are your Lambda addresses for receiving payments. "
                    "It is recommended to use a new receiving address for each "
                    "transaction."));
             ui->deleteAddress->setVisible(false);

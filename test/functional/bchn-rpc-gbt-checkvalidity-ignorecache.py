@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 The Bitcoin Cash Node developers
+# Copyright (c) 2021 The Lambda Node developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -12,11 +12,11 @@ bchn-rpc-gbt-checkvalidity-ignorecache
 import contextlib
 import threading
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from decimal import Decimal
 
 
-class GBTCheckValidityAndIgnoreCacheTest(BitcoinTestFramework):
+class GBTCheckValidityAndIgnoreCacheTest(LambdaTestFramework):
     def skip_test_if_missing_module(self):
         self.skip_if_no_wallet()
 

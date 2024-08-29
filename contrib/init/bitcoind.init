@@ -1,36 +1,36 @@
 #!/usr/bin/env bash
 #
-#  bitcoind The Bitcoin Cash Node server.
+#  lambdad The Lambda Node server.
 #
 #
 # chkconfig: 345 80 20
-# description: bitcoind
-# processname: bitcoind
+# description: lambdad
+# processname: lambdad
 #
 
 # Source function library.
 . /etc/init.d/functions
 
-# you can override defaults in /etc/sysconfig/bitcoind, see below
-if [ -f /etc/sysconfig/bitcoind ]; then
-        . /etc/sysconfig/bitcoind
+# you can override defaults in /etc/sysconfig/lambdad, see below
+if [ -f /etc/sysconfig/lambdad ]; then
+        . /etc/sysconfig/lambdad
 fi
 
 RETVAL=0
 
-prog=bitcoind
-# you can override the lockfile via BITCOIND_LOCKFILE in /etc/sysconfig/bitcoind
-lockfile=${BITCOIND_LOCKFILE-/var/lock/subsys/bitcoind}
+prog=lambdad
+# you can override the lockfile via BITCOIND_LOCKFILE in /etc/sysconfig/lambdad
+lockfile=${BITCOIND_LOCKFILE-/var/lock/subsys/lambdad}
 
-# bitcoind defaults to /usr/bin/bitcoind, override with BITCOIND_BIN
-bitcoind=${BITCOIND_BIN-/usr/bin/bitcoind}
+# lambdad defaults to /usr/bin/lambdad, override with BITCOIND_BIN
+lambdad=${BITCOIND_BIN-/usr/bin/lambdad}
 
-# bitcoind opts default to -disablewallet, override with BITCOIND_OPTS
-bitcoind_opts=${BITCOIND_OPTS--disablewallet}
+# lambdad opts default to -disablewallet, override with BITCOIND_OPTS
+lambdad_opts=${BITCOIND_OPTS--disablewallet}
 
 start() {
     echo -n $"Starting $prog: "
-    daemon $DAEMONOPTS $bitcoind $bitcoind_opts
+    daemon $DAEMONOPTS $lambdad $lambdad_opts
     RETVAL=$?
     echo
     [ $RETVAL -eq 0 ] && touch $lockfile

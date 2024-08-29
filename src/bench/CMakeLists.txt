@@ -1,6 +1,6 @@
-# Copyright (c) 2018-2020 The Bitcoin developers
+# Copyright (c) 2018-2020 The Lambda developers
 
-project(bench_bitcoin)
+project(bench_lambda)
 
 add_custom_command(
   OUTPUT
@@ -18,13 +18,13 @@ add_custom_command(
     ${CMAKE_CURRENT_SOURCE_DIR}/data/convert-raw-files.py
 )
 
-add_executable(bench_bitcoin
+add_executable(bench_lambda
 	EXCLUDE_FROM_ALL
 	banman.cpp
 	addrman.cpp
 	base58.cpp
 	bench.cpp
-	bench_bitcoin.cpp
+	bench_lambda.cpp
 	block_assemble.cpp
 	cashaddr.cpp
 	ccoins_caching.cpp
@@ -59,12 +59,12 @@ add_executable(bench_bitcoin
 	../test/util.cpp
 )
 
-target_link_libraries(bench_bitcoin common bitcoinconsensus server)
+target_link_libraries(bench_lambda common lambdaconsensus server)
 
-if(BUILD_BITCOIN_WALLET)
-	target_sources(bench_bitcoin PRIVATE coin_selection.cpp keypool.cpp)
-	target_link_libraries(bench_bitcoin wallet)
+if(BUILD_LAMBDA_WALLET)
+	target_sources(bench_lambda PRIVATE coin_selection.cpp keypool.cpp)
+	target_link_libraries(bench_lambda wallet)
 endif()
 
-add_custom_target(bench-bitcoin COMMAND bench_bitcoin USES_TERMINAL)
-add_custom_target(bitcoin-bench DEPENDS bench_bitcoin)
+add_custom_target(bench-lambda COMMAND bench_lambda USES_TERMINAL)
+add_custom_target(lambda-bench DEPENDS bench_lambda)

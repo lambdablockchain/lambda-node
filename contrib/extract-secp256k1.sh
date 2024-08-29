@@ -42,7 +42,7 @@ popd
 git clone "file://${WORKDIR}" secp256k1
 
 pushd secp256k1
-git remote add github 'https://github.com/Bitcoin-ABC/secp256k1.git'
+git remote add github 'https://github.com/Lambda-ABC/secp256k1.git'
 git pull github master --rebase
 git gc --prune=now
 

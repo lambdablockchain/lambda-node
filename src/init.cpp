@@ -1,11 +1,11 @@
 // Copyright (c) 2009-2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2018 The Bitcoin Core developers
-// Copyright (c) 2020-2021 The Bitcoin developers
+// Copyright (c) 2009-2018 The Lambda Core developers
+// Copyright (c) 2020-2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
+#include <config/lambda-config.h>
 #endif
 
 #include <init.h>
@@ -112,11 +112,11 @@ static const char *const DEFAULT_ASMAP_FILENAME = "ip_asn.map";
 /**
  * The PID file facilities.
  */
-static const char *BITCOIN_PID_FILENAME = "bitcoind.pid";
+static const char *LAMBDA_PID_FILENAME = "lambdad.pid";
 
 static fs::path GetPidFile() {
     return AbsPathForConfigVal(
-        fs::path(gArgs.GetArg("-pid", BITCOIN_PID_FILENAME)));
+        fs::path(gArgs.GetArg("-pid", LAMBDA_PID_FILENAME)));
 }
 
 [[nodiscard]] static bool CreatePidFile() {
@@ -161,7 +161,7 @@ static fs::path GetPidFile() {
 /**
  * This is a minimally invasive approach to shutdown on LevelDB read errors from
  * the chainstate, while keeping user interface out of the common library, which
- * is shared between bitcoind, and bitcoin-qt and non-server tools.
+ * is shared between lambdad, and lambda-qt and non-server tools.
  */
 class CCoinsViewErrorCatcher final : public CCoinsViewBacked {
 public:
@@ -439,7 +439,7 @@ void SetupServerArgs() {
     gArgs.AddArg("-conf=<file>",
                  strprintf("Specify configuration file. Relative paths will be "
                            "prefixed by datadir location. (default: %s)",
-                           BITCOIN_CONF_FILENAME),
+                           LAMBDA_CONF_FILENAME),
                  ArgsManager::ALLOW_ANY, OptionsCategory::OPTIONS);
     gArgs.AddArg("-datadir=<dir>", "Specify data directory", ArgsManager::ALLOW_ANY,
                  OptionsCategory::OPTIONS);
@@ -564,7 +564,7 @@ void SetupServerArgs() {
     gArgs.AddArg("-pid=<file>",
                  strprintf("Specify pid file. Relative paths will be prefixed "
                            "by a net-specific datadir location. (default: %s)",
-                           BITCOIN_PID_FILENAME),
+                           LAMBDA_PID_FILENAME),
                  ArgsManager::ALLOW_ANY, OptionsCategory::OPTIONS);
     gArgs.AddArg(
         "-prune=<n>",
@@ -927,13 +927,13 @@ void SetupServerArgs() {
 
     gArgs.AddArg(
         "-axionactivationtime=<n>",
-        strprintf("Activation time of the November 2020 Bitcoin Cash Network Upgrade (<n> seconds since epoch, "
+        strprintf("Activation time of the November 2020 Lambda Network Upgrade (<n> seconds since epoch, "
                   "default: %d). This option only has an effect on regtest or scalenet.",
                   defaultChainParams->GetConsensus().axionActivationTime),
         ArgsManager::ALLOW_ANY | ArgsManager::DEBUG_ONLY, OptionsCategory::DEBUG_TEST);
     gArgs.AddArg(
         "-upgrade9activationtime=<n>",
-        strprintf("Activation time of the tentative May 2023 Bitcoin Cash Network Upgrade (<n> seconds since epoch, "
+        strprintf("Activation time of the tentative May 2023 Lambda Network Upgrade (<n> seconds since epoch, "
                   "default: %d)",
                   defaultChainParams->GetConsensus().upgrade9ActivationTime),
         true, OptionsCategory::DEBUG_TEST);
@@ -1183,8 +1183,8 @@ void SetupServerArgs() {
 }
 
 std::string LicenseInfo() {
-    constexpr auto URL_SOURCE_CODE = "<https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node>";
-    constexpr auto URL_WEBSITE = "<https://bitcoincashnode.org>";
+    constexpr auto URL_SOURCE_CODE = "<https://github.com/lambdablockchain/lambda-node>";
+    constexpr auto URL_WEBSITE = "<https://lambdanode.org>";
 
     return CopyrightHolders(strprintf(_("Copyright (C) %i-%i"), 2009, COPYRIGHT_YEAR) + " ") +
            "\n\n" +
@@ -1380,7 +1380,7 @@ static void ThreadImport(const Config &config,
 }
 
 /** Sanity checks
- *  Ensure that Bitcoin is running in a usable environment with all
+ *  Ensure that Lambda is running in a usable environment with all
  *  necessary library support.
  */
 static bool InitSanityCheck() {
@@ -1981,10 +1981,10 @@ bool AppInitParameterInteraction(Config &config) {
         nLocalServices = ServiceFlags(nLocalServices | NODE_BLOOM);
     }
 
-    // Signal Bitcoin Cash support.
+    // Signal Lambda support.
     // TODO: remove some time after the hardfork when no longer needed
     // to differentiate the network nodes.
-    nLocalServices = ServiceFlags(nLocalServices | NODE_BITCOIN_CASH);
+    nLocalServices = ServiceFlags(nLocalServices | NODE_LAMBDA_CASH);
 
     // option to use extversion
     // we do not use extversion by default
@@ -2003,7 +2003,7 @@ bool AppInitParameterInteraction(Config &config) {
 }
 
 static bool LockDataDirectory(bool probeOnly) {
-    // Make sure only a single Bitcoin process is using the data directory.
+    // Make sure only a single Lambda process is using the data directory.
     fs::path datadir = GetDataDir();
     if (!DirIsWritable(datadir)) {
         return InitError(strprintf(
@@ -2088,7 +2088,7 @@ bool AppInitMain(Config &config, RPCServer &rpcServer,
 
     // Only log conf file usage message if conf file actually exists.
     fs::path config_file_path =
-        GetConfigFile(gArgs.GetArg("-conf", BITCOIN_CONF_FILENAME));
+        GetConfigFile(gArgs.GetArg("-conf", LAMBDA_CONF_FILENAME));
     if (fs::exists(config_file_path)) {
         LogPrintf("Config file: %s\n", config_file_path.string());
     } else if (gArgs.IsArgSet("-conf")) {
@@ -2114,10 +2114,10 @@ bool AppInitMain(Config &config, RPCServer &rpcServer,
         !fs::path(gArgs.GetArg("-datadir", "")).is_absolute()) {
         LogPrintf("Warning: relative datadir option '%s' specified, which will "
                   "be interpreted relative to the current working directory "
-                  "'%s'. This is fragile, because if bitcoin is started in the "
+                  "'%s'. This is fragile, because if lambda is started in the "
                   "future from a different location, it will be unable to "
                   "locate the current data files. There could also be data "
-                  "loss if bitcoin is started while in a temporary "
+                  "loss if lambda is started while in a temporary "
                   "directory.\n",
                   gArgs.GetArg("-datadir", ""), fs::current_path().string());
     }

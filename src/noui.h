@@ -1,4 +1,4 @@
-// Copyright (c) 2013-2014 The Bitcoin Core developers
+// Copyright (c) 2013-2014 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -16,10 +16,10 @@ bool noui_ThreadSafeQuestion(
 /** Non-GUI handler, which only logs a message. */
 void noui_InitMessage(const std::string &message);
 
-/** Connect all bitcoind signal handlers */
+/** Connect all lambdad signal handlers */
 void noui_connect();
 
-/** Suppress all bitcoind signal handlers. Used to suppress output during test
+/** Suppress all lambdad signal handlers. Used to suppress output during test
  * runs that produce expected errors */
 void noui_suppress();
 

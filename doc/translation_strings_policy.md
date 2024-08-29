@@ -1,7 +1,7 @@
 # Translation Strings Policy
 
 This document provides guidelines for internationalization of the
-Bitcoin Cash Node software.
+Lambda Node software.
 
 ## How to translate
 
@@ -83,10 +83,10 @@ This adds `<numerusform>`s to the respective `.ts` file, which can be translated
 separately depending on the language. In English, this is simply:
 
     <message numerus="yes">
-        <source>%n active connection(s) to Bitcoin network</source>
+        <source>%n active connection(s) to Lambda network</source>
         <translation>
-            <numerusform>%n active connection to Bitcoin network</numerusform>
-            <numerusform>%n active connections to Bitcoin network</numerusform>
+            <numerusform>%n active connection to Lambda network</numerusform>
+            <numerusform>%n active connections to Lambda network</numerusform>
         </translation>
     </message>
 
@@ -108,4 +108,4 @@ During a string freeze (often before a major release), no translation strings ar
 to be added, modified or removed.
 
 This can be checked by executing `make translate` in the `src` directory, then
-verifying that `bitcoin_en.ts` remains unchanged.
+verifying that `lambda_en.ts` remains unchanged.

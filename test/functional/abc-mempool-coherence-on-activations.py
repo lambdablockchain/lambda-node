@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# Copyright (c) 2015-2016 The Bitcoin Core developers
-# Copyright (c) 2017-2020 The Bitcoin developers
+# Copyright (c) 2015-2016 The Lambda Core developers
+# Copyright (c) 2017-2020 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -43,7 +43,7 @@ from test_framework.script import (
     SIGHASH_FORKID,
     SignatureHashForkId,
 )
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import assert_equal, assert_raises_rpc_error
 
 
@@ -119,7 +119,7 @@ class PreviousSpendableOutput(object):
         self.n = n
 
 
-class MempoolCoherenceOnActivationsTest(BitcoinTestFramework):
+class MempoolCoherenceOnActivationsTest(LambdaTestFramework):
 
     def set_test_params(self):
         self.num_nodes = 1
@@ -128,7 +128,7 @@ class MempoolCoherenceOnActivationsTest(BitcoinTestFramework):
         self.tip = None
         self.blocks = {}
         self.extra_args = [['-whitelist=127.0.0.1',
-                            '-acceptnonstdtxn=1']]
+                            '-acceptnonstdtxn=0']]
 
     def next_block(self, number):
         if self.tip is None:

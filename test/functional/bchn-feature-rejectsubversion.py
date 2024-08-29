@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-# Copyright (c) 2020-2021 The Bitcoin Cash Node developers
+# Copyright (c) 2020-2021 The Lambda Node developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """ Test for the -rejectsubversion CLI arg """
 
 from test_framework.messages import MY_SUBVERSION
 from test_framework.p2p import P2PInterface
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import wait_until
 
 
-class RejectSubVersionTest(BitcoinTestFramework):
+class RejectSubVersionTest(LambdaTestFramework):
     def set_test_params(self):
         self.num_nodes = 3
         reject_subver = MY_SUBVERSION.decode('utf8').split('/')[1].split(':')[0]  # "python-p2p-tester"

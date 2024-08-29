@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2016 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -36,7 +36,7 @@ class QWidget;
 QT_END_NAMESPACE
 
 /**
- * Utility functions used by the Bitcoin Qt UI.
+ * Utility functions used by the Lambda Qt UI.
  */
 namespace GUIUtil {
 
@@ -65,14 +65,14 @@ QString convertToCashAddr(const CChainParams &params, const QString &addr);
 // Set up widget for address
 void setupAddressWidget(QValidatedLineEdit *widget, QWidget *parent);
 
-// Parse "bitcoincash:" URI into recipient object, return true on successful
+// Parse "lambda:" URI into recipient object, return true on successful
 // parsing
-bool parseBitcoinURI(const QString &scheme, const QUrl &uri,
+bool parseLambdaURI(const QString &scheme, const QUrl &uri,
                      SendCoinsRecipient *out);
-bool parseBitcoinURI(const QString &scheme, QString uri,
+bool parseLambdaURI(const QString &scheme, QString uri,
                      SendCoinsRecipient *out);
-QString formatBitcoinURI(const SendCoinsRecipient &info);
-QString formatBitcoinURI(const CChainParams &params,
+QString formatLambdaURI(const SendCoinsRecipient &info);
+QString formatLambdaURI(const CChainParams &params,
                          const SendCoinsRecipient &info);
 
 // Returns true if given address+amount meets "dust" definition
@@ -158,7 +158,7 @@ void bringToFront(QWidget *w);
 void openDebugLogfile();
 
 // Open the config file
-bool openBitcoinConf();
+bool openLambdaConf();
 
 // Split a QString using given separator, skipping the empty parts
 QStringList splitSkipEmptyParts(const QString &s, const QString &separator);

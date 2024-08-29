@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2015-2019 The Bitcoin Core developers
+# Copyright (c) 2015-2019 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test the ZMQ notification interface."""
@@ -7,7 +7,7 @@ import struct
 from io import BytesIO
 
 from test_framework.blocktools import create_raw_transaction
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.messages import CTransaction
 from test_framework.util import (
     assert_equal,
@@ -38,13 +38,13 @@ class ZMQSubscriber:
         return body
 
 
-class ZMQTest (BitcoinTestFramework):
+class ZMQTest (LambdaTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
 
     def skip_test_if_missing_module(self):
         self.skip_if_no_py3_zmq()
-        self.skip_if_no_bitcoind_zmq()
+        self.skip_if_no_lambdad_zmq()
         self.skip_if_no_wallet()
 
     def setup_nodes(self):

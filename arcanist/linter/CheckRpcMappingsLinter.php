@@ -37,7 +37,7 @@ final class CheckRpcMappingsLinter extends GlobalExternalLinter {
 
   public function getInstallInstructions() {
     return pht('The test/lint/check-rpc-mappings.py script is part of the '.
-               'bitcoin-abc project');
+               'lambda-abc project');
   }
 
   public function shouldExpectCommandErrors() {

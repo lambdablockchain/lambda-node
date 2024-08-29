@@ -1,6 +1,6 @@
 // Copyright (c) 2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2018 The Bitcoin Core developers
-// Copyright (c) 2020-2021 The Bitcoin developers
+// Copyright (c) 2009-2018 The Lambda Core developers
+// Copyright (c) 2020-2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -172,7 +172,7 @@ static UniValue getnewaddress(const Config &config,
     if (request.fHelp || request.params.size() > 2) {
         throw std::runtime_error(
             RPCHelpMan{"getnewaddress",
-                "\nReturns a new Bitcoin Cash address for receiving payments.\n"
+                "\nReturns a new Lambda address for receiving payments.\n"
                 "If 'label' is specified, it is added to the address book\n"
                 "so payments received with the address will be associated with 'label'.\n",
                 {
@@ -180,7 +180,7 @@ static UniValue getnewaddress(const Config &config,
                 }}
                 .ToString() +
             "\nResult:\n"
-            "\"address\"    (string) The new Bitcoin Cash address\n"
+            "\"address\"    (string) The new Lambda address\n"
             "\nExamples:\n" +
             HelpExampleRpc("getnewaddress", ""));
     }
@@ -244,7 +244,7 @@ static UniValue getrawchangeaddress(const Config &config,
     if (request.fHelp || request.params.size() > 1) {
         throw std::runtime_error(
             RPCHelpMan{"getrawchangeaddress",
-                "\nReturns a new Bitcoin Cash address for receiving change.\n"
+                "\nReturns a new Lambda address for receiving change.\n"
                 "This is for use with raw transactions, NOT normal use.\n",
                 {}}
                 .ToString() +
@@ -313,7 +313,7 @@ static UniValue setlabel(const Config &config, const JSONRPCRequest &request) {
             RPCHelpMan{"setlabel",
                 "\nSets the label associated with the given address.\n",
                 {
-                    {"address", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "The Bitcoin Cash address to be associated with a label."},
+                    {"address", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "The Lambda address to be associated with a label."},
                     {"label", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "The label to assign to the address."},
                 }}
                 .ToString() +
@@ -329,7 +329,7 @@ static UniValue setlabel(const Config &config, const JSONRPCRequest &request) {
         DecodeDestination(request.params[0].get_str(), config.GetChainParams());
     if (!IsValidDestination(dest)) {
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY,
-                           "Invalid Bitcoin Cash address");
+                           "Invalid Lambda address");
     }
 
     std::string old_label = pwallet->mapAddressBook[dest].name;
@@ -356,7 +356,7 @@ static CTransactionRef SendMoney(interfaces::Chain::Lock &locked_chain,
             "Error: Peer-to-peer functionality missing or disabled");
     }
 
-    // Parse Bitcoin Cash address
+    // Parse Lambda address
     CScript scriptPubKey = GetScriptForDestination(address);
 
     // Create and send the transaction
@@ -430,7 +430,7 @@ static UniValue sendtoaddress(const Config &config,
                 "\nSend an amount to a given address." +
                     HelpRequiringPassphrase(pwallet) + "\n",
                 {
-                    {"address", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "The Bitcoin Cash address to send to."},
+                    {"address", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "The Lambda address to send to."},
                     {"amount", RPCArg::Type::AMOUNT, /* opt */ false, /* default_val */ "", "The amount in " + CURRENCY_UNIT + " to send. eg 0.1"},
                     {"comment", RPCArg::Type::STR, /* opt */ true, /* default_val */ "", "A comment used to store what the transaction is for.\n"
             "                             This is not part of the transaction, just kept in your wallet."},
@@ -438,7 +438,7 @@ static UniValue sendtoaddress(const Config &config,
             "                             to which you're sending the transaction. This is not part of the\n"
             "                             transaction, just kept in your wallet."},
                     {"subtractfeefromamount", RPCArg::Type::BOOL, /* opt */ true, /* default_val */ "false", "The fee will be deducted from the amount being sent.\n"
-            "                             The recipient will receive less bitcoins than you enter in the amount field."},
+            "                             The recipient will receive less lambdas than you enter in the amount field."},
                     {"coinsel", RPCArg::Type::NUM, /* opt */ true, /* default_val */ "0",
                         "Which coin selection algorithm to use. A value of 1 will use a faster algorithm "
                         "suitable for stress tests or use with large wallets. "
@@ -548,7 +548,7 @@ static UniValue listaddressgroupings(const Config &config,
             "[\n"
             "  [\n"
             "    [\n"
-            "      \"address\",            (string) The Bitcoin Cash address\n"
+            "      \"address\",            (string) The Lambda address\n"
             "      amount,                 (numeric) The amount in " +
             CURRENCY_UNIT +
             "\n"
@@ -610,7 +610,7 @@ static UniValue signmessage(const Config &config,
                 "\nSign a message with the private key of an address" +
                     HelpRequiringPassphrase(pwallet) + "\n",
                 {
-                    {"address", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "The Bitcoin Cash address to use for the private key."},
+                    {"address", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "The Lambda address to use for the private key."},
                     {"message", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "The message to create a signature of."},
                 }}
                 .ToString() +
@@ -685,7 +685,7 @@ static UniValue getreceivedbyaddress(const Config &config,
             RPCHelpMan{"getreceivedbyaddress",
                 "\nReturns the total amount received by the given address in transactions with at least minconf confirmations.\n",
                 {
-                    {"address", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "The Bitcoin Cash address for transactions."},
+                    {"address", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "The Lambda address for transactions."},
                     {"minconf", RPCArg::Type::NUM, /* opt */ true, /* default_val */ "1", "Only include transactions confirmed at least this many times."},
                 }}
                 .ToString() +
@@ -719,12 +719,12 @@ static UniValue getreceivedbyaddress(const Config &config,
     auto locked_chain = pwallet->chain().lock();
     LOCK(pwallet->cs_wallet);
 
-    // Bitcoin Cash address
+    // Lambda address
     CTxDestination dest =
         DecodeDestination(request.params[0].get_str(), config.GetChainParams());
     if (!IsValidDestination(dest)) {
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY,
-                           "Invalid Bitcoin Cash address");
+                           "Invalid Lambda address");
     }
     CScript scriptPubKey = GetScriptForDestination(dest);
     if (!IsMine(*pwallet, scriptPubKey)) {
@@ -946,14 +946,14 @@ static UniValue sendmany(const Config &config, const JSONRPCRequest &request) {
                     {"dummy", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "Must be set to \"\" for backwards compatibility.", "\"\""},
                     {"amounts", RPCArg::Type::OBJ, /* opt */ false, /* default_val */ "", "A json object with addresses and amounts",
                         {
-                            {"address", RPCArg::Type::AMOUNT, /* opt */ false, /* default_val */ "", "The Bitcoin Cash address is the key, the numeric amount (can be string) in " + CURRENCY_UNIT + " is the value"},
+                            {"address", RPCArg::Type::AMOUNT, /* opt */ false, /* default_val */ "", "The Lambda address is the key, the numeric amount (can be string) in " + CURRENCY_UNIT + " is the value"},
                         },
                     },
                     {"minconf", RPCArg::Type::NUM, /* opt */ true, /* default_val */ "1", "Only use the balance confirmed at least this many times."},
                     {"comment", RPCArg::Type::STR, /* opt */ true, /* default_val */ "", "A comment"},
                     {"subtractfeefrom", RPCArg::Type::ARR, /* opt */ true, /* default_val */ "", "A json array with addresses.\n"
             "                           The fee will be equally deducted from the amount of each selected address.\n"
-            "                           Those recipients will receive less bitcoins than you enter in their corresponding amount field.\n"
+            "                           Those recipients will receive less lambdas than you enter in their corresponding amount field.\n"
             "                           If no addresses are specified here, the sender pays the fee.",
                         {
                             {"address", RPCArg::Type::STR, /* opt */ true, /* default_val */ "", "Subtract fee from this address"},
@@ -1050,7 +1050,7 @@ static UniValue sendmany(const Config &config, const JSONRPCRequest &request) {
         CTxDestination dest = DecodeDestination(entry.first, config.GetChainParams());
         if (!IsValidDestination(dest)) {
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY,
-                               std::string("Invalid Bitcoin Cash address: ") +
+                               std::string("Invalid Lambda address: ") +
                                    entry.first);
         }
 
@@ -1144,15 +1144,15 @@ static UniValue addmultisigaddress(const Config &config,
         const std::string msg =
             RPCHelpMan{"addmultisigaddress",
                 "\nAdd a nrequired-to-sign multisignature address to the wallet. Requires a new wallet backup.\n"
-                "Each key is a Bitcoin Cash address or hex-encoded public key.\n"
+                "Each key is a Lambda address or hex-encoded public key.\n"
                 "This functionality is only intended for use with non-watchonly addresses.\n"
                 "See `importaddress` for watchonly p2sh address support.\n"
                 "If 'label' is specified (DEPRECATED), assign address to that label.\n",
                 {
                     {"nrequired", RPCArg::Type::NUM, /* opt */ false, /* default_val */ "", "The number of required signatures out of the n keys or addresses."},
-                    {"keys", RPCArg::Type::ARR, /* opt */ false, /* default_val */ "", "A json array of Bitcoin Cash addresses or hex-encoded public keys",
+                    {"keys", RPCArg::Type::ARR, /* opt */ false, /* default_val */ "", "A json array of Lambda addresses or hex-encoded public keys",
                         {
-                            {"key", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "Bitcoin Cash address or hex-encoded public key"},
+                            {"key", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "Lambda address or hex-encoded public key"},
                         },
                         },
                     {"label", RPCArg::Type::STR, /* opt */ true, /* default_val */ "", "A label to assign the addresses to."},
@@ -1620,7 +1620,7 @@ UniValue listtransactions(const Config &config, const JSONRPCRequest &request) {
             "\nResult:\n"
             "[\n"
             "  {\n"
-            "    \"address\":\"address\",    (string) The Bitcoin Cash address of "
+            "    \"address\":\"address\",    (string) The Lambda address of "
             "the transaction.\n"
             "    \"category\":\"send|receive\", (string) The transaction "
             "category.\n"
@@ -1776,7 +1776,7 @@ static UniValue listsinceblock(const Config &config,
             "\nResult:\n"
             "{\n"
             "  \"transactions\": [\n"
-            "    \"address\":\"address\",    (string) The Bitcoin Cash address of "
+            "    \"address\":\"address\",    (string) The Lambda address of "
             "the transaction. Not present for move transactions (category = "
             "move).\n"
             "    \"category\":\"send|receive\",     (string) The transaction "
@@ -1989,7 +1989,7 @@ static UniValue gettransaction(const Config &config,
             "for unconfirmed transactions not in the mempool\n"
             "  \"details\" : [\n"
             "    {\n"
-            "      \"address\" : \"address\",          (string) The Bitcoin Cash "
+            "      \"address\" : \"address\",          (string) The Lambda "
             "address involved in the transaction\n"
             "      \"category\" : \"send|receive\",    (string) The category, "
             "either 'send' or 'receive'\n"
@@ -2233,7 +2233,7 @@ static UniValue walletpassphrase(const Config &config,
         throw std::runtime_error(
             RPCHelpMan{"walletpassphrase",
                 "\nStores the wallet decryption key in memory for 'timeout' seconds.\n"
-                "This is needed prior to performing transactions related to private keys such as sending bitcoins\n",
+                "This is needed prior to performing transactions related to private keys such as sending lambdas\n",
                 {
                     {"passphrase", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "The wallet passphrase"},
                     {"timeout", RPCArg::Type::NUM, /* opt */ false, /* default_val */ "", "The time to keep the decryption key in seconds; capped at 100000000 (~3 years)."},
@@ -2457,7 +2457,7 @@ static UniValue encryptwallet(const Config &config,
             "\nEncrypt your wallet\n" +
             HelpExampleCli("encryptwallet", "\"my pass phrase\"") +
             "\nNow set the passphrase to use the wallet, such as for signing "
-            "or sending bitcoin\n" +
+            "or sending lambda\n" +
             HelpExampleCli("walletpassphrase", "\"my pass phrase\"") +
             "\nNow we can do something like sign\n" +
             HelpExampleCli("signmessage", "\"address\" \"test message\"") +
@@ -2513,7 +2513,7 @@ static UniValue lockunspent(const Config &config,
                 "\nUpdates list of temporarily unspendable outputs.\n"
                 "Temporarily lock (unlock=false) or unlock (unlock=true) specified transaction outputs.\n"
                 "If no transaction outputs are specified when unlocking then all current locked transaction outputs are unlocked.\n"
-                "A locked transaction output will not be chosen by automatic coin selection, when spending bitcoins.\n"
+                "A locked transaction output will not be chosen by automatic coin selection, when spending lambdas.\n"
                 "Locks are stored in memory only. Nodes start with zero locked outputs, and the locked output list\n"
                 "is always cleared (by virtue of process exit) when a node stops or fails.\n"
                 "Also see the listunspent call\n",
@@ -2929,7 +2929,7 @@ static UniValue loadwallet(const Config &config,
         throw std::runtime_error(
             RPCHelpMan{"loadwallet",
                 "\nLoads a wallet from a wallet file or directory."
-                "\nNote that all wallet command-line options used when starting bitcoind will be"
+                "\nNote that all wallet command-line options used when starting lambdad will be"
                 "\napplied to the new wallet (eg -zapwallettxes, upgradewallet, rescan, etc).\n",
                 {
                     {"filename", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "The wallet directory or .dat file."},
@@ -3169,9 +3169,9 @@ static UniValue listunspent(const Config &config,
                 {
                     {"minconf", RPCArg::Type::NUM, /* opt */ true, /* default_val */ "1", "The minimum confirmations to filter"},
                     {"maxconf", RPCArg::Type::NUM, /* opt */ true, /* default_val */ "9999999", "The maximum confirmations to filter"},
-                    {"addresses", RPCArg::Type::ARR, /* opt */ true, /* default_val */ "", "A json array of Bitcoin Cash addresses to filter",
+                    {"addresses", RPCArg::Type::ARR, /* opt */ true, /* default_val */ "", "A json array of Lambda addresses to filter",
                         {
-                            {"address", RPCArg::Type::STR, /* opt */ true, /* default_val */ "", "Bitcoin Cash address"},
+                            {"address", RPCArg::Type::STR, /* opt */ true, /* default_val */ "", "Lambda address"},
                         },
                     },
                     {"include_unsafe", RPCArg::Type::BOOL, /* opt */ true, /* default_val */ "true", "Include outputs that are not safe to spend\n"
@@ -3191,7 +3191,7 @@ static UniValue listunspent(const Config &config,
             "  {\n"
             "    \"txid\" : \"txid\",          (string) the transaction id\n"
             "    \"vout\" : n,               (numeric) the vout value\n"
-            "    \"address\" : \"address\",    (string) the Bitcoin Cash address\n"
+            "    \"address\" : \"address\",    (string) the Lambda address\n"
             "    \"label\" : \"label\",        (string) The associated label, "
             "or \"\" for the default label\n"
             "    \"scriptPubKey\" : \"key\",   (string) the script key\n"
@@ -3255,7 +3255,7 @@ static UniValue listunspent(const Config &config,
             CTxDestination dest = DecodeDestination(inputStr, config.GetChainParams());
             if (!IsValidDestination(dest)) {
                 throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY,
-                                   std::string("Invalid Bitcoin Cash address: ") +
+                                   std::string("Invalid Lambda address: ") +
                                        inputStr);
             }
             if (!destinations.insert(dest).second) {
@@ -3396,7 +3396,7 @@ void FundTransaction(CWallet *const pwallet, CMutableTransaction &tx,
                 if (!IsValidDestination(dest)) {
                     throw JSONRPCError(
                         RPC_INVALID_ADDRESS_OR_KEY,
-                        "changeAddress must be a valid Bitcoin Cash address");
+                        "changeAddress must be a valid Lambda address");
                 }
 
                 coinControl.destChange = dest;
@@ -3503,7 +3503,7 @@ static UniValue fundrawtransaction(const Config &config,
                              "disappears.\n"
                              "If that happens, you will need to fund the transaction with different inputs and "
                              "republish it."},
-                            {"changeAddress", RPCArg::Type::STR, /* opt */ true, /* default_val */ "pool address", "The Bitcoin Cash address to receive the change"},
+                            {"changeAddress", RPCArg::Type::STR, /* opt */ true, /* default_val */ "pool address", "The Lambda address to receive the change"},
                             {"changePosition", RPCArg::Type::NUM, /* opt */ true, /* default_val */ "random", "The index of the change output"},
                             {"includeWatching", RPCArg::Type::BOOL, /* opt */ true, /* default_val */ "false", "Also select inputs which are watch only"},
                             {"lockUnspents", RPCArg::Type::BOOL, /* opt */ true, /* default_val */ "false", "Lock selected unspent outputs"},
@@ -3511,7 +3511,7 @@ static UniValue fundrawtransaction(const Config &config,
                             {"subtractFeeFromOutputs", RPCArg::Type::ARR, /* opt */ true, /* default_val */ "", "A json array of integers.\n"
                             "                              The fee will be equally deducted from the amount of each specified output.\n"
                             "                              The outputs are specified by their zero-based index, before any change output is added.\n"
-                            "                              Those recipients will receive less bitcoins than you enter in their corresponding amount field.\n"
+                            "                              Those recipients will receive less lambdas than you enter in their corresponding amount field.\n"
                             "                              If no outputs are specified here, the sender pays the fee.",
                                 {
                                     {"vout_index", RPCArg::Type::NUM, /* opt */ true, /* default_val */ "", "The zero-based output index, before a change output is added."},
@@ -3915,15 +3915,15 @@ UniValue getaddressinfo(const Config &config, const JSONRPCRequest &request) {
     if (request.fHelp || request.params.size() != 1) {
         throw std::runtime_error(
             RPCHelpMan{"getaddressinfo",
-                "\nReturn information about the given Bitcoin Cash address. Some information requires the address\n"
+                "\nReturn information about the given Lambda address. Some information requires the address\n"
                 "to be in the wallet.\n",
                 {
-                    {"address", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "The Bitcoin Cash address to get the information of."},
+                    {"address", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "The Lambda address to get the information of."},
                 }}
                 .ToString() +
             "\nResult:\n"
             "{\n"
-            "  \"address\" : \"address\",        (string) The Bitcoin Cash address "
+            "  \"address\" : \"address\",        (string) The Lambda address "
             "validated\n"
             "  \"scriptPubKey\" : \"hex\",       (string) The hex-encoded "
             "scriptPubKey generated by the address\n"
@@ -4354,7 +4354,7 @@ static UniValue walletcreatefundedpsbt(const Config &config,
                         {
                             {"", RPCArg::Type::OBJ, /* opt */ true, /* default_val */ "", "",
                                 {
-                                    {"address", RPCArg::Type::AMOUNT, /* opt */ true, /* default_val */ "", "A key-value pair. The key (string) is the Bitcoin Cash address, the value (float or string) is the amount in " + CURRENCY_UNIT + ""},
+                                    {"address", RPCArg::Type::AMOUNT, /* opt */ true, /* default_val */ "", "A key-value pair. The key (string) is the Lambda address, the value (float or string) is the amount in " + CURRENCY_UNIT + ""},
                                 },
                                 },
                             {"", RPCArg::Type::OBJ, /* opt */ true, /* default_val */ "", "",
@@ -4374,7 +4374,7 @@ static UniValue walletcreatefundedpsbt(const Config &config,
                              "disappears.\n"
                              "If that happens, you will need to fund the transaction with different inputs and "
                              "republish it."},
-                            {"changeAddress", RPCArg::Type::STR_HEX, /* opt */ true, /* default_val */ "pool address", "The Bitcoin Cash address to receive the change"},
+                            {"changeAddress", RPCArg::Type::STR_HEX, /* opt */ true, /* default_val */ "pool address", "The Lambda address to receive the change"},
                             {"changePosition", RPCArg::Type::NUM, /* opt */ true, /* default_val */ "random", "The index of the change output"},
                             {"includeWatching", RPCArg::Type::BOOL, /* opt */ true, /* default_val */ "false", "Also select inputs which are watch only"},
                             {"lockUnspents", RPCArg::Type::BOOL, /* opt */ true, /* default_val */ "false", "Lock selected unspent outputs"},
@@ -4382,7 +4382,7 @@ static UniValue walletcreatefundedpsbt(const Config &config,
                             {"subtractFeeFromOutputs", RPCArg::Type::ARR, /* opt */ true, /* default_val */ "", "A json array of integers.\n"
                             "                              The fee will be equally deducted from the amount of each specified output.\n"
                             "                              The outputs are specified by their zero-based index, before any change output is added.\n"
-                            "                              Those recipients will receive less bitcoins than you enter in their corresponding amount field.\n"
+                            "                              Those recipients will receive less lambdas than you enter in their corresponding amount field.\n"
                             "                              If no outputs are specified here, the sender pays the fee.",
                                 {
                                     {"vout_index", RPCArg::Type::NUM, /* opt */ true, /* default_val */ "", ""},

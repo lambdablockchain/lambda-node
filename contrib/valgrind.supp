@@ -1,18 +1,18 @@
-# Valgrind suppressions file for Bitcoin.
+# Valgrind suppressions file for Lambda.
 #
 # Includes known Valgrind warnings in our dependencies that cannot be fixed
 # in-tree.
 #
 # Example use:
 # $ valgrind --suppressions=../contrib/valgrind.supp --child-silent-after-fork=yes \
-#       src/test/test_bitcoin
+#       src/test/test_lambda
 # $ valgrind --suppressions=../contrib/valgrind.supp --leak-check=full \
-#       --show-leak-kinds=all --child-silent-after-fork=yes src/test/test_bitcoin
+#       --show-leak-kinds=all --child-silent-after-fork=yes src/test/test_lambda
 #
 # To create suppressions for found issues, use the --gen-suppressions=all option:
 # $ valgrind --suppressions=../contrib/valgrind.supp --leak-check=full \
 #       --show-leak-kinds=all --gen-suppressions=all --show-reachable=yes \
-#       --child-silent-after-fork=yes --error-limit=no src/test/test_bitcoin
+#       --child-silent-after-fork=yes --error-limit=no src/test/test_lambda
 #
 # Note that suppressions may depend on OS and/or library versions.
 {

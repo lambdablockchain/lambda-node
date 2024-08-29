@@ -32,8 +32,8 @@ mapfile -d '' LUPDATE_FILES < <("@GIT_EXECUTABLE@" ls-files -z -- \
   "@CMAKE_SOURCE_DIR@/src/qt/forms/*.ui")
 
 QT_SELECT=qt5 \
-lupdate "@CMAKE_CURRENT_SOURCE_DIR@/bitcoinstrings.cpp" \
+lupdate "@CMAKE_CURRENT_SOURCE_DIR@/lambdastrings.cpp" \
 "${LUPDATE_FILES[@]}" \
 -locations relative \
 -no-obsolete \
--ts "@CMAKE_CURRENT_SOURCE_DIR@/locale/bitcoin_en.ts"
+-ts "@CMAKE_CURRENT_SOURCE_DIR@/locale/lambda_en.ts"

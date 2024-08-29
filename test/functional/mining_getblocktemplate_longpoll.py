@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2014-2019 The Bitcoin Core developers
+# Copyright (c) 2014-2019 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test longpolling with getblocktemplate."""
@@ -7,7 +7,7 @@
 from decimal import Decimal
 import threading
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import get_rpc_proxy, random_transaction
 
 
@@ -27,7 +27,7 @@ class LongpollThread(threading.Thread):
         self.node.getblocktemplate({'longpollid': self.longpollid})
 
 
-class GetBlockTemplateLPTest(BitcoinTestFramework):
+class GetBlockTemplateLPTest(LambdaTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
 

@@ -1,10 +1,10 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
-// Copyright (c) 2021 The Bitcoin developers
+// Copyright (c) 2011-2016 The Lambda Core developers
+// Copyright (c) 2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
+#include <config/lambda-config.h>
 #endif
 
 #include <qt/forms/ui_sendcoinsdialog.h>
@@ -14,7 +14,7 @@
 #include <interfaces/node.h>
 #include <key_io.h>
 #include <qt/addresstablemodel.h>
-#include <qt/bitcoinunits.h>
+#include <qt/lambdaunits.h>
 #include <qt/clientmodel.h>
 #include <qt/coincontroldialog.h>
 #include <qt/guiutil.h>
@@ -206,7 +206,7 @@ void SendCoinsDialog::setModel(WalletModel *_model) {
                 &SendCoinsDialog::coinControlUpdateLabels);
         connect(ui->groupCustomFee, buttonClickedEvent, this,
                 &SendCoinsDialog::coinControlUpdateLabels);
-        connect(ui->customFee, &BitcoinAmountField::valueChanged, this,
+        connect(ui->customFee, &LambdaAmountField::valueChanged, this,
                 &SendCoinsDialog::coinControlUpdateLabels);
         connect(ui->checkBoxMinimumFee, &QCheckBox::stateChanged, this,
                 &SendCoinsDialog::setMinimumFee);
@@ -284,7 +284,7 @@ void SendCoinsDialog::on_sendButton_clicked() {
     // process prepareStatus and on error generate message shown to user
     processSendCoinsReturn(
         prepareStatus,
-        BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(),
+        LambdaUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(),
                                      currentTransaction.getTransactionFee()));
 
     if (prepareStatus.status != WalletModel::OK) {
@@ -299,7 +299,7 @@ void SendCoinsDialog::on_sendButton_clicked() {
     for (const SendCoinsRecipient &rcp : currentTransaction.getRecipients()) {
         // generate bold amount string with wallet name in case of multiwallet
         QString amount =
-            "<b>" + BitcoinUnits::formatHtmlWithUnit(
+            "<b>" + LambdaUnits::formatHtmlWithUnit(
                         model->getOptionsModel()->getDisplayUnit(), rcp.amount);
         if (model->isMultiwallet()) {
             amount.append(
@@ -365,7 +365,7 @@ void SendCoinsDialog::on_sendButton_clicked() {
         // append transaction fee value
         questionString.append(
             "<span style='color:#aa0000; font-weight:bold;'>");
-        questionString.append(BitcoinUnits::formatHtmlWithUnit(
+        questionString.append(LambdaUnits::formatHtmlWithUnit(
             model->getOptionsModel()->getDisplayUnit(), txFee));
         questionString.append("</span><br />");
     }
@@ -374,16 +374,16 @@ void SendCoinsDialog::on_sendButton_clicked() {
     questionString.append("<hr />");
     Amount totalAmount = currentTransaction.getTotalTransactionAmount() + txFee;
     QStringList alternativeUnits;
-    for (const BitcoinUnits::Unit u : BitcoinUnits::availableUnits()) {
+    for (const LambdaUnits::Unit u : LambdaUnits::availableUnits()) {
         if (u != model->getOptionsModel()->getDisplayUnit()) {
             alternativeUnits.append(
-                BitcoinUnits::formatHtmlWithUnit(u, totalAmount));
+                LambdaUnits::formatHtmlWithUnit(u, totalAmount));
         }
     }
     questionString.append(
         QString("<b>%1</b>: <b>%2</b>")
             .arg(tr("Total Amount"))
-            .arg(BitcoinUnits::formatHtmlWithUnit(
+            .arg(LambdaUnits::formatHtmlWithUnit(
                 model->getOptionsModel()->getDisplayUnit(), totalAmount)));
     questionString.append(
         QString("<br /><span style='font-size:10pt; "
@@ -547,7 +547,7 @@ bool SendCoinsDialog::handlePaymentRequest(const SendCoinsRecipient &rv) {
 
 void SendCoinsDialog::setBalance(const interfaces::WalletBalances &balances) {
     if (model && model->getOptionsModel()) {
-        ui->labelBalance->setText(BitcoinUnits::formatWithUnit(
+        ui->labelBalance->setText(LambdaUnits::formatWithUnit(
             model->getOptionsModel()->getDisplayUnit(), balances.balance));
     }
 }
@@ -604,7 +604,7 @@ void SendCoinsDialog::processSendCoinsReturn(
         case WalletModel::AbsurdFee:
             msgParams.first =
                 tr("A fee higher than %1 is considered an absurdly high fee.")
-                    .arg(BitcoinUnits::formatWithUnit(
+                    .arg(LambdaUnits::formatWithUnit(
                         model->getOptionsModel()->getDisplayUnit(),
                         model->node().getMaxTxFee()));
             break;
@@ -692,7 +692,7 @@ void SendCoinsDialog::updateFeeMinimizedLabel() {
         ui->labelFeeMinimized->setText(ui->labelSmartFee->text());
     } else {
         ui->labelFeeMinimized->setText(
-            BitcoinUnits::formatWithUnit(
+            LambdaUnits::formatWithUnit(
                 model->getOptionsModel()->getDisplayUnit(),
                 ui->customFee->value()) +
             ((ui->radioCustomPerKilobyte->isChecked()) ? "/kB" : ""));
@@ -703,7 +703,7 @@ void SendCoinsDialog::updateMinFeeLabel() {
     if (model && model->getOptionsModel()) {
         ui->checkBoxMinimumFee->setText(
             tr("Pay only the required fee of %1")
-                .arg(BitcoinUnits::formatWithUnit(
+                .arg(LambdaUnits::formatWithUnit(
                          model->getOptionsModel()->getDisplayUnit(),
                          model->wallet().getRequiredFee(1000)) +
                      "/kB"));
@@ -730,7 +730,7 @@ void SendCoinsDialog::updateSmartFeeLabel() {
     CFeeRate feeRate(model->wallet().getMinimumFee(1000, coin_control));
 
     ui->labelSmartFee->setText(
-        BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(),
+        LambdaUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(),
                                      feeRate.GetFeePerK()) +
         "/kB");
     // not enough data => minfee
@@ -842,7 +842,7 @@ void SendCoinsDialog::coinControlChangeEdited(const QString &text) {
         } else if (!IsValidDestination(dest)) {
             // Invalid address
             ui->labelCoinControlChangeLabel->setText(
-                tr("Warning: Invalid Bitcoin Cash address"));
+                tr("Warning: Invalid Lambda address"));
         } else {
             // Valid address
             if (!model->wallet().isSpendable(dest)) {

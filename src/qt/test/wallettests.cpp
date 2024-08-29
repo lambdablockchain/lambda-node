@@ -1,4 +1,4 @@
-// Copyright (c) 2021 The Bitcoin developers
+// Copyright (c) 2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -12,7 +12,7 @@
 #include <interfaces/chain.h>
 #include <interfaces/node.h>
 #include <key_io.h>
-#include <qt/bitcoinamountfield.h>
+#include <qt/lambdaamountfield.h>
 #include <qt/legacyaddressconvertdialog.h>
 #include <qt/legacyaddressdialog.h>
 #include <qt/optionsmodel.h>
@@ -134,7 +134,7 @@ TxId SendCoins(CWallet &wallet, SendCoinsDialog &sendCoinsDialog,
     SendCoinsEntry *entry =
         qobject_cast<SendCoinsEntry *>(entries->itemAt(0)->widget());
     entry->findChild<QValidatedLineEdit *>("payTo")->setText(address);
-    entry->findChild<BitcoinAmountField *>("payAmount")->setValue(amount);
+    entry->findChild<LambdaAmountField *>("payAmount")->setValue(amount);
     TxId txid;
     boost::signals2::scoped_connection c =
         wallet.NotifyTransactionChanged.connect(
@@ -182,9 +182,9 @@ QModelIndex FindTx(const QAbstractItemModel &model, const uint256 &txid) {
 //
 // This also requires overriding the default minimal Qt platform:
 //
-//     src/qt/test/test_bitcoin-qt -platform xcb      # Linux
-//     src/qt/test/test_bitcoin-qt -platform windows  # Windows
-//     src/qt/test/test_bitcoin-qt -platform cocoa    # macOS
+//     src/qt/test/test_lambda-qt -platform xcb      # Linux
+//     src/qt/test/test_lambda-qt -platform windows  # Windows
+//     src/qt/test/test_lambda-qt -platform cocoa    # macOS
 void TestGUI() {
     QLocale::setDefault(QLocale("en_US"));
     // Set up wallet and chain with 105 blocks (5 mature blocks for spending).
@@ -249,8 +249,8 @@ void TestGUI() {
     QString balanceText = balanceLabel->text();
     int unit = walletModel.getOptionsModel()->getDisplayUnit();
     Amount balance = walletModel.wallet().getBalance();
-    QString balanceComparison = BitcoinUnits::formatWithUnit(
-        unit, balance, false, BitcoinUnits::separatorAlways);
+    QString balanceComparison = LambdaUnits::formatWithUnit(
+        unit, balance, false, LambdaUnits::separatorAlways);
     QCOMPARE(balanceText, balanceComparison);
 
     // Check Request Payment button
@@ -265,8 +265,8 @@ void TestGUI() {
     labelInput->setText("TEST_LABEL_1");
 
     // Amount input
-    BitcoinAmountField *amountInput =
-        receiveCoinsDialog.findChild<BitcoinAmountField *>("reqAmount");
+    LambdaAmountField *amountInput =
+        receiveCoinsDialog.findChild<LambdaAmountField *>("reqAmount");
     amountInput->setValue(1 * SATOSHI);
 
     // Message input
@@ -351,7 +351,7 @@ void WalletTests::walletTests() {
         // and fails to handle returned nulls
         // (https://bugreports.qt.io/browse/QTBUG-49686).
         QWARN("Skipping WalletTests on mac build with 'minimal' platform set "
-              "due to Qt bugs. To run AppTests, invoke with 'test_bitcoin-qt "
+              "due to Qt bugs. To run AppTests, invoke with 'test_lambda-qt "
               "-platform cocoa' on mac, or else use a linux or windows build.");
         return;
     }

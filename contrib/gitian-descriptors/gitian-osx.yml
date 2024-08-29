@@ -1,5 +1,5 @@
 ---
-name: "bitcoin-cash-node-osx"
+name: "lambda-node-osx"
 enable_cache: true
 distro: "debian"
 suites:
@@ -45,8 +45,8 @@ packages:
 - "protobuf-compiler"
 - "qttools5-dev"
 remotes:
-- "url": "https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node.git"
-  "dir": "bitcoin"
+- "url": "https://github.com/lambdablockchain/lambda-node.git"
+  "dir": "lambda"
 files:
 - "MacOSX10.15.sdk.tar.xz"
 script: |
@@ -57,7 +57,7 @@ script: |
   declare -A CMAKE_TOOLCHAIN_FILE
   CMAKE_TOOLCHAIN_FILE[x86_64-apple-darwin16]=OSX.cmake
 
-  INSTALL_COMPONENTS="bitcoind bitcoin-qt bitcoin-seeder"
+  INSTALL_COMPONENTS="lambdad lambda-qt lambda-seeder"
 
   FAKETIME_HOST_PROGS=""
   FAKETIME_PROGS="ar ranlib date dmg genisoimage"
@@ -107,7 +107,7 @@ script: |
   create_per-host_faketime_wrappers "2000-01-01 12:00:00"
   export PATH=${WRAP_DIR}:${PATH}
 
-  cd bitcoin
+  cd lambda
   SOURCEDIR=`pwd`
   BASEPREFIX=`pwd`/depends
 
@@ -128,12 +128,12 @@ script: |
   mkdir -p source_package
   pushd source_package
   cmake -GNinja .. \
-    -DBUILD_LIBBITCOINCONSENSUS=OFF \
+    -DBUILD_LIBLAMBDACONSENSUS=OFF \
     -DENABLE_CLANG_TIDY=OFF
 
   # Also generate manpages here, because they cannot be generated during cross-compilation
   ninja package_source doc-man
-  SOURCEDIST=`echo bitcoin-cash-node-*.tar.gz`
+  SOURCEDIST=`echo lambda-node-*.tar.gz`
   mv ${SOURCEDIST} ..
   mkdir ../doc/man
   mv doc/man/*.1 ../doc/man
@@ -144,7 +144,7 @@ script: |
   mkdir -p temp
   pushd temp
   tar xf ../$SOURCEDIST
-  find bitcoin-cash-node-* | sort | tar --no-recursion --mode='u+rw,go+r-w,a+X' --owner=0 --group=0 -c -T - | gzip -9n > ../$SOURCEDIST
+  find lambda-node-* | sort | tar --no-recursion --mode='u+rw,go+r-w,a+X' --owner=0 --group=0 -c -T - | gzip -9n > ../$SOURCEDIST
   popd
 
   ORIGPATH="$PATH"
@@ -196,7 +196,7 @@ script: |
     # parameters when an Apple strip tool is used. This is fixed starting with
     # CMake versions >= 3.14, see:
     # https://gitlab.kitware.com/cmake/cmake/merge_requests/2892
-    find -path "*.app*" -type f -executable -exec mv {} ${DISTNAME}/bin/bitcoin-qt \;
+    find -path "*.app*" -type f -executable -exec mv {} ${DISTNAME}/bin/lambda-qt \;
     find ${DISTNAME}/bin -type f -executable -exec ${i}-strip -u -r {} \;
     find ${DISTNAME}/lib -type f -executable -exec ${i}-strip -x {} \;
     find ${DISTNAME} -not -path "*.app*" | sort | tar --no-recursion --mode='u+rw,go+r-w,a+X' --owner=0 --group=0 -c -T - | gzip -9n > ${OUTDIR}/${DISTNAME}-${i}.tar.gz

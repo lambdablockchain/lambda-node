@@ -1,4 +1,4 @@
-# Copyright (c) 2019 The Bitcoin developers
+# Copyright (c) 2019 The Lambda developers
 
 add_custom_target(check-source-control-tools)
 

@@ -1,6 +1,6 @@
 // Copyright (c) 2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2018 The Bitcoin Core developers
-// Copyright (c) 2020-2021 The Bitcoin developers
+// Copyright (c) 2009-2018 The Lambda Core developers
+// Copyright (c) 2020-2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -205,7 +205,7 @@ static UniValue generatetoaddress(const Config &config,
                 {"nblocks", RPCArg::Type::NUM, /* opt */ false, /* default_val */ "",
                  "How many blocks are generated immediately."},
                 {"address", RPCArg::Type::STR, /* opt */ false, /* default_val */ "",
-                 "The address to send the newly generated bitcoin to."},
+                 "The address to send the newly generated lambda to."},
                 {"maxtries", RPCArg::Type::NUM, /* opt */ true, /* default_val */ "1000000", "How many iterations to try."},
             },
             RPCResult{
@@ -448,12 +448,12 @@ static UniValue getblocktemplatecommon(bool fLight, const Config &config, const 
 
     if (g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0) {
         throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED,
-                           "Bitcoin is not connected!");
+                           "Lambda is not connected!");
     }
 
     if (IsInitialBlockDownload()) {
         throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD,
-                           "Bitcoin is downloading blocks...");
+                           "Lambda is downloading blocks...");
     }
 
     static unsigned int nTransactionsUpdatedLast;
@@ -1383,7 +1383,7 @@ void CacheAndSaveTxsToFile(const JobId &jobId, const std::vector<CTransactionRef
             } else {
                 LogPrintf("getblocktemplatelight: cannot write tx data to %s\n", tmpOut.string());
                 try { fs::remove(tmpOut); } catch (...) {}
-                // We must throw here. Clients should be alerted that there is a misconfiguration with bitcoind (even
+                // We must throw here. Clients should be alerted that there is a misconfiguration with lambdad (even
                 // though we could theoretically continue and rely on in-memory cache, we are better off doing this).
                 throw JSONRPCError(RPC_INTERNAL_ERROR, "failed to save job tx data to disk");
             }

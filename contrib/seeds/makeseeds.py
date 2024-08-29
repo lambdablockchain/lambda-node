@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2013-2017 The Bitcoin Core developers
+# Copyright (c) 2013-2017 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #
@@ -35,7 +35,7 @@ PATTERN_ONION = re.compile(
     r"^([abcdefghijklmnopqrstuvwxyz234567]{16}\.onion):(\d+)$")
 
 # Used to only select nodes with a user agent string compatible with the
-# Bitcoin Cash specification.
+# Lambda specification.
 PATTERN_AGENT = re.compile(
     r"^(/Lambda Cash Node:2[34]\.(\d+)\.(\d+)[^/]*/)"
 )
@@ -205,7 +205,7 @@ def main():
     ips.sort(key=lambda x:
              (x['uptime'], x['lastsuccess'], x['ip']), reverse=True)
 
-    # Filter out hosts with multiple bitcoin ports, these are likely abusive
+    # Filter out hosts with multiple lambda ports, these are likely abusive
     ips = filtermultiport(ips)
 
     # Look up ASNs and limit results, both per ASN and globally.

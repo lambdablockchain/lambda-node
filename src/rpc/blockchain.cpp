@@ -1,6 +1,6 @@
 // Copyright (c) 2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
-// Copyright (c) 2021 The Bitcoin developers
+// Copyright (c) 2009-2016 The Lambda Core developers
+// Copyright (c) 2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -1185,8 +1185,8 @@ UniValue gettxout(const Config &config, const JSONRPCRequest &request) {
             "     \"reqSigs\" : n,          (numeric) Number of required "
             "signatures\n"
             "     \"type\" : \"pubkeyhash\", (string) The type, eg pubkeyhash\n"
-            "     \"addresses\" : [          (array of string) array of Bitcoin Cash addresses\n"
-            "        \"address\"     (string) Bitcoin Cash address\n"
+            "     \"addresses\" : [          (array of string) array of Lambda addresses\n"
+            "        \"address\"     (string) Lambda address\n"
             "        ,...\n"
             "     ]\n"
             "  },\n"

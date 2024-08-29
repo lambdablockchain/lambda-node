@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2016 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -10,7 +10,7 @@ static const int MODEL_UPDATE_DELAY = 250;
 /* AskPassphraseDialog -- Maximum passphrase length */
 static const int MAX_PASSPHRASE_SIZE = 1024;
 
-/* BitcoinGUI -- Size of icons in status bar */
+/* LambdaGUI -- Size of icons in status bar */
 static const int STATUSBAR_ICONSIZE = 16;
 
 /** Default for -splash */
@@ -48,9 +48,9 @@ static const int MAX_URI_LENGTH = 255;
 /* Number of frames in spinner animation */
 #define SPINNER_FRAMES 36
 
-#define QAPP_ORG_NAME "BitcoinCashNode"
-#define QAPP_ORG_DOMAIN "bitcoincashnode.org"
-#define QAPP_APP_NAME_DEFAULT "BitcoinCashNode-Qt"
-#define QAPP_APP_NAME_TESTNET "BitcoinCashNode-Qt-testnet"
-#define QAPP_APP_NAME_TESTNET4 "BitcoinCashNode-Qt-testnet4"
-#define QAPP_APP_NAME_SCALENET "BitcoinCashNode-Qt-scalenet"
+#define QAPP_ORG_NAME "LambdaNode"
+#define QAPP_ORG_DOMAIN "lambdanode.org"
+#define QAPP_APP_NAME_DEFAULT "LambdaNode-Qt"
+#define QAPP_APP_NAME_TESTNET "LambdaNode-Qt-testnet"
+#define QAPP_APP_NAME_TESTNET4 "LambdaNode-Qt-testnet4"
+#define QAPP_APP_NAME_SCALENET "LambdaNode-Qt-scalenet"

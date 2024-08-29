@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
-// Copyright (c) 2017-2019 The Bitcoin developers
+// Copyright (c) 2009-2016 The Lambda Core developers
+// Copyright (c) 2017-2019 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -151,7 +151,7 @@ inline const std::string CURRENCY_UNIT = "LMB";
 /**
  * No amount larger than this (in SATOSHI) is valid.
  *
- * Note that this constant is *not* the total money supply, which in Bitcoin
+ * Note that this constant is *not* the total money supply, which in Lambda
  * currently happens to be less than 21,000,000 LMA for various reasons, but
  * rather a sanity check. As this sanity check is used by consensus-critical
  * validation code, the exact value of the MAX_MONEY constant is consensus

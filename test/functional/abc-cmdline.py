@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2017 The Bitcoin developers
+# Copyright (c) 2017 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """
@@ -14,14 +14,14 @@ import re
 from test_framework.cdefs import (LEGACY_MAX_BLOCK_SIZE,
                                   DEFAULT_MAX_GENERATED_BLOCK_SIZE, MAX_EXCESSIVE_BLOCK_SIZE,
                                   ONE_MEGABYTE)
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import assert_equal
 
 MAX_GENERATED_BLOCK_SIZE_ERROR = (
     'Max generated block size (blockmaxsize) cannot exceed the excessive block size (excessiveblocksize)')
 
 
-class ABC_CmdLine_Test (BitcoinTestFramework):
+class ABC_CmdLine_Test (LambdaTestFramework):
 
     def set_test_params(self):
         self.num_nodes = 1
@@ -50,7 +50,7 @@ class ABC_CmdLine_Test (BitcoinTestFramework):
             DEFAULT_MAX_GENERATED_BLOCK_SIZE)])
         self.check_excessive(DEFAULT_MAX_GENERATED_BLOCK_SIZE)
         # Check for EB correctness in the subver string
-        self.check_subversion(r"/Bitcoin Cash Node:.*\(EB"
+        self.check_subversion(r"/Lambda Node:.*\(EB"
                               + str(DEFAULT_MAX_GENERATED_BLOCK_SIZE // ONE_MEGABYTE)
                               + r"\.0; .*\)/")
 
@@ -59,7 +59,7 @@ class ABC_CmdLine_Test (BitcoinTestFramework):
         self.start_node(0, ["-excessiveblocksize={}".format(MAX_EXCESSIVE_BLOCK_SIZE)])
         self.check_excessive(MAX_EXCESSIVE_BLOCK_SIZE)
         # Check for EB correctness in the subver string
-        self.check_subversion(r"/Bitcoin Cash Node:.*\(EB" + str(MAX_EXCESSIVE_BLOCK_SIZE // ONE_MEGABYTE)
+        self.check_subversion(r"/Lambda Node:.*\(EB" + str(MAX_EXCESSIVE_BLOCK_SIZE // ONE_MEGABYTE)
                               + r"\.0; .*\)/")
 
         self.log.info("  Attempt to set below legacy limit of 1MB - try {} bytes".format(

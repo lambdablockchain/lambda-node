@@ -72,9 +72,9 @@ Faster and constant time algorithms exists [3] but only for char-2 curves.
 References
 ----------
 
-[1] https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-May/014337.html
+[1] https://lists.linuxfoundation.org/pipermail/lambda-dev/2017-May/014337.html
 
-[2] https://lists.linuxfoundation.org/pipermail/bitcoin-ml/2017-September/000240.html
+[2] https://lists.linuxfoundation.org/pipermail/lambda-ml/2017-September/000240.html
 
 [3] https://arxiv.org/pdf/1601.06502.pdf
 

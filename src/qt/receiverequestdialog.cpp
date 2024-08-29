@@ -1,12 +1,12 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
-// Copyright (c) 2017-2019 The Bitcoin developers
+// Copyright (c) 2011-2016 The Lambda Core developers
+// Copyright (c) 2017-2019 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <qt/forms/ui_receiverequestdialog.h>
 #include <qt/receiverequestdialog.h>
 
-#include <qt/bitcoinunits.h>
+#include <qt/lambdaunits.h>
 #include <qt/guiconstants.h>
 #include <qt/guiutil.h>
 #include <qt/optionsmodel.h>
@@ -20,7 +20,7 @@
 #include <QPixmap>
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h> /* for USE_QRCODE */
+#include <config/lambda-config.h> /* for USE_QRCODE */
 #endif
 
 #ifdef USE_QRCODE
@@ -139,7 +139,7 @@ void ReceiveRequestDialog::update() {
     }
     setWindowTitle(tr("Request payment to %1").arg(target));
 
-    QString uri = GUIUtil::formatBitcoinURI(info);
+    QString uri = GUIUtil::formatLambdaURI(info);
     ui->btnSaveAs->setEnabled(false);
     QString html;
     html += "<html><font face='verdana, arial, helvetica, sans-serif'>";
@@ -150,7 +150,7 @@ void ReceiveRequestDialog::update() {
             "</b>: " + GUIUtil::HtmlEscape(info.address) + "<br>";
     if (info.amount != Amount::zero()) {
         html += "<b>" + tr("Amount") + "</b>: " +
-                BitcoinUnits::formatHtmlWithUnit(
+                LambdaUnits::formatHtmlWithUnit(
                     model->getOptionsModel()->getDisplayUnit(), info.amount) +
                 "<br>";
     }
@@ -219,7 +219,7 @@ void ReceiveRequestDialog::update() {
 }
 
 void ReceiveRequestDialog::on_btnCopyURI_clicked() {
-    GUIUtil::setClipboard(GUIUtil::formatBitcoinURI(info));
+    GUIUtil::setClipboard(GUIUtil::formatLambdaURI(info));
 }
 
 void ReceiveRequestDialog::on_btnCopyAddress_clicked() {

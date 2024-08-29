@@ -1,4 +1,4 @@
-# Copyright (c) 2017 The Bitcoin developers
+# Copyright (c) 2017 The Lambda developers
 
 cmake_minimum_required(VERSION 3.13)
 project(secp256k1 LANGUAGES C VERSION 0.1.0)
@@ -337,8 +337,8 @@ if(SECP256K1_ENABLE_JNI)
 	include(UseJava)
 
 	add_library(secp256k1_jni SHARED
-		src/java/org_bitcoin_NativeSecp256k1.c
-		src/java/org_bitcoin_Secp256k1Context.c
+		src/java/org_lambda_NativeSecp256k1.c
+		src/java/org_lambda_Secp256k1Context.c
 	)
 
 	install_shared_library(secp256k1_jni)
@@ -383,11 +383,11 @@ if(SECP256K1_BUILD_TEST)
 		set(CMAKE_JNI_TARGET TRUE)
 		add_jar(secp256k1-jni-test-jar
 			SOURCES
-				src/java/org/bitcoin/NativeSecp256k1.java
-				src/java/org/bitcoin/NativeSecp256k1Test.java
-				src/java/org/bitcoin/NativeSecp256k1Util.java
-				src/java/org/bitcoin/Secp256k1Context.java
-			ENTRY_POINT org/bitcoin/NativeSecp256k1Test
+				src/java/org/lambda/NativeSecp256k1.java
+				src/java/org/lambda/NativeSecp256k1Test.java
+				src/java/org/lambda/NativeSecp256k1Util.java
+				src/java/org/lambda/Secp256k1Context.java
+			ENTRY_POINT org/lambda/NativeSecp256k1Test
 			OUTPUT_NAME "${SECP256k1_JNI_TEST_JAR}"
 		)
 		add_dependencies(secp256k1-jni-test-jar secp256k1_jni)

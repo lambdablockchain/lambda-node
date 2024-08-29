@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2019 The Bitcoin developers
+# Copyright (c) 2019 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test requesting invalid blocks behaves safely."""
@@ -13,11 +13,11 @@ from test_framework.messages import (
     MSG_CMPCT_BLOCK,
 )
 from test_framework.p2p import p2p_lock, P2PInterface
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import assert_equal
 
 
-class GetInvalidBlockTest(BitcoinTestFramework):
+class GetInvalidBlockTest(LambdaTestFramework):
     def set_test_params(self):
         self.num_nodes = 1
 

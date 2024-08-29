@@ -1,5 +1,5 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
-// Copyright (c) 2017-2020 The Bitcoin developers
+// Copyright (c) 2011-2016 The Lambda Core developers
+// Copyright (c) 2017-2020 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -19,7 +19,7 @@
 #include <util/system.h>
 
 #if defined(HAVE_CONSENSUS_LIB)
-#include <script/bitcoinconsensus.h>
+#include <script/lambdaconsensus.h>
 #endif
 
 #include <test/data/script_tests.json.h>
@@ -179,22 +179,22 @@ static void DoTest(const CScript &scriptPubKey, const CScript &scriptSig,
     CDataStream stream(SER_NETWORK, PROTOCOL_VERSION);
     stream << tx2;
     uint32_t libconsensus_flags =
-        flags & bitcoinconsensus_SCRIPT_FLAGS_VERIFY_ALL;
+        flags & lambdaconsensus_SCRIPT_FLAGS_VERIFY_ALL;
     if (libconsensus_flags == flags) {
-        if (flags & bitcoinconsensus_SCRIPT_ENABLE_SIGHASH_FORKID) {
-            BOOST_CHECK_MESSAGE(bitcoinconsensus_verify_script_with_amount(
+        if (flags & lambdaconsensus_SCRIPT_ENABLE_SIGHASH_FORKID) {
+            BOOST_CHECK_MESSAGE(lambdaconsensus_verify_script_with_amount(
                                     scriptPubKey.data(), scriptPubKey.size(),
                                     txCredit.vout[0].nValue / SATOSHI,
                                     (const uint8_t *)&stream[0], stream.size(),
                                     0, libconsensus_flags, nullptr) == expect,
                                 message);
         } else {
-            BOOST_CHECK_MESSAGE(bitcoinconsensus_verify_script_with_amount(
+            BOOST_CHECK_MESSAGE(lambdaconsensus_verify_script_with_amount(
                                     scriptPubKey.data(), scriptPubKey.size(), 0,
                                     (const uint8_t *)&stream[0], stream.size(),
                                     0, libconsensus_flags, nullptr) == expect,
                                 message);
-            BOOST_CHECK_MESSAGE(bitcoinconsensus_verify_script(
+            BOOST_CHECK_MESSAGE(lambdaconsensus_verify_script(
                                     scriptPubKey.data(), scriptPubKey.size(),
                                     (const uint8_t *)&stream[0], stream.size(),
                                     0, libconsensus_flags, nullptr) == expect,

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2019-2020 The Bitcoin developers
+# Copyright (c) 2019-2020 The Lambda developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -79,7 +79,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=(
         "Make chainparams file.\n"
-        "Prerequisites: RPC access to a bitcoind node.\n\n"),
+        "Prerequisites: RPC access to a lambdad node.\n\n"),
         formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('--address', '-a', default="127.0.0.1:9332",
                         help="Node address for making RPC calls.\n"
@@ -90,9 +90,9 @@ if __name__ == "__main__":
                              "MainNet default: 10 blocks from the chain tip."
                              "ScaleNet default: block 9999 (fixed)"
                              "All other test networks default: 2000 blocks from the chain tip.")
-    parser.add_argument('--config', '-c', default="~/.bitcoin/bitcoin.conf",
-                        help="Path to bitcoin.conf for RPC authentication arguments (rpcuser & rpcpassword).\n"
-                             "Default: ~/.bitcoin/bitcoin.conf")
+    parser.add_argument('--config', '-c', default="~/.lambda/lambda.conf",
+                        help="Path to lambda.conf for RPC authentication arguments (rpcuser & rpcpassword).\n"
+                             "Default: ~/.lambda/lambda.conf")
     args = parser.parse_args()
     args.config = os.path.expanduser(args.config)
 
@@ -111,7 +111,7 @@ if __name__ == "__main__":
                     assert password is None
                     password = line.split("=")[1].strip("\n")
     else:
-        raise FileNotFoundError("Missing bitcoin.conf")
+        raise FileNotFoundError("Missing lambda.conf")
     if user is None:
         raise ValueError("Config is missing rpcuser")
     if password is None:

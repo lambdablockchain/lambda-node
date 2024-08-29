@@ -27,8 +27,8 @@ curl git`.
 
 ```bash
 # Fetch the `gitian-build.py` script
-git clone https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node.git
-cp bitcoin-cash-node/contrib/gitian-build.py .
+git clone https://github.com/lambdablockchain/lambda-node.git
+cp lambda-node/contrib/gitian-build.py .
 
 # If you are on a MacOS host, you will need the MacOS-capable fork
 # of gitian-builder, if on Linux, you can skip this step.

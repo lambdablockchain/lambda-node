@@ -27,9 +27,9 @@ trim() {
 }
 
 # Get the hash of the source tarball and output that first
-grep -Eh "bitcoin-abc-[0-9.]+.tar.gz" "$1"/linux/bitcoin-abc-*linux-res.yml | trim
+grep -Eh "lambda-abc-[0-9.]+.tar.gz" "$1"/linux/lambda-abc-*linux-res.yml | trim
 
 # Output hashes of all of the binaries
-grep -Eh -- "bitcoin-abc-[0-9.]+.*-linux-.*.tar.gz" "$1"/linux/bitcoin-abc-*linux-res.yml | trim
-grep -Eh -- "bitcoin-abc-[0-9.]+-win.*.(exe|tar.gz|zip)" "$1"/win/bitcoin-abc-*win-res.yml | trim
-grep -Eh -- "bitcoin-abc-[0-9.]+-osx.*.(dmg|tar.gz)" "$1"/osx/bitcoin-abc-*osx-res.yml | trim
+grep -Eh -- "lambda-abc-[0-9.]+.*-linux-.*.tar.gz" "$1"/linux/lambda-abc-*linux-res.yml | trim
+grep -Eh -- "lambda-abc-[0-9.]+-win.*.(exe|tar.gz|zip)" "$1"/win/lambda-abc-*win-res.yml | trim
+grep -Eh -- "lambda-abc-[0-9.]+-osx.*.(dmg|tar.gz)" "$1"/osx/lambda-abc-*osx-res.yml | trim

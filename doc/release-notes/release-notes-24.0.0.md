@@ -1,13 +1,13 @@
-# Release Notes for Bitcoin Cash Node version 24.0.0
+# Release Notes for Lambda Node version 24.0.0
 
-Bitcoin Cash Node version 24.0.0 is now available from:
+Lambda Node version 24.0.0 is now available from:
 
-  <https://bitcoincashnode.org>
+  <https://lambdanode.org>
 
 ## Overview
 
-This is a major release of Bitcoin Cash Node (BCHN) that implements the
-[May 15, 2022 Network Upgrade](https://upgradespecs.bitcoincashnode.org/2022-05-15-upgrade/).
+This is a major release of Lambda Node (BCHN) that implements the
+[May 15, 2022 Network Upgrade](https://upgradespecs.lambdanode.org/2022-05-15-upgrade/).
 This release implements the following two consensus CHIPs:
 
 - [CHIP-2021-03: Bigger Script Integers](https://gitlab.com/GeneralProtocols/research/chips/-/blob/master/CHIP-2021-02-Bigger-Script-Integers.md)
@@ -16,7 +16,7 @@ This release implements the following two consensus CHIPs:
 
 This version contains further corrections and improvements, such as:
 
-- [BIP69](https://github.com/bitcoin/bips/blob/master/bip-0069.mediawiki) (privacy) lexicographical sorting of transaction inputs/outputs
+- [BIP69](https://github.com/lambda/bips/blob/master/bip-0069.mediawiki) (privacy) lexicographical sorting of transaction inputs/outputs
 - A new wallet RPC call attribute ('include_unsafe') which enables
   creation of transactions which spend unconfirmed outputs
   (the default is still to spend only confirmed transactions)
@@ -30,8 +30,8 @@ to upgrade to v24.0.0 ahead of May 2022.
 
 ## Usage recommendations
 
-The update to Bitcoin Cash Node 24.0.0 is required for the May 15, 2022
-Bitcoin Cash network upgrade.
+The update to Lambda Node 24.0.0 is required for the May 15, 2022
+Lambda network upgrade.
 
 
 ## Network changes
@@ -141,18 +141,18 @@ of these legacy address types is allowed. These settings are:
 
 ## Regressions
 
-Bitcoin Cash Node 24.0.0 does not introduce any known regressions as compared to 23.1.0.
+Lambda Node 24.0.0 does not introduce any known regressions as compared to 23.1.0.
 
 ## Known Issues
 
 Some issues could not be closed in time for release, but we are tracking all of them on our GitLab repository.
 
 - MacOS versions earlier than 10.12 are no longer supported. Additionally,
-  Bitcoin Cash Node does not yet change appearance when macOS "dark mode"
+  Lambda Node does not yet change appearance when macOS "dark mode"
   is activated.
 
-- Windows users are recommended not to run multiple instances of bitcoin-qt
-  or bitcoind on the same machine if the wallet feature is enabled.
+- Windows users are recommended not to run multiple instances of lambda-qt
+  or lambdad on the same machine if the wallet feature is enabled.
   There is risk of data corruption if instances are configured to use the same
   wallet folder.
 
@@ -168,7 +168,7 @@ Some issues could not be closed in time for release, but we are tracking all of 
 
 - `doc/dependencies.md` needs revision (Issue #65).
 
-- `test_bitcoin` can collide with temporary files if used by more than
+- `test_lambda` can collide with temporary files if used by more than
   one user on the same system simultaneously. (Issue #43)
 
 - For users running from sources built with BerkeleyDB releases newer than
@@ -177,7 +177,7 @@ Some issues could not be closed in time for release, but we are tracking all of 
   When building from source it is recommended to use BerkeleyDB 5.3 as this
   avoids wallet database incompatibility issues with the official release.
 
-- The `test_bitcoin-qt` test executable fails on Linux Mint 20
+- The `test_lambda-qt` test executable fails on Linux Mint 20
   (see Issue #144). This does not otherwise appear to impact the functioning
   of the BCHN software on that platform.
 
@@ -188,7 +188,7 @@ Some issues could not be closed in time for release, but we are tracking all of 
 - Some functional tests are known to fail spuriously with varying probability.
   (see e.g. issue #148, and a fuller listing in #162).
 
-- Possible out-of-memory error when starting bitcoind with high excessiveblocksize
+- Possible out-of-memory error when starting lambdad with high excessiveblocksize
   value (Issue #156)
 
 - A problem was observed on scalenet where nodes would sometimes hang for
@@ -208,7 +208,7 @@ Some issues could not be closed in time for release, but we are tracking all of 
 
 ---
 
-## Changes since Bitcoin Cash Node 23.1.0
+## Changes since Lambda Node 23.1.0
 
 ### New documents
 

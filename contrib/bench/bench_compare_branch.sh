@@ -76,29 +76,29 @@ trap cleanup_tmp EXIT
 
 if [ "$current_branch" = "$compare_base" ]; then
   echo "Benchmarking $compare_base..." >&2
-  ninja bench_bitcoin && \
-    src/bench/bench_bitcoin "$filter_arg" > "$result1" || exit 1
+  ninja bench_lambda && \
+    src/bench/bench_lambda "$filter_arg" > "$result1" || exit 1
   echo "Benchmarking $compare_branch..." >&2
   git checkout "$compare_branch" >&2 && \
-    ninja bench_bitcoin >&2 && \
-    src/bench/bench_bitcoin "$filter_arg" > "$result2" || exit 1
+    ninja bench_lambda >&2 && \
+    src/bench/bench_lambda "$filter_arg" > "$result2" || exit 1
 elif [ "$current_branch" = "$compare_branch" ]; then
   echo "Benchmarking $compare_branch..." >&2
-  ninja bench_bitcoin && \
-    src/bench/bench_bitcoin "$filter_arg" > "$result2" || exit 1
+  ninja bench_lambda && \
+    src/bench/bench_lambda "$filter_arg" > "$result2" || exit 1
   echo "Benchmarking $compare_base..." >&2
   git checkout "$compare_base" >&2 && \
-    ninja bench_bitcoin >&2 && \
-    src/bench/bench_bitcoin "$filter_arg" > "$result1" || exit 1
+    ninja bench_lambda >&2 && \
+    src/bench/bench_lambda "$filter_arg" > "$result1" || exit 1
 else
   echo "Benchmarking $compare_base..." >&2
   git checkout "$compare_base" >&2 && \
-    ninja bench_bitcoin >&2 && \
-    src/bench/bench_bitcoin "$filter_arg" > "$result1" || exit 1
+    ninja bench_lambda >&2 && \
+    src/bench/bench_lambda "$filter_arg" > "$result1" || exit 1
   echo "Benchmarking $compare_branch..." >&2
   git checkout "$compare_branch" >&2 && \
-    ninja bench_bitcoin >&2 && \
-    src/bench/bench_bitcoin "$filter_arg" > "$result2" || exit 1
+    ninja bench_lambda >&2 && \
+    src/bench/bench_lambda "$filter_arg" > "$result2" || exit 1
 fi
 # return to the previously checked out branch
 git checkout "$current_branch" >&2

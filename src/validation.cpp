@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2018 The Bitcoin Core developers
-// Copyright (c) 2017-2021 The Bitcoin developers
+// Copyright (c) 2009-2018 The Lambda Core developers
+// Copyright (c) 2017-2021 The Lambda developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -284,7 +284,7 @@ CTxMemPool g_mempool;
 /** Constant stuff for coinbase transactions we create: */
 CScript COINBASE_FLAGS;
 
-const std::string strMessageMagic = "Bitcoin Signed Message:\n";
+const std::string strMessageMagic = "Lambda Signed Message:\n";
 
 // Internal stuff
 namespace {
@@ -5980,7 +5980,7 @@ bool IsBlockPruned(const CBlockIndex *pblockindex) {
 //! Guess how far we are in the verification process at the given block index
 //! require cs_main if pindex has not been validated yet (because the chain's
 //! transaction count might be unset) This conditional lock requirement might be
-//! confusing, see: https://github.com/bitcoin/bitcoin/issues/15994
+//! confusing, see: https://github.com/lambda/lambda/issues/15994
 double GuessVerificationProgress(const ChainTxData &data,
                                  const CBlockIndex *pindex) {
     if (pindex == nullptr) {

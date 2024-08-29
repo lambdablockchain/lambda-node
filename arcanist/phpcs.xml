@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<ruleset name="BitcoinCashNode Standard" namespace="BitcoinCashNode\CS\Standard">
+<ruleset name="LambdaNode Standard" namespace="LambdaNode\CS\Standard">
 
     <description>
-        BitcoinCashNode PHP coding standard.
+        LambdaNode PHP coding standard.
     </description>
 
     <rule ref="Generic">

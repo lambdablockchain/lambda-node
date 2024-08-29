@@ -48,7 +48,7 @@ function(make_link file)
 endfunction()
 
 make_link(functional/test_runner.py)
-make_link(util/bitcoin-util-test.py)
+make_link(util/lambda-util-test.py)
 make_link(util/rpcauth-test.py)
 make_link(fuzz/test_runner.py)
 
@@ -62,11 +62,11 @@ macro(add_functional_test_check TARGET COMMENT)
     set(exclude_arg "--exclude=${EXCLUDE_FUNCTIONAL_TESTS}")
   endif()
   set(listDepends "")
-  list(APPEND listDepends "bitcoind"
-                          "bitcoin-cli"
+  list(APPEND listDepends "lambdad"
+                          "lambda-cli"
                           ${CMAKE_CURRENT_BINARY_DIR}/functional/test_runner.py)
-  if(BUILD_BITCOIN_WALLET)
-      list(APPEND listDepends "bitcoin-wallet")
+  if(BUILD_LAMBDA_WALLET)
+      list(APPEND listDepends "lambda-wallet")
   endif()
   add_test_custom_target(${TARGET}
     TEST_COMMAND
@@ -98,7 +98,7 @@ add_functional_test_check(check-functional-extended
 )
 add_dependencies(check-extended check-functional-extended)
 
-set(TEST_SUITE_NAME_UPGRADE_ACTIVATED "Bitcoin Cash Node functional tests with the next upgrade activated")
+set(TEST_SUITE_NAME_UPGRADE_ACTIVATED "Lambda Node functional tests with the next upgrade activated")
 
 add_functional_test_check(check-functional-upgrade-activated
   "Run the functional tests with the upgrade activated"
@@ -130,24 +130,24 @@ add_functional_test_check(check-functional-upgrade-activated-longeronly
 )
 
 
-if(BUILD_BITCOIN_TX)
-  add_test_custom_target(check-bitcoin-util
+if(BUILD_LAMBDA_TX)
+  add_test_custom_target(check-lambda-util
     TEST_COMMAND
       "${EATMYDATA_EXECUTABLE}"
       "${Python_EXECUTABLE}"
-      ./util/bitcoin-util-test.py
+      ./util/lambda-util-test.py
     CUSTOM_TARGET_ARGS
-      COMMENT "Test Bitcoin utilities..."
+      COMMENT "Test Lambda utilities..."
       DEPENDS
-        bitcoin-tx
-        ${CMAKE_CURRENT_BINARY_DIR}/util/bitcoin-util-test.py
+        lambda-tx
+        ${CMAKE_CURRENT_BINARY_DIR}/util/lambda-util-test.py
   )
 
-  add_dependencies(check check-bitcoin-util)
+  add_dependencies(check check-lambda-util)
 endif()
 
 add_custom_target(check-rpcauth
-  COMMENT "Test Bitcoin RPC authentication..."
+  COMMENT "Test Lambda RPC authentication..."
   COMMAND
     "${EATMYDATA_EXECUTABLE}"
     "${Python_EXECUTABLE}"

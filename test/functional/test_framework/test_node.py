@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-# Copyright (c) 2017-2019 The Bitcoin Core developers
+# Copyright (c) 2017-2019 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
-"""Class for bitcoind node under test"""
+"""Class for lambdad node under test"""
 
 import contextlib
 import decimal
@@ -32,7 +32,7 @@ from .util import (
     wait_until,
 )
 
-BITCOIND_PROC_WAIT_TIMEOUT = 60
+LAMBDAD_PROC_WAIT_TIMEOUT = 60
 
 
 class FailedToStartError(Exception):
@@ -46,7 +46,7 @@ class ErrorMatch(Enum):
 
 
 class TestNode():
-    """A class for representing a bitcoind node under test.
+    """A class for representing a lambdad node under test.
 
     This class contains:
 
@@ -58,11 +58,11 @@ class TestNode():
     To make things easier for the test writer, any unrecognised messages will
     be dispatched to the RPC connection."""
 
-    def __init__(self, i, datadir, *, chain, host, rpc_port, p2p_port, timewait, bitcoind,
-                 bitcoin_cli, mocktime, coverage_dir, extra_conf=None, extra_args=None, use_cli=False, emulator=None):
+    def __init__(self, i, datadir, *, chain, host, rpc_port, p2p_port, timewait, lambdad,
+                 lambda_cli, mocktime, coverage_dir, extra_conf=None, extra_args=None, use_cli=False, emulator=None):
         self.index = i
         self.datadir = datadir
-        self.bitcoinconf = os.path.join(self.datadir, "bitcoin.conf")
+        self.lambdaconf = os.path.join(self.datadir, "lambda.conf")
         self.stdout_dir = os.path.join(self.datadir, "stdout")
         self.stderr_dir = os.path.join(self.datadir, "stderr")
         self.chain = chain
@@ -71,10 +71,10 @@ class TestNode():
         self.p2p_port = p2p_port
         self.name = "testnode-{}".format(i)
         self.rpc_timeout = timewait
-        self.binary = bitcoind
+        self.binary = lambdad
         if not os.path.isfile(self.binary):
             raise FileNotFoundError(
-                "Binary '{}' could not be found.\nTry setting it manually:\n\tBITCOIND=<path/to/bitcoind> {}".format(self.binary, sys.argv[0]))
+                "Binary '{}' could not be found.\nTry setting it manually:\n\tLAMBDAD=<path/to/lambdad> {}".format(self.binary, sys.argv[0]))
         self.coverage_dir = coverage_dir
         if extra_conf is not None:
             append_config(datadir, extra_conf)
@@ -103,10 +103,10 @@ class TestNode():
                     raise FileNotFoundError("Emulator '{}' could not be found.".format(emulator))
         self.emulator = emulator
 
-        if use_cli and not os.path.isfile(bitcoin_cli):
+        if use_cli and not os.path.isfile(lambda_cli):
             raise FileNotFoundError(
-                "Binary '{}' could not be found.\nTry setting it manually:\n\tBITCOINCLI=<path/to/bitcoin-cli> {}".format(bitcoin_cli, sys.argv[0]))
-        self.cli = TestNodeCLI(bitcoin_cli, self.datadir, self.emulator)
+                "Binary '{}' could not be found.\nTry setting it manually:\n\tLAMBDACLI=<path/to/lambda-cli> {}".format(lambda_cli, sys.argv[0]))
+        self.cli = TestNodeCLI(lambda_cli, self.datadir, self.emulator)
         self.use_cli = use_cli
 
         self.running = False
@@ -156,7 +156,7 @@ class TestNode():
         raise AssertionError(self._node_msg(msg))
 
     def __del__(self):
-        # Ensure that we don't leave any bitcoind processes lying around after
+        # Ensure that we don't leave any lambdad processes lying around after
         # the test ends
         if self.process and self.cleanup_on_exit:
             # Should only happen on test failure
@@ -219,7 +219,7 @@ class TestNode():
         if extra_args is None:
             extra_args = self.extra_args
 
-        # Add a new stdout and stderr file each time bitcoind is started
+        # Add a new stdout and stderr file each time lambdad is started
         if stderr is None:
             stderr = tempfile.NamedTemporaryFile(
                 dir=self.stderr_dir, delete=False)
@@ -230,7 +230,7 @@ class TestNode():
         self.stdout = stdout
 
         # Delete any existing cookie file -- if such a file exists (eg due to
-        # unclean shutdown), it will get overwritten anyway by bitcoind, and
+        # unclean shutdown), it will get overwritten anyway by lambdad, and
         # potentially interfere with our attempt to authenticate
         delete_cookie_file(self.datadir, self.chain)
 
@@ -250,16 +250,16 @@ class TestNode():
             **kwargs)
 
         self.running = True
-        self.log.debug("bitcoind started, waiting for RPC to come up")
+        self.log.debug("lambdad started, waiting for RPC to come up")
 
     def wait_for_rpc_connection(self):
-        """Sets up an RPC connection to the bitcoind process. Returns False if unable to connect."""
+        """Sets up an RPC connection to the lambdad process. Returns False if unable to connect."""
         # Poll at a rate of four times per second
         poll_per_s = 4
         for _ in range(poll_per_s * self.rpc_timeout):
             if self.process.poll() is not None:
                 raise FailedToStartError(self._node_msg(
-                    'bitcoind exited with status {} during initialization'.format(self.process.returncode)))
+                    'lambdad exited with status {} during initialization'.format(self.process.returncode)))
             try:
                 rpc = get_rpc_proxy(
                     rpc_url(self.datadir, self.chain, self.host, self.rpc_port),
@@ -302,11 +302,11 @@ class TestNode():
                 # -342 Service unavailable, RPC server started but is shutting down due to error
                 if e.error['code'] != -28 and e.error['code'] != -342:
                     raise  # unknown JSON RPC exception
-            except ValueError as e:  # cookie file not found and no rpcuser or rpcassword. bitcoind still starting
+            except ValueError as e:  # cookie file not found and no rpcuser or rpcassword. lambdad still starting
                 if "No RPC credentials" not in str(e):
                     raise
             time.sleep(1.0 / poll_per_s)
-        self._raise_assertion_error("Unable to connect to bitcoind")
+        self._raise_assertion_error("Unable to connect to lambdad")
 
     def get_wallet_rpc(self, wallet_name):
         if self.use_cli:
@@ -359,7 +359,7 @@ class TestNode():
         self.log.debug("Node stopped")
         return True
 
-    def wait_until_stopped(self, timeout=BITCOIND_PROC_WAIT_TIMEOUT):
+    def wait_until_stopped(self, timeout=LAMBDAD_PROC_WAIT_TIMEOUT):
         wait_until(self.is_node_stopped, timeout=timeout)
 
     @contextlib.contextmanager
@@ -395,11 +395,11 @@ class TestNode():
             self, extra_args=None, expected_msg=None, match=ErrorMatch.FULL_TEXT, *args, **kwargs):
         """Attempt to start the node and expect it to raise an error.
 
-        extra_args: extra arguments to pass through to bitcoind
-        expected_msg: regex that stderr should match when bitcoind fails
+        extra_args: extra arguments to pass through to lambdad
+        expected_msg: regex that stderr should match when lambdad fails
 
-        Will throw if bitcoind starts without an error.
-        Will throw if an expected_msg is provided and it does not match bitcoind's stdout."""
+        Will throw if lambdad starts without an error.
+        Will throw if an expected_msg is provided and it does not match lambdad's stdout."""
         with tempfile.NamedTemporaryFile(dir=self.stderr_dir, delete=False) as log_stderr, \
                 tempfile.NamedTemporaryFile(dir=self.stdout_dir, delete=False) as log_stdout:
             try:
@@ -409,7 +409,7 @@ class TestNode():
                 self.stop_node()
                 self.wait_until_stopped()
             except FailedToStartError as e:
-                self.log.debug('bitcoind failed to start: {}'.format(e))
+                self.log.debug('lambdad failed to start: {}'.format(e))
                 self.running = False
                 self.process = None
                 # Check stderr for expected message
@@ -431,9 +431,9 @@ class TestNode():
                                 'Expected message "{}" does not fully match stderr:\n"{}"'.format(expected_msg, stderr))
             else:
                 if expected_msg is None:
-                    assert_msg = "bitcoind should have exited with an error"
+                    assert_msg = "lambdad should have exited with an error"
                 else:
-                    assert_msg = "bitcoind should have exited with expected error " + expected_msg
+                    assert_msg = "lambdad should have exited with expected error " + expected_msg
                 self._raise_assertion_error(assert_msg)
 
     def relay_fee(self, cached=True):
@@ -527,18 +527,18 @@ def arg_to_cli(arg):
 
 
 class TestNodeCLI():
-    """Interface to bitcoin-cli for an individual node"""
+    """Interface to lambda-cli for an individual node"""
 
     def __init__(self, binary, datadir, emulator=None):
         self.options = []
         self.binary = binary
         self.datadir = datadir
         self.input = None
-        self.log = logging.getLogger('TestFramework.bitcoincli')
+        self.log = logging.getLogger('TestFramework.lambdacli')
         self.emulator = emulator
 
     def __call__(self, *options, input=None):
-        # TestNodeCLI is callable with bitcoin-cli command-line options
+        # TestNodeCLI is callable with lambda-cli command-line options
         cli = TestNodeCLI(self.binary, self.datadir, self.emulator)
         cli.options = [str(o) for o in options]
         cli.input = input
@@ -557,12 +557,12 @@ class TestNodeCLI():
         return results
 
     def send_cli(self, command=None, *args, **kwargs):
-        """Run bitcoin-cli command. Deserializes returned string as python object."""
+        """Run lambda-cli command. Deserializes returned string as python object."""
         pos_args = [arg_to_cli(arg) for arg in args]
         named_args = [str(key) + "=" + arg_to_cli(value)
                       for (key, value) in kwargs.items()]
         assert not (
-            pos_args and named_args), "Cannot use positional arguments and named arguments in the same bitcoin-cli call"
+            pos_args and named_args), "Cannot use positional arguments and named arguments in the same lambda-cli call"
         p_args = [self.binary, "-datadir=" + self.datadir] + self.options
         if named_args:
             p_args += ["-named"]
@@ -571,7 +571,7 @@ class TestNodeCLI():
         p_args += pos_args + named_args
         if self.emulator is not None:
             p_args = [self.emulator] + p_args
-        self.log.debug("Running bitcoin-cli command: {}".format(command))
+        self.log.debug("Running lambda-cli command: {}".format(command))
         process = subprocess.Popen(p_args, stdin=subprocess.PIPE,
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         cli_stdout, cli_stderr = process.communicate(input=self.input)

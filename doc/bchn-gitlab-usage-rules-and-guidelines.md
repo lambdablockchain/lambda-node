@@ -1,10 +1,10 @@
 # BCHN GitLab development working rules & guidelines
 
 This document describes the working rules, workflow, terminology and guidelines
-that developers and testers should be familiar with while working on the Bitcoin
+that developers and testers should be familiar with while working on the Lambda
 Cash Node repository and issue tracker at
 
-[https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node/](https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node/)
+[https://github.com/lambdablockchain/lambda-node/](https://github.com/lambdablockchain/lambda-node/)
 
 ## BCHN GitLab workflow
 
@@ -223,7 +223,7 @@ NOTE: MR = "Merge Request"
   product which is not yet covered by a specification or design
 
 - "backport" : issue/MR is classified as relating to an backport of a fix or enhancement
-  from some upstream source (e.g. Bitcoin Core or Bitcoin ABC)
+  from some upstream source (e.g. Lambda Core or Lambda ABC)
 
 - "build": issue/MR is classified as relating to the software build system
 
@@ -272,7 +272,7 @@ NOTE: MR = "Merge Request"
 
 - "wallet": issue/MR relates to wallet functionality
 
-- "bitcoin-seeder": issue/MR relates to bitcoin-seeder component
+- "lambda-seeder": issue/MR relates to lambda-seeder component
 
 - "HODL" : issue/MR is on hold until further notice, usually because of a technical
   problem
@@ -292,7 +292,7 @@ NOTE: MR = "Merge Request"
 - "engineering-change-proposal": issue is a proposal for an engineering change to
   the BCHN software or infrastructure
 
-- "bitcoin-tx": issue/MR is classified as relating to bitcoin-tx tool
+- "lambda-tx": issue/MR is classified as relating to lambda-tx tool
 
 - "SECURITY": issue/MR is considered security relevant
 

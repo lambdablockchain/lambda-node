@@ -1,7 +1,7 @@
 # Publishing the documentation
 
 The documentation located in the `/doc` folder (and all of the git tree) is
-automatically published to [docs.bitcoincashnode.org](https://docs.bitcoincashnode.org)
+automatically published to [docs.lambdanode.org](https://docs.lambdanode.org)
 when changes are merged into the master branch.
 
 This is done as part of the continuous integration, by the job named `pages`

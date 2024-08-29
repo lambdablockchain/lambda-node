@@ -1,4 +1,4 @@
-# Copyright (c) 2017 The Bitcoin developers
+# Copyright (c) 2017 The Lambda developers
 
 cmake_minimum_required(VERSION 3.13)
 project(univalue)

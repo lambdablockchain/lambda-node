@@ -1,4 +1,4 @@
-// Copyright (c) 2016-2018 The Bitcoin Core developers
+// Copyright (c) 2016-2018 The Lambda Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -59,7 +59,7 @@ static bool WalletAppInit(int argc, char *argv[]) {
             strprintf("%s bitcoin-wallet version", PACKAGE_NAME) + " " +
                       FormatFullVersion() + "\n\n" +
                       "wallet-tool is an offline tool for creating and interacting with "
-                      "Bitcoin Cash Node wallet files.\n" +
+                      "Lambda Node wallet files.\n" +
                       "By default wallet-tool will act on wallets in the default mainnet "
                       "wallet directory in the datadir.\n" +
                       "To change the target wallet, use the -datadir, -wallet and "

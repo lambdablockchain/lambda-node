@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2020 The Bitcoin Cash Node developers
+# Copyright (c) 2020 The Lambda Node developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test RPC HTTP/1.1 pipelining."""
@@ -8,7 +8,7 @@ import urllib
 import socket
 import re
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.util import str_to_b64str, assert_equal
 
 
@@ -29,7 +29,7 @@ def make_request(data: str, auth: str = None) -> bytes:
     return '\n'.join(lines).encode('ascii')
 
 
-class HTTPPipeliningTest(BitcoinTestFramework):
+class HTTPPipeliningTest(LambdaTestFramework):
     def set_test_params(self):
         self.num_nodes = 1
         self.extra_args = [

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2014-2019 The Bitcoin Core developers
+# Copyright (c) 2014-2019 The Lambda Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test BIP68 implementation."""
@@ -20,7 +20,7 @@ from test_framework.messages import (
     ToHex,
 )
 from test_framework.script import CScript
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import LambdaTestFramework
 from test_framework.txtools import pad_tx
 from test_framework.util import (
     assert_equal,
@@ -42,10 +42,10 @@ SEQUENCE_LOCKTIME_MASK = 0x0000ffff
 NOT_FINAL_ERROR = "non-BIP68-final (code 64)"
 
 
-class BIP68Test(BitcoinTestFramework):
+class BIP68Test(LambdaTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
-        self.extra_args = [["-noparkdeepreorg", "-maxreorgdepth=-1", "-acceptnonstdtxn=1"],
+        self.extra_args = [["-noparkdeepreorg", "-maxreorgdepth=-1", "-acceptnonstdtxn=0"],
                            ["-acceptnonstdtxn=0", "-maxreorgdepth=-1"]]
 
     def skip_test_if_missing_module(self):
@@ -74,7 +74,7 @@ class BIP68Test(BitcoinTestFramework):
         self.activateCSV()
 
         print("Verifying nVersion=2 transactions are standard.")
-        print("Note that with current versions of bitcoin software, nVersion=2 transactions are always standard (independent of BIP68 activation status).")
+        print("Note that with current versions of lambda software, nVersion=2 transactions are always standard (independent of BIP68 activation status).")
         self.test_version2_relay()
 
         self.log.info("Passed")

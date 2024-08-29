@@ -1,7 +1,7 @@
 Test Networks
 =============
 
-This document describes the Bitcoin Cash test networks supported by the
+This document describes the Lambda test networks supported by the
 BCHN software.
 
 There are currently three test networks that you can access with BCHN:
@@ -25,7 +25,7 @@ Below, we give a brief description and an overview table for these networks.
 Testnet3
 --------
 
-This is the historical testnet in Bitcoin Cash, maintained as a fork from
+This is the historical testnet in Lambda, maintained as a fork from
 BTC's testnet3 since 2017. It has grown substantially in size
 (2020/Oct/15: 44GB), in part due to scaling tests that deposited a number
 of 32MB blocks, and due to the resulting time to sync a test node from
@@ -110,4 +110,4 @@ Note 2: scalenet is intended to be periodically reorganized down to a
 Further references
 ------------------
 
-1. <https://bitcoincashresearch.org/t/testnet4-and-scalenet/148>
+1. <https://lambdaresearch.org/t/testnet4-and-scalenet/148>

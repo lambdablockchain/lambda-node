@@ -8,8 +8,8 @@ Authors: Awemany, Griffith
 
 ## Overview
 
-Using the `version` message in the Bitcoin protocol (for more details,
-see [https://en.bitcoin.it/wiki/Protocol_documentation#version](https://en.bitcoin.it/wiki/Protocol_documentation#version)),
+Using the `version` message in the Lambda protocol (for more details,
+see [https://en.lambda.it/wiki/Protocol_documentation#version](https://en.lambda.it/wiki/Protocol_documentation#version)),
 peers announce their capabilities and preferences to each other. The
 `version` message is limited in scope to a fixed set of well-known
 fields.
@@ -45,9 +45,9 @@ between spec versions 0.0.3 and 0.1.0 ([see below](#Handling-and-sequencing-of-x
 The `xversion` message contains a single compound field which is a
 serialized key-value map henceforth named `xmap` that maps 64-bit
 integer values to variable-sized byte vectors. The message itself is
-encoded in the standard Bitcoin message frame[2].
+encoded in the standard Lambda message frame[2].
 
-The `xmap` is encoded using Bitcoin's usual network de-/serialization
+The `xmap` is encoded using Lambda's usual network de-/serialization
 schemes while using `COMPACTSIZE` size[3] encodings whenever possible.
 Note that this is different from using the default encoding you would
 get when serializing through the `std::map` serializer (which is
@@ -123,9 +123,9 @@ The value is a vector of bytes. These bytes can be an object that
 is itself serialized, but MUST exist within the vector "envelope"
 so that implementations that do not recognize a field can skip it.
 The serialization format of the bytes inside the "envelope" is defined
-by the creator of the key, however, Bitcoin P2P network serialization
+by the creator of the key, however, Lambda P2P network serialization
 is recommended since it is also used to encode/decode most of the other
-the messages in the Bitcoin protocol.
+the messages in the Lambda protocol.
 
 An entry that has unknown meaning is to be ignored.
 
@@ -150,7 +150,7 @@ Values in the `xmap` can be interpreted as compact-size encoded 64-bit
 unsigned integers (named `u64c`), allowing to use it as a simple
 unsigned integer to unsigned integer map.
 
-A value of `u64c` type is encoded in Bitcoin's message serialization as a
+A value of `u64c` type is encoded in Lambda's message serialization as a
 COMPACTSIZE integer *within* the generic byte vector value of the `xmap`.
 For example, a value of `0x1000` (4096) is encoded like this as the `xmap`
 value:
@@ -215,9 +215,9 @@ a non zero suffix as a key.
 
 ## Notes on implementation details
 
-### Bitcoin Unlimited
+### Lambda Unlimited
 
-In the Bitcoin Unlimited reference implementation, the `xversion`
+In the Lambda Unlimited reference implementation, the `xversion`
 message is handled using the `CXVersionMessage` class. The actual
 `xmap` is serialized and deserialized using the
 `CompactMapSerialization` adapter class.  To avoid attacks that could

@@ -8,7 +8,7 @@ SetCompressor @CPACK_NSIS_COMPRESSOR@
 !define VERSION @CPACK_PACKAGE_VERSION@
 !define COMPANY "@CPACK_PACKAGE_VENDOR@"
 !define URL "@CPACK_NSIS_URL_INFO_ABOUT@"
-!define BITCOIN_GUI_NAME "bitcoin-qt.exe"
+!define LAMBDA_GUI_NAME "lambda-qt.exe"
 
 # MUI Symbol Definitions
 !define MUI_ICON "@CPACK_NSIS_MUI_ICON@"
@@ -21,7 +21,7 @@ SetCompressor @CPACK_NSIS_COMPRESSOR@
 !define MUI_STARTMENUPAGE_REGISTRY_KEY ${REGKEY}
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME StartMenuGroup
 !define MUI_STARTMENUPAGE_DEFAULTFOLDER "@CPACK_NSIS_DISPLAY_NAME@"
-!define MUI_FINISHPAGE_RUN $INSTDIR\${BITCOIN_GUI_NAME}
+!define MUI_FINISHPAGE_RUN $INSTDIR\${LAMBDA_GUI_NAME}
 !define MUI_UNICON "@CPACK_NSIS_MUI_UNIICON@"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "@CPACK_NSIS_MUI_UNWELCOMEFINISHPAGE_BITMAP@"
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
@@ -51,9 +51,9 @@ Var StartMenuGroup
 # Installer attributes
 OutFile "@CPACK_TOPLEVEL_DIRECTORY@/@CPACK_OUTPUT_FILE_NAME@"
 !if "@CPACK_SYSTEM_NAME@" == "x86_64-w64-mingw32"
-InstallDir $PROGRAMFILES64\Bitcoin-Cash-Node
+InstallDir $PROGRAMFILES64\Lambda-Node
 !else
-InstallDir $PROGRAMFILES\Bitcoin-Cash-Node
+InstallDir $PROGRAMFILES\Lambda-Node
 !endif
 CRCCheck on
 XPStyle on
@@ -74,15 +74,15 @@ ShowUninstDetails show
 Section -Main SEC0000
     SetOutPath $INSTDIR
     SetOverwrite on
-    File "@CPACK_TEMPORARY_INSTALL_DIRECTORY@/@CPACK_NSIS_EXECUTABLES_DIRECTORY@/${BITCOIN_GUI_NAME}"
+    File "@CPACK_TEMPORARY_INSTALL_DIRECTORY@/@CPACK_NSIS_EXECUTABLES_DIRECTORY@/${LAMBDA_GUI_NAME}"
     File /oname=COPYING.txt "@CPACK_RESOURCE_FILE_LICENSE@"
     File /oname=readme.txt "@CPACK_PACKAGE_DESCRIPTION_FILE@"
     SetOutPath $INSTDIR\daemon
-    File "@CPACK_TEMPORARY_INSTALL_DIRECTORY@/@CPACK_NSIS_EXECUTABLES_DIRECTORY@/bitcoind.exe"
-    File "@CPACK_TEMPORARY_INSTALL_DIRECTORY@/@CPACK_NSIS_EXECUTABLES_DIRECTORY@/bitcoin-cli.exe"
+    File "@CPACK_TEMPORARY_INSTALL_DIRECTORY@/@CPACK_NSIS_EXECUTABLES_DIRECTORY@/lambdad.exe"
+    File "@CPACK_TEMPORARY_INSTALL_DIRECTORY@/@CPACK_NSIS_EXECUTABLES_DIRECTORY@/lambda-cli.exe"
     SetOutPath $INSTDIR\doc
     File /r /x gitian-building* "@CPACK_TEMPORARY_INSTALL_DIRECTORY@/doc\*.md"
-    File /r /x bitcoin_logo_doxygen.png "@CPACK_TEMPORARY_INSTALL_DIRECTORY@/doc\*.png"
+    File /r /x lambda_logo_doxygen.png "@CPACK_TEMPORARY_INSTALL_DIRECTORY@/doc\*.png"
     SetOutPath $INSTDIR
     WriteRegStr HKCU "${REGKEY}\Components" Main 1
 SectionEnd
@@ -93,10 +93,10 @@ Section -post SEC0001
     WriteUninstaller $INSTDIR\uninstall.exe
     !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     CreateDirectory $SMPROGRAMS\$StartMenuGroup
-    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\$(^Name).lnk" $INSTDIR\${BITCOIN_GUI_NAME}
-    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\@CPACK_NSIS_DISPLAY_NAME@ (testnet).lnk" "$INSTDIR\${BITCOIN_GUI_NAME}" "-testnet" "$INSTDIR\${BITCOIN_GUI_NAME}" 1
-    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\@CPACK_NSIS_DISPLAY_NAME@ (testnet4).lnk" "$INSTDIR\${BITCOIN_GUI_NAME}" "-testnet4" "$INSTDIR\${BITCOIN_GUI_NAME}" 1
-    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\@CPACK_NSIS_DISPLAY_NAME@ (scalenet).lnk" "$INSTDIR\${BITCOIN_GUI_NAME}" "-scalenet" "$INSTDIR\${BITCOIN_GUI_NAME}" 1
+    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\$(^Name).lnk" $INSTDIR\${LAMBDA_GUI_NAME}
+    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\@CPACK_NSIS_DISPLAY_NAME@ (testnet).lnk" "$INSTDIR\${LAMBDA_GUI_NAME}" "-testnet" "$INSTDIR\${LAMBDA_GUI_NAME}" 1
+    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\@CPACK_NSIS_DISPLAY_NAME@ (testnet4).lnk" "$INSTDIR\${LAMBDA_GUI_NAME}" "-testnet4" "$INSTDIR\${LAMBDA_GUI_NAME}" 1
+    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\@CPACK_NSIS_DISPLAY_NAME@ (scalenet).lnk" "$INSTDIR\${LAMBDA_GUI_NAME}" "-scalenet" "$INSTDIR\${LAMBDA_GUI_NAME}" 1
     CreateShortcut "$SMPROGRAMS\$StartMenuGroup\Uninstall $(^Name).lnk" $INSTDIR\uninstall.exe
     !insertmacro MUI_STARTMENU_WRITE_END
     WriteRegStr HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayName "$(^Name)"
@@ -108,9 +108,9 @@ Section -post SEC0001
     WriteRegDWORD HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" NoModify 1
     WriteRegDWORD HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" NoRepair 1
     WriteRegStr HKCR "@CPACK_PACKAGE_NAME@" "URL Protocol" ""
-    WriteRegStr HKCR "@CPACK_PACKAGE_NAME@" "" "URL:Bitcoin-Cash-Node"
-    WriteRegStr HKCR "@CPACK_PACKAGE_NAME@\DefaultIcon" "" "$INSTDIR\${BITCOIN_GUI_NAME}"
-    WriteRegStr HKCR "@CPACK_PACKAGE_NAME@\shell\open\command" "" '"$INSTDIR\${BITCOIN_GUI_NAME}" "%1"'
+    WriteRegStr HKCR "@CPACK_PACKAGE_NAME@" "" "URL:Lambda-Node"
+    WriteRegStr HKCR "@CPACK_PACKAGE_NAME@\DefaultIcon" "" "$INSTDIR\${LAMBDA_GUI_NAME}"
+    WriteRegStr HKCR "@CPACK_PACKAGE_NAME@\shell\open\command" "" '"$INSTDIR\${LAMBDA_GUI_NAME}" "%1"'
 SectionEnd
 
 # Macro for selecting uninstaller sections
@@ -128,7 +128,7 @@ done${UNSECTION_ID}:
 
 # Uninstaller sections
 Section /o -un.Main UNSEC0000
-    Delete /REBOOTOK "$INSTDIR\${BITCOIN_GUI_NAME}"
+    Delete /REBOOTOK "$INSTDIR\${LAMBDA_GUI_NAME}"
     Delete /REBOOTOK "$INSTDIR\COPYING.txt"
     Delete /REBOOTOK "$INSTDIR\readme.txt"
     RMDir /r /REBOOTOK "$INSTDIR\daemon"
@@ -143,11 +143,11 @@ Section -un.post UNSEC0001
     Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\@CPACK_NSIS_DISPLAY_NAME@ (testnet).lnk"
     Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\@CPACK_NSIS_DISPLAY_NAME@ (testnet4).lnk"
     Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\@CPACK_NSIS_DISPLAY_NAME@ (scalenet).lnk"
-    Delete /REBOOTOK "$SMSTARTUP\Bitcoin Cash Node.lnk"
-    Delete /REBOOTOK "$SMSTARTUP\Bitcoin Cash Node (testnet).lnk"
-    Delete /REBOOTOK "$SMSTARTUP\Bitcoin Cash Node (testnet4).lnk"
-    Delete /REBOOTOK "$SMSTARTUP\Bitcoin Cash Node (scalenet).lnk"
-    Delete /REBOOTOK "$SMSTARTUP\Bitcoin Cash Node (regtest).lnk"
+    Delete /REBOOTOK "$SMSTARTUP\Lambda Node.lnk"
+    Delete /REBOOTOK "$SMSTARTUP\Lambda Node (testnet).lnk"
+    Delete /REBOOTOK "$SMSTARTUP\Lambda Node (testnet4).lnk"
+    Delete /REBOOTOK "$SMSTARTUP\Lambda Node (scalenet).lnk"
+    Delete /REBOOTOK "$SMSTARTUP\Lambda Node (regtest).lnk"
     Delete /REBOOTOK "$INSTDIR\uninstall.exe"
     Delete /REBOOTOK "$INSTDIR\debug.log"
     Delete /REBOOTOK "$INSTDIR\db.log"

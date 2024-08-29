@@ -74,7 +74,7 @@ Notes on the DSProof specification
 ----------------------------------
 
 1. A copy of the specification can be found at
-   <https://upgradespecs.bitcoincashnode.org/dsproof/>.
+   <https://upgradespecs.lambdanode.org/dsproof/>.
 
 2. The sizes of the `FirstSpender` and `DoubleSpender` fields are variable.
 
