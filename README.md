@@ -24,7 +24,7 @@ What is Lambda Node?
 
 [Lambda Node](https://www.lambdanode.org) is the name of open-source
 software which enables the use of Lambda. It is a descendant of the
-[Lambda Core](https://lambdacore.org) and [Lambda ABC](https://www.lambdaabc.org)
+[Lambda Core](https://lambdacore.org) 
 software projects.
 
 License
