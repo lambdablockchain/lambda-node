@@ -9,7 +9,7 @@ set(CMAKE_USER_MAKE_RULES_OVERRIDE
 )
 
 project(lambda-node
-	VERSION 24.1.0
+	VERSION 1.0.0
 	DESCRIPTION "Lambda Node is a full node implementation of the Lambda protocol."
 	HOMEPAGE_URL "https://www.lambdanode.org"
 )
@@ -18,7 +18,7 @@ project(lambda-node
 set(PACKAGE_NAME "Lambda Node")
 
 # Copyright
-set(COPYRIGHT_YEAR 2022)
+set(COPYRIGHT_YEAR 2024)
 set(COPYRIGHT_HOLDERS "The %s developers")
 set(COPYRIGHT_HOLDERS_SUBSTITUTION Lambda)
 string(REPLACE "%s" ${COPYRIGHT_HOLDERS_SUBSTITUTION} COPYRIGHT_HOLDERS_FINAL ${COPYRIGHT_HOLDERS})

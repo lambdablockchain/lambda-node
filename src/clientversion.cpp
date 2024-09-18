@@ -18,7 +18,7 @@ const std::string CLIENT_NAME("Lambda Cash Node");
 /**
  * Client version number
  */
-#define CLIENT_VERSION_SUFFIX ""
+#define CLIENT_VERSION_SUFFIX "2"
 
 /**
  * The following part of the code determines the CLIENT_BUILD variable.
@@ -46,8 +46,8 @@ const std::string CLIENT_NAME("Lambda Cash Node");
 //! 
 #define GIT_ARCHIVE 1
 #ifdef GIT_ARCHIVE
-#define GIT_COMMIT_ID "ee9621cf47"
-#define GIT_COMMIT_DATE "Sun, 29 May 2022 19:23:10 +0000"
+#define GIT_COMMIT_ID ""
+#define GIT_COMMIT_DATE "Sun, 26 August 2024 19:23:10 +0000"
 #endif
 
 #define BUILD_DESC_WITH_SUFFIX(maj, min, rev, suffix)                          \

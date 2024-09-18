@@ -101,6 +101,7 @@ function(_gen_native_cmake_target)
 	list(JOIN ARGSLIST " " ARGS)
 
 	file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/config")
+
 	configure_file(
 		"${CMAKE_SOURCE_DIR}/cmake/templates/NativeCmakeRunner.cmake.in"
 		"${CMAKE_BINARY_DIR}/config/run_native_cmake.sh"

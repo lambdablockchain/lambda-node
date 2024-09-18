@@ -34,6 +34,8 @@ struct Params {
     int uahfHeight;
     /** Block height at which the new DAA becomes active */
     int daaHeight;
+    int ERHeight;
+    int PushTXStateHeight;
     /** Block height at which the magnetic anomaly activation becomes active */
     int magneticAnomalyHeight;
     /** Block height at which the graviton activation becomes active */

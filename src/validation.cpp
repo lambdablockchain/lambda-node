@@ -1671,6 +1671,7 @@ static uint32_t GetNextBlockScriptFlags(const Consensus::Params &params,
         flags |= SCRIPT_VERIFY_LOW_S;
         flags |= SCRIPT_VERIFY_NULLFAIL;
     }
+     
 
     // When the magnetic anomaly fork is enabled, we start accepting
     // transactions using the OP_CHECKDATASIG opcode and it's verify

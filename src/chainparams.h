@@ -95,6 +95,7 @@ public:
     uint64_t PruneAfterHeight() const { return nPruneAfterHeight; }
     /** Minimum free space (in GB) needed for data directory */
     uint64_t AssumedBlockchainSize() const { return m_assumed_blockchain_size; }
+    
     /**
      * Minimum free space (in GB) needed for data directory when pruned; Does
      * not include prune target

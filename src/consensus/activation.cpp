@@ -15,7 +15,7 @@ static bool IsUAHFenabled(const Consensus::Params &params, int nHeight) {
 bool IsUAHFenabled(const Consensus::Params &params,
                    const CBlockIndex *pindexPrev) {
     if (pindexPrev == nullptr) {
-        return false;
+        return true;
     }
 
     return IsUAHFenabled(params, pindexPrev->nHeight);
@@ -28,7 +28,7 @@ static bool IsDAAEnabled(const Consensus::Params &params, int nHeight) {
 bool IsDAAEnabled(const Consensus::Params &params,
                   const CBlockIndex *pindexPrev) {
     if (pindexPrev == nullptr) {
-        return false;
+        return true;
     }
 
     return IsDAAEnabled(params, pindexPrev->nHeight);
