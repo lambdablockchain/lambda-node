@@ -15,8 +15,8 @@ Lambda is a digital currency that enables instant payments to anyone,
 anywhere in the world. It uses peer-to-peer technology to operate with no
 central authority: managing transactions and issuing money are carried out
 collectively by the network. Lambda is a descendant of Lambda. It became
-a separate currency from the version supported by Lambda Core when the two
-split on August 1, 2017. Lambda and the Lambda Core version of Lambda
+a separate currency from the version supported by Lambda Core .
+Lambda and the Lambda Core version of Lambda
 share the same transaction history up until the split.
 
 What is Lambda Node?
@@ -24,7 +24,7 @@ What is Lambda Node?
 
 [Lambda Node](https://www.lambdanode.org) is the name of open-source
 software which enables the use of Lambda. It is a descendant of the
-[Lambda Core](https://lambdacore.org) and [Lambda ABC](https://www.lambdaabc.org)
+[Lambda Core](https://lambdacore.org) 
 software projects.
 
 License
