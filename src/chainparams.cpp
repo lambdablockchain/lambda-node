@@ -188,23 +188,14 @@ public:
             }};
 
         
-        chainTxData = ChainTxData{
+         chainTxData = ChainTxData{
             // UNIX timestamp of last known number of transactions.
-<<<<<<< HEAD
             1726438333,
             // Total number of transactions between genesis and that timestamp
             // (the tx=... number in the ChainStateFlushed debug.log lines)
             134,
             // Estimated number of transactions per second after that timestamp.
             1.49
-=======
-            1690465230,
-            // Total number of transactions between genesis and that timestamp
-            // (the tx=... number in the ChainStateFlushed debug.log lines)
-            2800,
-            // Estimated number of transactions per second after that timestamp.
-            1,
->>>>>>> origin/master
         };
     }
 };
