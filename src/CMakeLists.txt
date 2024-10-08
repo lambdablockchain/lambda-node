@@ -28,7 +28,7 @@ option(ENABLE_QRCODE "Enable QR code display" ON)
 option(ENABLE_UPNP "Enable UPnP support" ON)
 option(ENABLE_WERROR "Promote some compiler warnings to errors" OFF)
 option(START_WITH_UPNP "Make UPnP the default to map ports" OFF)
-option(ENABLE_CLANG_TIDY "Enable clang-tidy checks for Lambda Node" OFF)
+option(ENABLE_CLANG_TIDY "Enable clang-tidy checks for Lambda Node" ON)
 option(ENABLE_PROFILING "Select the profiling tool to use" OFF)
 option(USE_JEMALLOC_EXPERIMENTAL "Use jemalloc as an allocation library (experimental)" OFF)
 

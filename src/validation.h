@@ -64,7 +64,7 @@ struct Params;
     (::GetSerializeSize(CTransaction::null, PROTOCOL_VERSION))
 
 /** Default for -minrelaytxfee, minimum relay fee for transactions */
-static constexpr Amount DEFAULT_MIN_RELAY_TX_FEE_PER_KB(1000 * SATOSHI);
+static constexpr Amount DEFAULT_MIN_RELAY_TX_FEE_PER_KB(200 * SATOSHI);
 /** Default for -excessutxocharge for transactions transactions */
 static constexpr Amount DEFAULT_UTXO_FEE = Amount::zero();
 //! -maxtxfee default

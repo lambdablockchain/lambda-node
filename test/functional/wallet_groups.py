@@ -11,7 +11,7 @@ from test_framework.util import (
 )
 
 
-def assert_approx(v, vexp, vspan=0.00001):
+def assert_approx(v, vexp, vspan=0.0000001):
     if v < vexp - vspan:
         raise AssertionError("{} < [{}..{}]".format(
             str(v), str(vexp - vspan), str(vexp + vspan)))

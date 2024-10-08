@@ -1,6 +1,6 @@
-# Release Notes for Lambda Node version 24.1.0
+# Release Notes for Lambda Node version 1.0.0
 
-Lambda Node version 24.1.0 is now available from:
+Lambda Node version 1.0.0 is now available from:
 
   <https://lambdanode.org>
 
@@ -18,7 +18,7 @@ new network address formats.
 
 ## Usage recommendations
 
-Users who are running v24.0.0 are encouraged to upgrade to v24.1.0.
+Users who are running v24.0.0 are encouraged to upgrade to v1.0.0.
 It offers up to date TOR network support, improves synching performance and
 fixes minor bugs.
 
@@ -133,7 +133,7 @@ None.
 
 ## Regressions
 
-Lambda Node 24.1.0 does not introduce any known regressions as compared to 24.0.0.
+Lambda Node 1.0.0 does not introduce any known regressions as compared to 24.0.0.
 
 ## Known Issues
 

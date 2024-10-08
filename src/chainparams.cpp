@@ -57,7 +57,7 @@ static CBlock CreateGenesisBlock(const char *pszTimestamp,
  * vtx=1)
  *   CTransaction(hash=4a5e1e, ver=1, vin.size=1, vout.size=1, nLockTime=0)
  *     CTxIn(COutPoint(000000, -1), coinbase
- * 04ffff001d0104455468652054696d65732030332f4a616e2f32303039204368616e63656c6c6f72206f6e206272696e6b206f66207365636f6e64206261696c6f757420666f722062616e6b73)
+ * 0491270606D79D2A69108E51DCD4040A466858D4CE029ACF3586B43B90EA4CF4B4C810DD675E717804EADF5596624B442FB59E1EB2A8580EC4BBCE8594E9F06CE2)
  *     CTxOut(nValue=50.00000000, scriptPubKey=0x5F1DF16B2B704C8A578D0B)
  *   vMerkleTree: 4a5e1e
  */
@@ -82,7 +82,6 @@ public:
         consensus.nSubsidyHalvingInterval = 210000;
         // 00000000000000ce80a7e057163a4db1d5ad7b20fb6f598c9597b9665c8fb0d4 -
         // April 1, 2012
-        consensus.BIP16Height = 173805;
         
         consensus.powLimit = uint256S(
             "00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
@@ -91,8 +90,14 @@ public:
         consensus.nPowTargetSpacing = 5 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = true;
-
-        // The half life for the ASERT DAA. For every (nASERTHalfLife) seconds behind schedule the blockchain gets,
+        
+        consensus.BIP16Height = 0;
+        consensus.BIP34Height = 19;
+        consensus.BIP65Height = 100;
+        consensus.BIP66Height = 101;
+        consensus.CSVHeight = 102;
+        
+            // The half life for the ASERT DAA. For every (nASERTHalfLife) seconds behind schedule the blockchain gets,
         // difficulty is cut in half. Doubled if blocks are ahead of schedule.
         // Two days
         consensus.nASERTHalfLife = 2 * 24 * 60 * 60;
@@ -108,8 +113,9 @@ public:
 
         // August 1, 2017 hard fork
        
+        consensus.axionActivationTime = 1690565230;
         
-
+ 
         // May 15, 2021 12:00:00 UTC protocol upgrade was 1621080000, but since this upgrade was for relay rules only,
         // we do not track this time (since it does not apply at all to the blockchain itself).
 
@@ -139,7 +145,7 @@ public:
         netMagic[2] = 0xf3;
         netMagic[3] = 0xe8;
         nDefaultPort = 9333;
-        nPruneAfterHeight = 2;
+        nPruneAfterHeight = 33;
         m_assumed_blockchain_size = 240;
         m_assumed_chain_state_size = 5;
 
@@ -151,7 +157,7 @@ public:
         assert(genesis.hashMerkleRoot ==
                uint256S("b4b7c2069e481a1e0a05f3a5cce0fd7f04c65f13ca361326d3096dfdee0438ea"));
 
-        vSeeds.emplace_back("154.251.81.112:9333");
+        vSeeds.emplace_back("https://node.lambdablockchain.org/");
         // Note that of those which support the service bits prefix, most only
         // support a subset of possible options. This is fine at runtime as
         // we'll fall back to using them as a oneshot if they don't support the
@@ -175,24 +181,21 @@ public:
 
         checkpointData = {
             /* .mapCheckpoints = */ {
-                {0, genesis.GetHash()},
-                {1,BlockHash::fromHex("00000000d0156b882e35fed2bbeecc7d2190e70bbe9329088abe923448140ca6")},
-                {2,BlockHash::fromHex("0000000091d3ae87cbf6771f706766c69236ffc4569883d91510364b0cfbeab9")},
-                {3,BlockHash::fromHex("00000000e76c20bb02477e20619c3792886319b400a49abd4d90864f4e4249a1")},
-                {4,BlockHash::fromHex("00000000e302142716dd006ec6d187d848c4c359084da1f28c5d4254a25ffe30")},
-                {5,BlockHash::fromHex("000000004d2aa36e9ba6472252485a59bedefcd73a27d2ae0107c978a40d32ff")},
+                {4, BlockHash::fromHex("00000000e302142716dd006ec6d187d848c4c359084da1f28c5d4254a25ffe30")}, 
+                {25, BlockHash::fromHex("00000000237c59cad49eb0fe4587babb232f3d63eb3d1a8bfb8637651858b7f5")}, // When ASERT went live
+                {27, BlockHash::fromHex("00000000a904b6cf1135135afecb45f92d4b7ab22aabfd95a3de2b91bcd12d56")}
             
             }};
 
         
         chainTxData = ChainTxData{
             // UNIX timestamp of last known number of transactions.
-            0,
+            1726438333,
             // Total number of transactions between genesis and that timestamp
             // (the tx=... number in the ChainStateFlushed debug.log lines)
-            0,
+            134,
             // Estimated number of transactions per second after that timestamp.
-            0,
+            1.49
         };
     }
 };
@@ -329,11 +332,7 @@ public:
         // November 13, 2017 hard fork
         consensus.daaHeight = 3000;
 
-        // November 15, 2018 hard fork
-        consensus.magneticAnomalyHeight = 4000;
-
-        // November 15, 2019 protocol upgrade
-        consensus.gravitonHeight = 5000;
+  
 
         // May 15, 2020 12:00:00 UTC protocol upgrade
         // Note: We must set this to 0 here because "historical" sigop code has
