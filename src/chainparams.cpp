@@ -88,8 +88,8 @@ public:
         // two weeks
         consensus.nPowTargetTimespan = 7 * 24 * 60 * 60;
         consensus.nPowTargetSpacing = 5 * 60;
-        consensus.fPowAllowMinDifficultyBlocks = true;
-        consensus.fPowNoRetargeting = true;
+        consensus.fPowAllowMinDifficultyBlocks = false;
+        consensus.fPowNoRetargeting = false;
         
         consensus.BIP16Height = 0;
         consensus.BIP34Height = 19;
@@ -145,7 +145,7 @@ public:
         netMagic[2] = 0xf3;
         netMagic[3] = 0xe8;
         nDefaultPort = 9333;
-        nPruneAfterHeight = 33;
+        nPruneAfterHeight = 7000;
         m_assumed_blockchain_size = 240;
         m_assumed_chain_state_size = 5;
 
@@ -158,6 +158,9 @@ public:
                uint256S("b4b7c2069e481a1e0a05f3a5cce0fd7f04c65f13ca361326d3096dfdee0438ea"));
 
         vSeeds.emplace_back("https://node.lambdablockchain.org/");
+        vSeeds.emplace_back("154.251.104.203");
+        vSeeds.emplace_back("79.10.218.231");
+       
         // Note that of those which support the service bits prefix, most only
         // support a subset of possible options. This is fine at runtime as
         // we'll fall back to using them as a oneshot if they don't support the
@@ -616,9 +619,11 @@ void SelectParams(const std::string &network) {
 SeedSpec6::SeedSpec6(const char *pszHostPort)
 {
     const CService service = LookupNumeric(pszHostPort, 0);
-    if (!service.IsValid() || service.GetPort() == 0)
+    if (!service.IsValid() || service.GetPort() == 0) {
         throw std::invalid_argument(strprintf("Unable to parse numeric-IP:port pair: %s", pszHostPort));
-    if (!service.IsRoutable())
+    }
+    if (!service.IsRoutable()) {
         throw std::invalid_argument(strprintf("Not routable: %s", pszHostPort));
+    }
     *this = SeedSpec6(service);
 }
