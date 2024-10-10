@@ -88,8 +88,8 @@ public:
         // two weeks
         consensus.nPowTargetTimespan = 7 * 24 * 60 * 60;
         consensus.nPowTargetSpacing = 5 * 60;
-        consensus.fPowAllowMinDifficultyBlocks = false;
-        consensus.fPowNoRetargeting = false;
+        consensus.fPowAllowMinDifficultyBlocks = true;
+        consensus.fPowNoRetargeting = true;
         
         consensus.BIP16Height = 0;
         consensus.BIP34Height = 19;
