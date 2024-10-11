@@ -46,7 +46,7 @@ const std::string CLIENT_NAME("Lambda Node");
 //! 
 #define GIT_ARCHIVE 1
 #ifdef GIT_ARCHIVE
-#define GIT_COMMIT_ID ""
+#define GIT_COMMIT_ID "a56a01c"
 #define GIT_COMMIT_DATE "Sun, 26 August 2024 19:23:10 +0000"
 #endif
 
