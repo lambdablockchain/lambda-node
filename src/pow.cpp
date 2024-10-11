@@ -57,8 +57,9 @@ static const CBlockIndex *GetASERTAnchorBlock(const CBlockIndex *const pindex,
     // Note that if pindex == cachedAnchor, GetAncestor() here will return cachedAnchor,
     // which is what we want.
     const CBlockIndex *lastCached = cachedAnchor.load();
-    if (lastCached && pindex->GetAncestor(lastCached->nHeight) == lastCached)
+    if (lastCached && pindex->GetAncestor(lastCached->nHeight) == lastCached) {
         return lastCached;
+    }
 
     // Slow path: walk back until we find the first ancestor for which IsAxionEnabled() == true.
     const CBlockIndex *anchor = pindex;
@@ -519,10 +520,14 @@ uint32_t GetNextCashWorkRequired(const CBlockIndex *pindexPrev,
         return UintToArith256(params.powLimit).GetCompact();
     }
 
-    // Compute the difficulty based on the full adjustment interval.
     const uint32_t nHeight = pindexPrev->nHeight;
-    assert(nHeight >= params.DifficultyAdjustmentInterval());
 
+    // If we are below the DifficultyAdjustmentInterval, use the minimum difficulty.
+    if (nHeight < params.DifficultyAdjustmentInterval()) {
+        return UintToArith256(params.powLimit).GetCompact();
+    }
+
+    // Compute the difficulty based on the full adjustment interval.
     // Get the last suitable block of the difficulty interval.
     const CBlockIndex *pindexLast = GetSuitableBlock(pindexPrev);
     assert(pindexLast);
