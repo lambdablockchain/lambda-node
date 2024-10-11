@@ -37,7 +37,7 @@ PATTERN_ONION = re.compile(
 # Used to only select nodes with a user agent string compatible with the
 # Lambda specification.
 PATTERN_AGENT = re.compile(
-    r"^(/Lambda Cash Node:2[34]\.(\d+)\.(\d+)[^/]*/)"
+    r"^(/Lambda Node:2[34]\.(\d+)\.(\d+)[^/]*/)"
 )
 
 
