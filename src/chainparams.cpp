@@ -114,6 +114,12 @@ public:
         // August 1, 2017 hard fork
        
         consensus.axionActivationTime = 1690565230;
+        consensus.asertAnchorParams = Consensus::Params::ASERTAnchor{
+            10000,          // anchor block height
+            0x1b03a760,     // anchor block nBits
+            1731610320,     // anchor block previous block timestamp
+        }; 
+
         
  
         // May 15, 2021 12:00:00 UTC protocol upgrade was 1621080000, but since this upgrade was for relay rules only,
@@ -159,7 +165,7 @@ public:
 
         vSeeds.emplace_back("https://node.lambdablockchain.org/");
         vSeeds.emplace_back("154.251.104.203");
-        vSeeds.emplace_back("79.10.218.231");
+        
        
         // Note that of those which support the service bits prefix, most only
         // support a subset of possible options. This is fine at runtime as
@@ -178,15 +184,13 @@ public:
 
         vFixedSeeds.assign(std::begin(pnSeed6_main), std::end(pnSeed6_main));
 
-        fDefaultConsistencyChecks = true;
+        fDefaultConsistencyChecks = false;
         fRequireStandard = false;
         m_is_test_chain = false;
 
         checkpointData = {
             /* .mapCheckpoints = */ {
-                {4, BlockHash::fromHex("00000000e302142716dd006ec6d187d848c4c359084da1f28c5d4254a25ffe30")}, 
-                {25, BlockHash::fromHex("00000000237c59cad49eb0fe4587babb232f3d63eb3d1a8bfb8637651858b7f5")}, // When ASERT went live
-                {27, BlockHash::fromHex("00000000a904b6cf1135135afecb45f92d4b7ab22aabfd95a3de2b91bcd12d56")}
+                {0, genesis.GetHash()},
             
             }};
 
