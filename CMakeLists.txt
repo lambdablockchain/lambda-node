@@ -9,7 +9,7 @@ set(CMAKE_USER_MAKE_RULES_OVERRIDE
 )
 
 project(lambda-node
-	VERSION 1.0.0
+	VERSION 1.22.5
 	DESCRIPTION "Lambda Node is a full node implementation of the Lambda protocol."
 	HOMEPAGE_URL "https://www.lambdanode.org"
 )
