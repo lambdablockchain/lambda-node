@@ -47,7 +47,7 @@ Lambda Node development takes place at [https://github.com/lambdablockchain/lamb
 This Github repository contains only source code of releases.
 
 If you would like to contribute, please contact us directly at
-[lambdanode.slack.com](https://lambdanode.slack.com) or [t.me/lambdablockchain]( https://t.me/lambdablockchain)
+[discord.gg/7wVsGxgX](https://discord.gg/7wVsGxgX) or [t.me/lambdablockchain]( https://t.me/lambdablockchain)
 
 Disclosure Policy
 -----------------
