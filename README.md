@@ -22,9 +22,9 @@ share the same transaction history up until the split.
 What is Lambda Node?
 --------------------------
 
-[Lambda Node](https://www.lambdanode.org) is the name of open-source
+[Lambda Node](https://www.lambdablockchain.com) is the name of open-source
 software which enables the use of Lambda. It is a descendant of the
-[Lambda Core](https://lambdacore.org) 
+[Lambda project](https://lambdablockchain.com) 
 software projects.
 
 License
