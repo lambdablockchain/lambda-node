@@ -49,11 +49,19 @@ This Github repository contains only source code of releases.
 If you would like to contribute, please contact us directly at
 [discord.gg/7wVsGxgX](https://discord.gg/7wVsGxgX) or [t.me/lambdablockchain]( https://t.me/lambdablockchain)
 
-Disclosure Policy
+build-node using unix 
 -----------------
 
-We have a [Disclosure Policy](DISCLOSURE_POLICY.md) for responsible disclosure
-of security issues.
+run this commands 
+sudo apt-get install build-essential cmake git libboost-chrono-dev libboost-filesystem-dev libboost-test-dev libboost-thread-dev libevent-dev libminiupnpc-dev libssl-dev libzmq3-dev help2man ninja-build python3
+
+git clone https://github.com/lambdablockchain/lambda-node.git
+
+cd lambda-node/
+mkdir build
+cd build
+cmake -GNinja .. -DBUILD_LAMBDA_QT=OFF
+cmake -GNinja .. -DBUILD_LAMBDA_QT=OFF && find ../ -name "*.sh" -exec chmod +x {} \; && find ../ -name "*.py" -exec chmod +x {} \; && ninja
 
 Further info
 ------------
