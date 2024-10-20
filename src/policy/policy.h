@@ -74,7 +74,7 @@ static constexpr unsigned int DEFAULT_BYTES_PER_SIGCHECK = 50;
  * only increase the dust limit after prior releases were already not creating
  * outputs below the new threshold.
  */
-static constexpr Amount DUST_RELAY_TX_FEE(225 * SATOSHI);
+static constexpr Amount DUST_RELAY_TX_FEE(1000 * SATOSHI);
 
 /**
  * The maximum value we accept for configuration of the -txbroadcastinterval
