@@ -52,7 +52,7 @@ If you would like to contribute, please contact us directly at
 build-node using unix 
 -----------------
 
-run this commands 
+
 sudo apt-get install build-essential cmake git libboost-chrono-dev libboost-filesystem-dev libboost-test-dev libboost-thread-dev libevent-dev libminiupnpc-dev libssl-dev libzmq3-dev help2man ninja-build python3 clang-tidy libminiupnpc-dev libdb++-dev qttools5-dev qttools5-dev-tools qtbase5-dev protobuf-compiler libprotobuf-dev libqrcodegen-dev
 
 git clone https://github.com/lambdablockchain/lambda-node.git
@@ -62,6 +62,23 @@ mkdir build
 cd build
 cmake -GNinja .. -DBUILD_LAMBDA_QT=OFF
 cmake -GNinja .. -DBUILD_LAMBDA_QT=OFF && find ../ -name "*.sh" -exec chmod +x {} \; && find ../ -name "*.py" -exec chmod +x {} \; && ninja
+
+when install completeted create new file in .lambda directory name : lambda.conf add this lines
+-----------------------------------------------------------------------------------------------
+
+server=1
+txindex=1
+acceptnonstdtxn=0
+dns=1
+listen=1
+rpcuser=user
+rpcpassword=pass
+rpcport=9332
+addnode=145.239.0.137:11029
+addnode=51.75.144.177:21029
+
+save and run ./lambdad ./lambda-cli 
+PS: Lambda-qt is not fully developed please do not use it
 
 Further info
 ------------
