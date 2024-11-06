@@ -18,8 +18,7 @@ GlobalConfig::GlobalConfig()
       nMaxMemPoolSize(DEFAULT_EXCESSIVE_BLOCK_SIZE * DEFAULT_MAX_MEMPOOL_SIZE_PER_MB) {}
 
 bool GlobalConfig::SetExcessiveBlockSize(uint64_t blockSize) {
-    // Do not allow maxBlockSize to be set below historic 1MB limit
-    // It cannot be equal either because of the "must be big" UAHF rule.
+    
     if (blockSize <= LEGACY_MAX_BLOCK_SIZE) {
         return false;
     }
@@ -42,7 +41,6 @@ uint64_t GlobalConfig::GetExcessiveBlockSize() const {
 }
 
 bool GlobalConfig::SetGeneratedBlockSize(uint64_t blockSize) {
-    // Do not allow generated blocks to exceed the size of blocks we accept.
     if (blockSize > GetExcessiveBlockSize()) {
         return false;
     }
@@ -52,13 +50,17 @@ bool GlobalConfig::SetGeneratedBlockSize(uint64_t blockSize) {
 }
 
 bool GlobalConfig::SetInvBroadcastRate(uint64_t rate) {
-    if (rate > MAX_INV_BROADCAST_RATE) return false;
+    if (rate > MAX_INV_BROADCAST_RATE) 
+        { return false; }
+    
     nInvBroadcastRate = rate;
     return true;
 }
 
 bool GlobalConfig::SetInvBroadcastInterval(uint64_t interval) {
-    if (interval > MAX_INV_BROADCAST_INTERVAL) return false;
+    if (interval > MAX_INV_BROADCAST_INTERVAL) {
+        return false;
+    }
     nInvBroadcastInterval = interval;
     return true;
 }
