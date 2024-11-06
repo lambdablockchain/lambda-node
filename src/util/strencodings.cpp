@@ -683,8 +683,9 @@ bool ParseHDKeypath(const std::string &keypath_str,
 std::string ToLower(const std::string &str) {
     std::string r;
     r.reserve(str.size());
-    for (auto ch : str)
-        r += ToLower(static_cast<unsigned char>(ch));
+    for (auto ch : str) 
+       { r += ToLower(static_cast<unsigned char>(ch)); }
+    
     return r;
 }
 
@@ -692,14 +693,15 @@ std::string ToUpper(const std::string &str) {
     std::string r;
     r.reserve(str.size());
     for (auto ch : str)
-        r += ToUpper(static_cast<unsigned char>(ch));
+       {  r += ToUpper(static_cast<unsigned char>(ch)); }
+   
     return r;
 }
 
 std::string Capitalize(std::string str) {
-    if (str.empty()) {
-        return str;
-    }
+    if (str.empty()) 
+       { return str; }
+   
     str[0] = ToUpper(str.front());
     return str;
 }
