@@ -98,15 +98,15 @@ bool LockDirectory(const fs::path &directory, const std::string &lockfile_name,
 
     // If a lock for this directory already exists in the map, don't try to
     // re-lock it
-    if (dir_locks.count(pathLockFile.string())) {
-        return true;
-    }
+    if (dir_locks.count(pathLockFile.string())) 
+        {return true;}
+    
 
     // Create empty lock file if it doesn't exist.
     FILE *file = fsbridge::fopen(pathLockFile, "a");
-    if (file) {
-        fclose(file);
-    }
+    if (file) 
+      { fclose(file); }
+  
     auto lock = std::make_unique<fsbridge::FileLock>(pathLockFile);
     if (!lock->TryLock()) {
         return error("Error while attempting to lock directory %s: %s",
@@ -440,7 +440,9 @@ bool ArgsManager::ParseParameters(int argc, const char *const argv[],
 
     for (int i = 1; i < argc; i++) {
         std::string key(argv[i]);
-        if (key == "-") break; // lambda-tx using stdin
+        if (key == "-") 
+          { break; } // lambda-tx using stdin
+      
         std::string val;
         if (!ParseKeyValue(key, val)) {
             break;
