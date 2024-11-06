@@ -45,7 +45,9 @@ bool DecodeBase58(const char *psz, std::vector<uint8_t> &vch, size_t max_ret_len
     size_t length = 0;
     while (*psz == '1') {
         zeroes++;
-        if (zeroes > max_ret_len) return false;
+        if (zeroes > max_ret_len) 
+            { return false; }
+       
         psz++;
     }
     // Allocate enough space in big-endian base256 representation.
@@ -71,7 +73,9 @@ bool DecodeBase58(const char *psz, std::vector<uint8_t> &vch, size_t max_ret_len
         }
         assert(carry == 0);
         length = i;
-        if (length + zeroes > max_ret_len) return false;
+        if (length + zeroes > max_ret_len) 
+          { return false; }
+        
         psz++;
     }
     // Skip trailing spaces.
