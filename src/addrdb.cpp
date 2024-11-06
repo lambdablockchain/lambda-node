@@ -20,7 +20,6 @@ namespace {
 template <typename Stream, typename Data>
 bool SerializeDB(const CChainParams &chainParams, Stream &stream,
                  const Data &data) {
-    // Write and commit header, data
     try {
         CHashWriter hasher(SER_DISK, CLIENT_VERSION);
         stream << chainParams.DiskMagic() << data;
@@ -140,7 +139,6 @@ bool CAddrDB::Read(CAddrMan &addr) {
 bool CAddrDB::Read(CAddrMan &addr, CDataStream &ssPeers) {
     bool ret = DeserializeDB(chainParams, ssPeers, addr, false);
     if (!ret) {
-        // Ensure addrman is left in a clean state
         addr.Clear();
     }
     return ret;
@@ -151,8 +149,9 @@ bool CAddrDB::Read(CAddrMan &addr, CDataStream &ssPeers) {
 BanTables::AggregatedMap BanTables::toAggregatedMap() const {
     AggregatedMap ret;
 
-    for (const auto &entry : subNets)
-        ret.insert(entry);
+    for (const auto &entry : subNets) 
+        { ret.insert(entry); }
+    
     for (const auto &entry : addresses) {
         ret.emplace(std::piecewise_construct,
                     std::forward_as_tuple(CSubNet{entry.first}),
