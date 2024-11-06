@@ -32,6 +32,7 @@
 #include <primitives/block.h>
 #include <primitives/transaction.h>
 #include <random.h>
+#include <stdexcept>
 #include <reverse_iterator.h>
 #include <script/script.h>
 #include <script/scriptcache.h>
