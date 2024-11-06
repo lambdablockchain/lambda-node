@@ -46,9 +46,15 @@ static std::atomic<bool> interruptSocks5Recv(false);
 
 enum Network ParseNetwork(const std::string &net_in) {
     std::string net = ToLower(net_in);
-    if (net == "ipv4") return NET_IPV4;
-    if (net == "ipv6") return NET_IPV6;
-    if (net == "onion") return NET_ONION;
+    if (net == "ipv4") {
+        return NET_IPV4;
+    }
+    if (net == "ipv6") {
+        return NET_IPV6;
+    }
+    if (net == "onion") {
+        return NET_ONION;
+    }
     if (net == "tor") {
         LogPrintf("Warning: net name 'tor' is deprecated and will be removed "
                   "in the future. You should use 'onion' instead.\n");
@@ -80,42 +86,22 @@ static bool LookupIntern(const std::string &name, std::vector<CNetAddr> &vIP, un
 
     {
         CNetAddr addr;
-        // From our perspective, onion addresses are not hostnames but rather
-        // direct encodings of CNetAddr much like IPv4 dotted-decimal notation
-        // or IPv6 colon-separated hextet notation. Since we can't use
-        // getaddrinfo to decode them and it wouldn't make sense to resolve
-        // them, we return a network address representing it instead. See
-        // CNetAddr::SetSpecial(const std::string&) for more details.
         if (addr.SetSpecial(name)) {
             vIP.push_back(addr);
             return true;
         }
     }
 #ifdef WIN32
-    // Windows: WSAStartup must be called before getaddrinfo below will work.
-    // SetupNetworking() is a no-op on all platforms except Windows, and on
-    // Windows it is guaranteed to be ok to call more than once in this
-    // codebase. This was added after MR !786, which ends up calling into here
-    // during static initialization, before SetupNetworking() could be called
-    // by init.cpp.
-    static const bool setupOnce = SetupNetworking(); // leverage C++ guarantee this is called just once.
+    static const bool setupOnce = SetupNetworking(); 
     (void)setupOnce;
 #endif
 
     struct addrinfo aiHint;
     memset(&aiHint, 0, sizeof(struct addrinfo));
 
-    // We want a TCP port, which is a streaming socket type
     aiHint.ai_socktype = SOCK_STREAM;
     aiHint.ai_protocol = IPPROTO_TCP;
-    // We don't care which address family (IPv4 or IPv6) is returned
     aiHint.ai_family = AF_UNSPEC;
-    // If we allow lookups of hostnames, use the AI_ADDRCONFIG flag to only
-    // return addresses whose family we have an address configured for.
-    //
-    // If we don't allow lookups, then use the AI_NUMERICHOST flag for
-    // getaddrinfo to only decode numerical network addresses and suppress
-    // hostname lookups.
     aiHint.ai_flags = fAllowLookup ? AI_ADDRCONFIG : AI_NUMERICHOST;
     struct addrinfo *aiRes = nullptr;
     int nErr = getaddrinfo(name.c_str(), nullptr, &aiHint, &aiRes);
@@ -123,8 +109,6 @@ static bool LookupIntern(const std::string &name, std::vector<CNetAddr> &vIP, un
         return false;
     }
 
-    // Traverse the linked list starting with aiTrav, add all non-internal
-    // IPv4,v6 addresses to vIP while respecting nMaxSolutions.
     struct addrinfo *aiTrav = aiRes;
     while (aiTrav != nullptr &&
            (nMaxSolutions == 0 || vIP.size() < nMaxSolutions)) {
@@ -140,8 +124,6 @@ static bool LookupIntern(const std::string &name, std::vector<CNetAddr> &vIP, un
             resolved = CNetAddr(s6.sin6_addr, s6.sin6_scope_id);
         }
 
-        // Never allow resolving to an internal address. Consider any such
-        // result invalid.
         if (!resolved.IsInternal()) {
             vIP.push_back(resolved);
         }
