@@ -191,6 +191,9 @@ public:
         checkpointData = {
             /* .mapCheckpoints = */ {
                 {0, genesis.GetHash()},
+                {10000, BlockHash::fromHex("00000000000000c7ab434ebc9f09a985ae0d1b00371534b6cf3b6831a924d512")},// When ASERT went live
+                {10716, BlockHash::fromHex("0000000000000fd29f4e346912875421415ee9f2bb51a5eefade7dc44622d835")},// When ASERT went live
+
             
             }};
 
