@@ -20,7 +20,9 @@ uint32_t DecodeBits(std::vector<bool>::const_iterator &bitpos, const std::vector
     bool bit;
     for (auto bit_sizes_it = bit_sizes.begin(); bit_sizes_it != bit_sizes.end(); ++bit_sizes_it) {
         if (bit_sizes_it + 1 != bit_sizes.end()) {
-            if (bitpos == endpos) break;
+            if (bitpos == endpos) 
+                { break; }
+           
             bit = *bitpos;
             ++bitpos;
         } else {
@@ -30,7 +32,9 @@ uint32_t DecodeBits(std::vector<bool>::const_iterator &bitpos, const std::vector
             val += (1 << *bit_sizes_it);
         } else {
             for (int b = 0; b < *bit_sizes_it; b++) {
-                if (bitpos == endpos) return INVALID; // Reached EOF in mantissa
+                if (bitpos == endpos) 
+                   { return INVALID; } // Reached EOF in mantissa
+               
                 bit = *bitpos;
                 ++bitpos;
                 val += static_cast<uint32_t>(bit) << (*bit_sizes_it - 1 - b);
@@ -82,34 +86,48 @@ uint32_t Interpret(const std::vector<bool> &asmap, const std::vector<bool> &ip) 
         opcode = DecodeType(pos, endpos);
         if (opcode == Instruction::RETURN) {
             default_asn = DecodeASN(pos, endpos);
-            if (default_asn == INVALID) break; // ASN straddles EOF
+            if (default_asn == INVALID) 
+               { break; } // ASN straddles EOF
+           
             return default_asn;
         } else if (opcode == Instruction::JUMP) {
             jump = DecodeJump(pos, endpos);
-            if (jump == INVALID) break;      // Jump offset straddles EOF
-            if (bits == 0) break;            // No input bits left
-            if (static_cast<int64_t>(jump) >= static_cast<int64_t>(endpos - pos)) break; // Jumping past EOF
-            if (ip[ip.size() - bits]) {
-                pos += jump;
-            }
+            if (jump == INVALID) 
+                { break;} // Jump offset straddles EOF
+            
+            if (bits == 0) 
+                { break; } // No input bits left
+           
+            if (static_cast<int64_t>(jump) >= static_cast<int64_t>(endpos - pos)) 
+               { break; } // Jumping past EOF
+            
+            if (ip[ip.size() - bits]) 
+              {  pos += jump; }
+            
             bits--;
         } else if (opcode == Instruction::MATCH) {
             match = DecodeMatch(pos, endpos);
-            if (match == INVALID) break; // Match bits straddle EOF
+            if (match == INVALID) 
+               { break; } // Match bits straddle EOF
+           
             matchlen = CountBits(match) - 1;
-            if (bits < matchlen) break; // Not enough input bits
+            if (bits < matchlen) 
+                { break; }// Not enough input bits
+            
             for (uint32_t bit = 0; bit < matchlen; bit++) {
-                if ((ip[ip.size() - bits]) != ((match >> (matchlen - 1 - bit)) & 1)) {
-                    return default_asn;
-                }
+                if ((ip[ip.size() - bits]) != ((match >> (matchlen - 1 - bit)) & 1)) 
+                  {  return default_asn; }
+               
                 bits--;
             }
         } else if (opcode == Instruction::DEFAULT) {
             default_asn = DecodeASN(pos, endpos);
-            if (default_asn == INVALID) break; // ASN straddles EOF
-        } else {
-            break; // Instruction straddles EOF
-        }
+            if (default_asn == INVALID) 
+               { break; }// ASN straddles EOF
+           
+        } else 
+          { break; }// Instruction straddles EOF
+        
     }
     assert(false); // Reached EOF without RETURN, or aborted (see any of the breaks above) - should have been caught by SanityCheckASMap below
     return 0; // 0 is not a valid ASN
@@ -125,61 +143,90 @@ bool SanityCheckASMap(const std::vector<bool> &asmap, uint32_t bits) {
     bool had_incomplete_match = false;
     while (pos != endpos) {
         uint32_t offset = pos - begin;
-        if (!jumps.empty() && offset >= jumps.back().first)
+        if (!jumps.empty() && offset >= jumps.back().first) {
             return false; // There was a jump into the middle of the previous instruction
+        }
         Instruction opcode = DecodeType(pos, endpos);
         if (opcode == Instruction::RETURN) {
             if (prevopcode == Instruction::DEFAULT)
-                return false; // There should not be any RETURN immediately after a DEFAULT (could be combined into just
+                { return false; } // There should not be any RETURN immediately after a DEFAULT (could be combined into just
+            
                               // RETURN)
             uint32_t asn = DecodeASN(pos, endpos);
-            if (asn == INVALID) return false; // ASN straddles EOF
+            if (asn == INVALID) 
+               { return false; } // ASN straddles EOF
+           
             if (jumps.empty()) {
                 // Nothing to execute anymore
-                if (endpos - pos > 7) return false; // Excessive padding
+                if (endpos - pos > 7) 
+                  { return false; }// Excessive padding
+                
                 while (pos != endpos) {
-                    if (*pos) return false; // Nonzero padding bit
+                    if (*pos) 
+                      { return false; } // Nonzero padding bit
+                    
                     ++pos;
                 }
                 return true; // Sanely reached EOF
             } else {
                 // Continue by pretending we jumped to the next instruction
                 offset = pos - begin;
-                if (offset != jumps.back().first) return false; // Unreachable code
+                if (offset != jumps.back().first) 
+                   { return false; }// Unreachable code
+                
                 bits = jumps.back().second; // Restore the number of bits we would have had left after this jump
                 jumps.pop_back();
                 prevopcode = Instruction::JUMP;
             }
         } else if (opcode == Instruction::JUMP) {
             uint32_t jump = DecodeJump(pos, endpos);
-            if (jump == INVALID) return false;     // Jump offset straddles EOF
-            if (static_cast<int64_t>(jump) > static_cast<int64_t>(endpos - pos)) return false; // Jump out of range
-            if (bits == 0) return false;           // Consuming bits past the end of the input
+            if (jump == INVALID) 
+               { return false; } // Jump offset straddles EOF
+            
+            if (static_cast<int64_t>(jump) > static_cast<int64_t>(endpos - pos)) 
+               { return false;  } // Jump out of range
+           
+            if (bits == 0)
+                { return false;  } // Consuming bits past the end of the input
+           
             --bits;
             uint32_t jump_offset = pos - begin + jump;
-            if (!jumps.empty() && jump_offset >= jumps.back().first) return false; // Intersecting jumps
+            if (!jumps.empty() && jump_offset >= jumps.back().first) 
+              {  return false; } // Intersecting jumps
+            
             jumps.emplace_back(jump_offset, bits);
             prevopcode = Instruction::JUMP;
         } else if (opcode == Instruction::MATCH) {
             uint32_t match = DecodeMatch(pos, endpos);
-            if (match == INVALID) return false; // Match bits straddle EOF
+            if (match == INVALID) 
+              { return false; } // Match bits straddle EOF
+           
             uint32_t matchlen = CountBits(match) - 1;
-            if (prevopcode != Instruction::MATCH) had_incomplete_match = false;
-            if (matchlen < 8 && had_incomplete_match)
-                return false; // Within a sequence of matches only at most one should be incomplete
+            if (prevopcode != Instruction::MATCH) 
+               { had_incomplete_match = false; }
+          
+            if (matchlen < 8 && had_incomplete_match) 
+               { return false; } // Within a sequence of matches only at most one should be incomplete
+           
             had_incomplete_match = (matchlen < 8);
-            if (bits < matchlen) return false; // Consuming bits past the end of the input
+            if (bits < matchlen)
+                { return false;  } // Consuming bits past the end of the input
+           
             bits -= matchlen;
             prevopcode = Instruction::MATCH;
         } else if (opcode == Instruction::DEFAULT) {
-            if (prevopcode == Instruction::DEFAULT)
-                return false; // There should not be two successive DEFAULTs (they could be combined into one)
+            if (prevopcode == Instruction::DEFAULT) 
+               { return false;  } // There should not be two successive DEFAULTs (they could be combined into one)
+           
             uint32_t asn = DecodeASN(pos, endpos);
-            if (asn == INVALID) return false; // ASN straddles EOF
+            if (asn == INVALID) 
+               { return false;  } // ASN straddles EOF
+           
             prevopcode = Instruction::DEFAULT;
-        } else {
-            return false; // Instruction straddles EOF
-        }
+        } else 
+           { return false;  } // Instruction straddles EOF
+       
     }
-    return false; // Reached EOF without RETURN instruction
+    return false; 
+
 }
