@@ -21,11 +21,13 @@ std::vector<uint8_t> getP2PKHSignature(const CScript &script)
     opcodetype type;
     script.GetOp(scriptIter, type, vchRet);
 
-    if (vchRet.empty())
-        throw std::runtime_error("scriptSig has no signature");
+    if (vchRet.empty()) 
+       { throw std::runtime_error("scriptSig has no signature"); }
+   
     const auto hashType = vchRet.back();
-    if (!(hashType & SIGHASH_FORKID))
-        throw std::runtime_error("Tx is not a Lambda P2PKH transaction");
+    if (!(hashType & SIGHASH_FORKID)) 
+       { throw std::runtime_error("Tx is not a Lambda P2PKH transaction"); }
+    
     return vchRet;
 }
 
@@ -37,21 +39,26 @@ std::vector<uint8_t> getP2PKHSignature(const CTransaction &tx, unsigned int inpu
     txnouttype outtype;
     std::vector<CTxDestination> dests;
     int nReq;
-    if (!ExtractDestinations(txOut.scriptPubKey, outtype, dests, nReq)
-            || nReq != 1 || dests.size() != 1 || outtype != TX_PUBKEYHASH)
-        throw std::runtime_error("TxOut destination is not P2PKH");
+    if (!ExtractDestinations(txOut.scriptPubKey, outtype, dests, nReq) || nReq != 1 || dests.size() != 1 ||
+        outtype != TX_PUBKEYHASH) 
+       { throw std::runtime_error("TxOut destination is not P2PKH"); }
+   
 
     const SignatureData sigData = DataFromTransaction(CMutableTransaction{tx}, inputIndex, txOut);
-    if (!sigData.complete)
-        throw std::runtime_error("Specified tx input is not properly signed");
-    if (sigData.signatures.size() != 1)
-        throw std::runtime_error("Not a P2PKH signature");
+    if (!sigData.complete) 
+       { throw std::runtime_error("Specified tx input is not properly signed"); }
+   
+    if (sigData.signatures.size() != 1) 
+       { throw std::runtime_error("Not a P2PKH signature");}
+    
     vchRet = sigData.signatures.begin()->second.second;
     if (vchRet.empty())
-        throw std::runtime_error("scriptSig has no signature");
+       {  throw std::runtime_error("scriptSig has no signature");  }
+   
     const auto hashType = vchRet.back();
     if (!(hashType & SIGHASH_FORKID))
-        throw std::runtime_error("Tx is not a Lambda P2PKH transaction");
+        { throw std::runtime_error("Tx is not a Lambda P2PKH transaction");  }
+   
 
     return vchRet;
 }
@@ -88,15 +95,16 @@ void hashTx(DoubleSpendProof::Spender &spender, const CTransaction &tx, size_t i
         spender.hashOutputs = ss.GetHash();
     }
 }
-} // namespace
+} 
 
-// static
 DoubleSpendProof DoubleSpendProof::create(const CTransaction &tx1, const CTransaction &tx2,
                                           const COutPoint &prevout, const CTxOut *txOut)
 {
     DoubleSpendProof answer;
-    if (tx1.GetHash() == tx2.GetHash())
-        throw std::invalid_argument(strprintf("DSProof %s: CTransaction arguments must point to different transactions", __func__));
+    if (tx1.GetHash() == tx2.GetHash()) 
+       { throw std::invalid_argument(
+            strprintf("DSProof %s: CTransaction arguments must point to different transactions", __func__));}
+    
     Spender &s1 = answer.m_spender1;
     Spender &s2 = answer.m_spender2;
 
@@ -117,7 +125,8 @@ DoubleSpendProof DoubleSpendProof::create(const CTransaction &tx1, const CTransa
         }
     }
     if (foundCt != 2)
-        throw std::runtime_error("Transactions do not double spend each other with the specified COutPoint");
+        { throw std::runtime_error("Transactions do not double spend each other with the specified COutPoint");  }
+   
     const CTxIn &in1 = tx1.vin[inputIndex1];
     const CTxIn &in2 = tx2.vin[inputIndex2];
     assert(in1.prevout == in2.prevout && in1.prevout == prevout);
@@ -127,17 +136,14 @@ DoubleSpendProof DoubleSpendProof::create(const CTransaction &tx1, const CTransa
     s1.outSequence = in1.nSequence;
     s2.outSequence = in2.nSequence;
 
-    // Allow only p2pkh for now.  Below calls to getP2PKHSignature may throw
     s1.pushData.clear();
-    // may throw
     s1.pushData.emplace_back( txOut
-                              ? getP2PKHSignature(tx1, inputIndex1, *txOut) // verify sig
-                              : getP2PKHSignature(in1.scriptSig) );         // non-verifying (for test code)
+                              ? getP2PKHSignature(tx1, inputIndex1, *txOut) 
+                              : getP2PKHSignature(in1.scriptSig) );         
     s2.pushData.clear();
-    // may throw
     s2.pushData.emplace_back( txOut
-                              ? getP2PKHSignature(tx2, inputIndex2, *txOut) // verify sig
-                              : getP2PKHSignature(in2.scriptSig) );         // non-verifying (for test code)
+                              ? getP2PKHSignature(tx2, inputIndex2, *txOut) 
+                              : getP2PKHSignature(in2.scriptSig) );         
 
     assert(!s1.pushData.front().empty() && !s2.pushData.front().empty());
 
@@ -149,17 +155,16 @@ DoubleSpendProof DoubleSpendProof::create(const CTransaction &tx1, const CTransa
     hashTx(s1, tx1, inputIndex1);
     hashTx(s2, tx2, inputIndex2);
 
-    // Sort the spenders so the proof stays the same, independent of the order of tx seen first
     int32_t diff = s1.hashOutputs.Compare(s2.hashOutputs);
-    if (diff == 0)
-        diff = s1.hashPrevOutputs.Compare(s2.hashPrevOutputs);
-    if (diff > 0)
-        std::swap(s1, s2);
+    if (diff == 0) 
+       { diff = s1.hashPrevOutputs.Compare(s2.hashPrevOutputs); }
+   
+    if (diff > 0) 
+       { std::swap(s1, s2); }
+   
 
-    answer.setHash(); // finally, set the hash
+    answer.setHash(); 
 
-    // Finally, ensure that we can eat our own dog food -- this should always succeed,
-    // it is a programming error if it does not.
     answer.checkSanityOrThrow();
 
     return answer;
