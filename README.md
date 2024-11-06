@@ -65,6 +65,12 @@ cd build
 
 cmake -GNinja .. -DBUILD_LAMBDA_QT=OFF 
 
+find ../ -name "*.sh" -exec dos2unix {} \; -exec chmod +x {} \;
+
+find ../ -name "*.py" -exec dos2unix {} \; -exec chmod +x {} \;
+
+ninja
+
 
 when install completeted create new file in .lambda directory name : lambda.conf add this lines
 -----------------------------------------------------------------------------------------------
