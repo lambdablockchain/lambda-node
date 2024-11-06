@@ -37,8 +37,9 @@ CScript ParseScript(const std::string &s) {
 
             std::string strName(name);
             mapOpNames[strName] = static_cast<opcodetype>(op);
-            // Convenience: OP_ADD and just ADD are both recognized:
-            if (strName.substr(0,3) == "OP_") strName.erase(0, 3);
+            if (strName.substr(0, 3) == "OP_") {
+                strName.erase(0, 3);
+            }
 
             mapOpNames[strName] = static_cast<opcodetype>(op);
         }
@@ -49,28 +50,21 @@ CScript ParseScript(const std::string &s) {
 
     size_t push_size = 0, next_push_size = 0;
     size_t script_size = 0;
-    // Deal with PUSHDATA1 operation with some more hacks.
     size_t push_data_size = 0;
 
     for (const auto &w : words) {
         if (w.empty()) {
-            // Empty string, ignore. Split given '' will return one
-            // word)
             continue;
         }
 
-        // Update script size.
         script_size = result.size();
 
-        // Make sure we keep track of the size of push operations.
         push_size = next_push_size;
         next_push_size = 0;
 
-        // Decimal numbers
         if (std::all_of(w.begin(), w.end(), ::IsDigit) ||
             (w.front() == '-' && w.size() > 1 &&
              std::all_of(w.begin() + 1, w.end(), ::IsDigit))) {
-            // Number
             int64_t n = atoi64(w);
             auto res = ScriptInt::fromInt(n);
             if ( ! res) {
@@ -83,29 +77,23 @@ CScript ParseScript(const std::string &s) {
         // Hex Data
         if (w.substr(0, 2) == "0x" && w.size() > 2) {
             if (!IsHex(std::string(w.begin() + 2, w.end()))) {
-                // Should only arrive here for improperly formatted hex values
                 throw std::runtime_error("Hex numbers expected to be formatted "
                                          "in full-byte chunks (ex: 0x00 "
                                          "instead of 0x0)");
             }
 
-            // Raw hex data, inserted NOT pushed onto stack:
             std::vector<uint8_t> raw = ParseHex(std::string(w.begin() + 2, w.end()));
             result.insert(result.end(), raw.begin(), raw.end());
             goto next;
         }
 
         if (w.size() >= 2 && w.front() == '\'' && w.back() == '\'') {
-            // Single-quoted string, pushed as data. NOTE: this is poor-man's
-            // parsing, spaces/tabs/newlines in single-quoted strings won't
-            // work.
             std::vector<uint8_t> value(w.begin() + 1, w.end() - 1);
             result << value;
             goto next;
         }
 
         if (mapOpNames.count(w)) {
-            // opcode, e.g. OP_ADD or ADD:
             opcodetype op = mapOpNames[w];
 
             result << op;
@@ -117,7 +105,6 @@ CScript ParseScript(const std::string &s) {
     next:
         size_t size_change = result.size() - script_size;
 
-        // If push_size is set, ensure have added the right amount of stuff.
         if (push_size != 0 && size_change != push_size) {
             throw std::runtime_error(
                 "Wrong number of bytes being pushed. Expected:" +
@@ -125,15 +112,9 @@ CScript ParseScript(const std::string &s) {
                 " Pushed:" + std::to_string(size_change));
         }
 
-        // If push_size is set, and we have push_data_size set, then we have a
-        // PUSHDATAX opcode.  We need to read it's push size as a LE value for
-        // the next iteration of this loop.
         if (push_size != 0 && push_data_size != 0) {
             auto offset = &result[script_size];
 
-            // Push data size is not a CScriptNum (Because it is
-            // 2's-complement instead of 1's complement).  We need to use
-            // ReadLE(N) instead of converting to a CScriptNum.
             if (push_data_size == 1) {
                 next_push_size = *offset;
             } else if (push_data_size == 2) {
@@ -145,14 +126,9 @@ CScript ParseScript(const std::string &s) {
             push_data_size = 0;
         }
 
-        // If push_size is unset, but size_change is 1, that means we have an
-        // opcode in the form of `0x00` or <opcodename>.  We will check to see
-        // if it is a push operation and set state accordingly
         if (push_size == 0 && size_change == 1) {
             opcodetype op = opcodetype(*result.rbegin());
 
-            // If we have what looks like an immediate push, figure out its
-            // size.
             if (op < OP_PUSHDATA1) {
                 next_push_size = op;
                 continue;
