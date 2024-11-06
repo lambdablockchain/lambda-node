@@ -20,7 +20,6 @@ DoubleSpendProofStorage::DoubleSpendProofStorage()
 {
 }
 
-//! Helper struct to catch index modify failures (indicates programming error)
 struct DoubleSpendProofStorage::ModFastFail {
     void operator()(Entry &e) const {
         LogPrintf("DSProof: Failed to modify m_proofs for entry: %s\n", e.proof.GetId().ToString());
@@ -31,7 +30,6 @@ struct DoubleSpendProofStorage::ModFastFail {
 bool DoubleSpendProofStorage::add(const DoubleSpendProof &proof)
 {
     if (proof.isEmpty()) {
-        // this should never happen and indicates a programming error
         throw std::invalid_argument(strprintf("%s: DSProof is empty", __func__));
     }
 
@@ -72,13 +70,18 @@ bool DoubleSpendProofStorage::addOrphan(const DoubleSpendProof &proof, NodeId no
     assert(it != m_proofs.end()); // cannot happen since above add() call guarantees it now exists
 
     incrementOrphans(!it->orphan, hash); // actually increments only if orphan false -- may reap older orphans as a side-effect
-    m_proofs.modify(it, [nodeId](Entry &e) {
-        if (e.nodeId < 0 && nodeId > -1)
-            e.nodeId = nodeId;
-        if (e.timeStamp < 0)
-            e.timeStamp = GetTime();
-        e.orphan = true;
-    }, ModFastFail());
+    m_proofs.modify(
+        it,
+        [nodeId](Entry &e) {
+            if (e.nodeId < 0 && nodeId > -1) {
+                e.nodeId = nodeId;
+            }
+            if (e.timeStamp < 0) {
+                e.timeStamp = GetTime();
+            }
+            e.orphan = true;
+        },
+        ModFastFail());
     return true;
 }
 
@@ -88,8 +91,9 @@ std::list<std::pair<DspId, NodeId>> DoubleSpendProofStorage::findOrphans(const C
     LOCK(m_lock);
     const auto iters = m_proofs.get<tag_COutPoint>().equal_range(prevOut);
     for (auto it = iters.first; it != iters.second; ++it) {
-        if (it->orphan)
+        if (it->orphan) {
             answer.emplace_back(it->proof.GetId(), it->nodeId);
+        }
     }
     return answer;
 }
@@ -99,8 +103,9 @@ std::vector<std::pair<DoubleSpendProof, bool>> DoubleSpendProofStorage::getAll(b
     std::vector<std::pair<DoubleSpendProof, bool>> ret;
     LOCK(m_lock);
     for (const auto & entry: m_proofs) {
-        if (entry.orphan && !includeOrphans)
+        if (entry.orphan && !includeOrphans) {
             continue;
+        }
         ret.emplace_back(entry.proof, entry.orphan);
     }
     return ret;
@@ -146,8 +151,9 @@ DoubleSpendProof DoubleSpendProofStorage::lookup(const DspId &hash) const
     DoubleSpendProof ret;
     LOCK(m_lock);
     auto it = m_proofs.find(hash);
-    if (it != m_proofs.end())
+    if (it != m_proofs.end()) {
         ret = it->proof;
+    }
     return ret;
 }
 
@@ -239,8 +245,10 @@ size_t DoubleSpendProofStorage::numOrphans() const {
 void DoubleSpendProofStorage::decrementOrphans(size_t n)
 {
     if (n) {
-        if (m_numOrphans < n)
-            throw std::runtime_error(strprintf("Internal error in DSProof %s: Orphan counter not as expected.", __func__));
+        if (m_numOrphans < n) {
+            throw std::runtime_error(
+                strprintf("Internal error in DSProof %s: Orphan counter not as expected.", __func__));
+        }
         m_numOrphans -= n;
     }
 }
@@ -267,8 +275,9 @@ void DoubleSpendProofStorage::checkOrphanLimit(const DspId &dontDeleteHash)
                 it = index.erase(it);
                 decrementOrphans(1);
                 ++ctr;
-            } else
+            } else {
                 ++it;
+            }
         }
         LogPrint(BCLog::DSPROOF, "DSProof %s: reaped %d orphans, orphan count now %d (thresh-low: %d, thresh-high: %d",
                  __func__, ctr, m_numOrphans, lowWaterMark, highWaterMark);
