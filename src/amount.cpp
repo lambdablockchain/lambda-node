@@ -13,14 +13,20 @@ std::string Amount::ToString(bool trimTrailingZeros, bool trimTrailingDecimalPoi
     std::string result{strprintf("%d", amount)};
 
     unsigned int start = result.front() == '-' ? 1u : 0u;
-    if (result.length() - start <= 8u) result.insert(start, std::string(9u + start - result.length(), '0')); // if value is less than 1 coin, left-pad zeros
-    result.insert(result.length() - 8u, "."); // decimal place in the correct location
+    if (result.length() - start <= 8u) {
+        result.insert(start,
+                      std::string(9u + start - result.length(), '0')); 
+    }
+    result.insert(result.length() - 8u, "."); 
 
     if (trimTrailingZeros) {
         result.resize(result.find_last_not_of('0') + 1u);
-        if (result.back() == '.') { // if the decimal point would be the last character...
-            if (trimTrailingDecimalPoint) result.resize(result.length() - 1u); // strip the decimal point as well
-            else result += '0'; // we want to keep the decimal, so append back a single .0
+        if (result.back() == '.') { 
+            if (trimTrailingDecimalPoint) {
+                result.resize(result.length() - 1u); 
+            } else {
+                result += '0'; 
+            }
         }
     }
     return result;
