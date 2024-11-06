@@ -18,22 +18,23 @@ bool DoubleSpendProofStorage::periodicCleanup()
         size_t erased = 0;
         for (auto it = index.begin(); it != end; ) {
             if (it->orphan) {
-                if (it->nodeId > -1)
-                    punishPeers.push_back(it->nodeId);
+                if (it->nodeId > -1) 
+                  {  punishPeers.push_back(it->nodeId); }
                 it = index.erase(it);
                 decrementOrphans(1);
                 ++erased;
             } else
-                ++it;
+               {  ++it; }
         }
-        if (erased)
-            LogPrint(BCLog::DSPROOF, "DSP orphans erased: %d, DSProof count: %d\n", erased, m_proofs.size());
+        if (erased) 
+           { LogPrint(BCLog::DSPROOF, "DSP orphans erased: %d, DSProof count: %d\n", erased, m_proofs.size()); }
+       
     }
     if (!punishPeers.empty()) {
-        // mark peers as misbehaving here with m_lock not held
         LOCK(cs_main);
         for (auto peerId : punishPeers)
-            Misbehaving(peerId, 1, "dsproof-orphan-expired");
+            { Misbehaving(peerId, 1, "dsproof-orphan-expired"); }
+       
     }
 
     return true; // repeat
