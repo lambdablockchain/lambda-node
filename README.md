@@ -57,10 +57,13 @@ sudo apt-get install build-essential cmake git libboost-chrono-dev libboost-file
 
 git clone https://github.com/lambdablockchain/lambda-node.git
 
-cd lambda-node/
+cd lambda-node
+
 mkdir build
+
 cd build
-cmake -GNinja .. -DBUILD_LAMBDA_QT=OFF && find ../ -name "*.sh" -exec chmod +x {} \; && find ../ -name "*.py" -exec chmod +x {} \; && ninja
+
+cmake -GNinja .. -DBUILD_LAMBDA_QT=OFF 
 
 
 when install completeted create new file in .lambda directory name : lambda.conf add this lines
