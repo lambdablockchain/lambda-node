@@ -32,7 +32,6 @@
 #include <primitives/block.h>
 #include <primitives/transaction.h>
 #include <random.h>
-#include <stdexcept>
 #include <reverse_iterator.h>
 #include <script/script.h>
 #include <script/scriptcache.h>
@@ -581,17 +580,20 @@ AcceptToMemoryPoolWorker(const Config &config, CTxMemPool &pool,
 
                         const CCoinsViewMemPool viewMemPool(pcoinsTip.get(), pool); // always sees mempool-spent
                         Coin coin;
-                        if (!viewMemPool.GetCoin(txin.prevout, coin))
-                            throw std::runtime_error(strprintf("Could not find coin: %s", txin.prevout.ToString()));
+                        if (!viewMemPool.GetCoin(txin.prevout, coin)) {
+                           { throw std::runtime_error(strprintf("Could not find coin: %s", txin.prevout.ToString())); }
+                       
 
                         const auto proof = DoubleSpendProof::create(*itConflicting->second, tx, txin.prevout, &coin.GetTxOut());
 
-                        if (proof.validate(pool, entryIt->GetSharedTx()) != DoubleSpendProof::Valid)
-                            throw std::runtime_error("Proof is not valid (doublespend tx may be bad)");
+                        if (proof.validate(pool, entryIt->GetSharedTx()) != DoubleSpendProof::Valid) 
+                           { throw std::runtime_error("Proof is not valid (doublespend tx may be bad)"); }
+                       
 
                         const auto txRef = pool.addDoubleSpendProof(proof, entryIt);
-                        if (!txRef)
-                            throw std::runtime_error("Failed to add proof to mempool store");
+                        if (!txRef) 
+                           { throw std::runtime_error("Failed to add proof to mempool store"); }
+                       
 
                         const auto &proofHash = proof.GetId();
                         LogPrint(BCLog::DSPROOF, "  DSProof created: %s (outpoint: %s)\n", proofHash.ToString(), proof.outPoint().ToString());
@@ -601,7 +603,6 @@ AcceptToMemoryPoolWorker(const Config &config, CTxMemPool &pool,
                         GetMainSignals().TransactionDoubleSpent(txRef, proofHash);
 
                     } catch (const std::exception &e) {
-                        // We don't support 100% of the types of transactions yet, failures are possible.
                         LogPrint(BCLog::DSPROOF, "DSProof create & add failed: %s\n", e.what());
                     }
                 }
@@ -846,16 +847,16 @@ AcceptToMemoryPoolWorker(const Config &config, CTxMemPool &pool,
                 LogPrint(BCLog::DSPROOF, "  DSP didn't validate!\n");
                 pool.doubleSpendProofStorage()->remove(it->first);
                 if (it->second > -1)
-                    badProofNodeIds.push_back(it->second);
-            } else { // MissingUTXO / MissingTransaction
-                // This should never happen, but we will log this error here
-                // because dsproof is still in beta.
+                    { badProofNodeIds.push_back(it->second);}
+                
+            } else { 
                 LogPrint(BCLog::DSPROOF, "  DSP unexpected failure reason: %d!\n", int(rc));
                 pool.doubleSpendProofStorage()->remove(it->first);
             }
         }
-        if (!badProofNodeIds.empty())
-            GetMainSignals().BadDSProofsDetectedFromNodeIds(badProofNodeIds); // punish peer(s)
+        if (!badProofNodeIds.empty()) 
+           { GetMainSignals().BadDSProofsDetectedFromNodeIds(badProofNodeIds);  }
+       
     }
 
     return true;
