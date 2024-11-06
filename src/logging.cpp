@@ -1,6 +1,6 @@
-// Copyright (c) 2009-2010 SATOSHI Nakamoto
-// Copyright (c) 2009-2016 The Lambda Core developers
-// Copyright (c) 2017-2019 The Lambda developers
+// Copyright (c) 2009-2010 Satoshi Nakamoto
+// Copyright (c) 2009-2016 The Bitcoin Core developers
+// Copyright (c) 2017-2019 The Bitcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -150,8 +150,9 @@ BCLog::Logger::~Logger() {
 }
 
 void BCLog::Logger::PrependTimestampStr(std::string &str) {
-    if (!m_log_timestamps || !m_started_new_line)
-        return;
+    if (!m_log_timestamps || !m_started_new_line) 
+        { return; }
+    
 
     const int64_t nTimeMicros = GetTimeMicros();
     std::string tmpStr = FormatISO8601DateTime(nTimeMicros / 1000000);
@@ -173,8 +174,9 @@ void BCLog::Logger::PrependTimestampStr(std::string &str) {
 
 void BCLog::Logger::LogPrintStr(std::string &&str)
 {
-    if (!m_print_to_console && !m_print_to_file)
-        return; // Nothing to do!
+    if (!m_print_to_console && !m_print_to_file) 
+       { return; }
+    
 
     if (m_log_threadnames && m_started_new_line) {
         // below does: str = "[" + threadName + "] " + str; (but with less copying)
