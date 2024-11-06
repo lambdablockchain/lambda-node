@@ -1057,7 +1057,9 @@ uint8_t CSubNet::GetCIDRLength() const {
     uint8_t cidr = 0;
     for (size_t i = 0; i < network.m_addr.size(); ++i) {
         const int bits = NetmaskBits(netmask[i]);
-        if (bits <= 0) break; // end of mask
+        if (bits <= 0) {
+            break; 
+        }
         cidr += bits;
     }
     return cidr;
@@ -1077,10 +1079,14 @@ bool CSubNet::IsSingleIP() const {
 }
 
 bool CSubNet::SanityCheck() const {
-    if (!(network.IsIPv4() || network.IsIPv6())) return false;
+    if (!(network.IsIPv4() || network.IsIPv6())) 
+       { return false; }
+    
 
     for (size_t x = 0; x < network.m_addr.size(); ++x) {
-        if (network.m_addr[x] & ~netmask[x]) return false;
+        if (network.m_addr[x] & ~netmask[x]) 
+          { return false; }
+       
     }
 
     return true;
