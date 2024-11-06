@@ -90,9 +90,9 @@ bool BanMan::IsBanned(const CNetAddr &net_addr) const
     auto current_time = GetTime();
     LOCK(m_cs_banned);
     auto foundAddr = m_banned.addresses.find(net_addr);
-    if (foundAddr != m_banned.addresses.end() && current_time < foundAddr->second.nBanUntil)
-        return true;
-    // fall back to scanning for subnet bans
+    if (foundAddr != m_banned.addresses.end() && current_time < foundAddr->second.nBanUntil) 
+       { return true;}
+    
     for (const auto &it : m_banned.subNets) {
         const CSubNet &sub_net = it.first;
         const CBanEntry &ban_entry = it.second;
@@ -106,8 +106,9 @@ bool BanMan::IsBanned(const CNetAddr &net_addr) const
 
 bool BanMan::IsBanned(const CSubNet &sub_net) const
 {
-    if (sub_net.IsSingleIP())
-        return IsBanned(sub_net.Network());
+    if (sub_net.IsSingleIP()) 
+       { return IsBanned(sub_net.Network()); }
+   
     auto current_time = GetTime();
     LOCK(m_cs_banned);
     auto it = m_banned.subNets.find(sub_net);
@@ -159,7 +160,6 @@ void BanMan::Ban(const CNetAddr &net_addr, int64_t ban_time_offset, bool since_u
     }
 
     if (save_to_disk) {
-        // store banlist to disk immediately
         DumpBanlist();
     }
 }
@@ -175,7 +175,6 @@ void BanMan::Ban(const CSubNet &sub_net, int64_t ban_time_offset, bool since_uni
     {
         LOCK(m_cs_banned);
         if (m_banned.subNets[sub_net].nBanUntil < ban_entry.nBanUntil) {
-            // new entry or overwrite existing entry because ban was extended
             m_banned.subNets[sub_net] = ban_entry;
             m_is_dirty = true;
         } else {
@@ -187,7 +186,6 @@ void BanMan::Ban(const CSubNet &sub_net, int64_t ban_time_offset, bool since_uni
     }
 
     if (save_to_disk) {
-        // store banlist to disk immediately
         DumpBanlist();
     }
 }
@@ -214,8 +212,6 @@ bool BanMan::Unban(const CNetAddr &net_addr) {
 
 bool BanMan::Unban(const CSubNet &sub_net) {
     if (sub_net.IsSingleIP()) {
-        // Qt sends us subnets only, so we detect if it's a single IP and
-        // route the unban to the appropriate table
         return Unban(sub_net.Network());
     }
     {
@@ -235,15 +231,12 @@ void BanMan::UnbanCommon()
         m_client_interface->BannedListChanged();
     }
 
-    // store banlist to disk immediately
     DumpBanlist();
 }
 
 void BanMan::GetBanned(BanTables &banmap) {
     LOCK(m_cs_banned);
-    // Sweep the banlist so expired bans are not returned
     SweepBanned();
-    // create a thread safe copy
     banmap = m_banned;
 }
 
@@ -259,7 +252,6 @@ void BanMan::SweepBanned() {
     {
         LOCK(m_cs_banned);
         {
-            // sweep subnets
             auto it = m_banned.subNets.begin();
             while (it != m_banned.subNets.end()) {
                 const CSubNet &sub_net = it->first;
@@ -309,7 +301,6 @@ bool BanMan::BannedSetIsDirty() const {
 }
 
 void BanMan::SetBannedSetDirty(bool dirty) {
-    // reuse m_banned lock for the m_is_dirty flag
     LOCK(m_cs_banned);
     m_is_dirty = dirty;
 }
