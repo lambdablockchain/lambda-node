@@ -4,7 +4,7 @@
 
 #include <support/cleanse.h>
 #include <support/lockedpool.h>
-
+#include <stdexcept>
 #if defined(HAVE_CONFIG_H)
 #include <config/lambda-config.h>
 #endif
