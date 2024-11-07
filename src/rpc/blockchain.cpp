@@ -2116,9 +2116,15 @@ static UniValue getblockstats(const Config &config,
     const CBlockUndo &&blockUndo = loop_inputs ? ReadUndoChecked(pindex) : CBlockUndo{};
 
     // Reserve for the above vectors only if we use them
-    if (do_mediantxsize) txsize_array.reserve(block.vtx.size());
-    if (do_medianfee) fee_array.reserve(block.vtx.size());
-    if (do_feerate_percentiles) feerate_array.reserve(block.vtx.size());
+    if (do_mediantxsize)
+        { txsize_array.reserve(block.vtx.size()); }
+   
+    if (do_medianfee) 
+      { fee_array.reserve(block.vtx.size()); }
+   
+    if (do_feerate_percentiles) 
+       { feerate_array.reserve(block.vtx.size()); }
+   
 
     for (size_t i_tx = 0; i_tx < block.vtx.size(); ++i_tx) {
         const auto &tx = block.vtx[i_tx];
