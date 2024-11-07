@@ -17,6 +17,7 @@
 #pragma once
 
 #include <attributes.h>
+#include <stdexcept>
 
 #include <string>
 #include <vector>
