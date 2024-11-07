@@ -60,8 +60,9 @@ void CScheduler::serviceQueue() {
                     // exception instead of return timeout.
                     // See https://github.com/boostorg/thread/issues/308
                     // Check if the time has passed and if so, break gracefully
-                    if (timeToWaitFor <= boost::chrono::system_clock::now())
-                        break;
+                    if (timeToWaitFor <= boost::chrono::system_clock::now()) 
+                       { break; }
+                   
                     // otherwise, propagate exception up
                     throw;
                 }
