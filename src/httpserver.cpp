@@ -617,7 +617,9 @@ std::string HTTPRequest::ReadBody(bool drain) {
         return ret;
     }
     ret.assign(data, size);
-    if (drain) evbuffer_drain(buf, size);
+    if (drain) 
+       { evbuffer_drain(buf, size); }
+   
     return ret;
 }
 
@@ -646,7 +648,9 @@ void HTTPRequest::WriteReply(int nStatus, const std::string &strReply) {
         const std::string headers = Join(headersVec, "\n", [&isBinary] (const auto &nvp) {
             const auto & [name, value] = nvp;
             // Set the isBinary flag if we are outputting binary (this is for REST .bin output mode)
-            if (!isBinary && name == "Content-Type" && value == "application/octet-stream") isBinary = true;
+            if (!isBinary && name == "Content-Type" && value == "application/octet-stream")
+                { isBinary = true; }
+           
             return strprintf("%s: %s", nvp.first, nvp.second);
         });
         const char *content_desc = "";
