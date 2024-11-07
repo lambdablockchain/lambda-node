@@ -1285,14 +1285,24 @@ void CConnman::SocketEvents(std::set<SOCKET> &recv_set, std::set<SOCKET> &send_s
         vpollfds.push_back(std::move(it.second));
     }
 
-    if (poll(vpollfds.data(), vpollfds.size(), SELECT_TIMEOUT_MILLISECONDS) <= 0) return;
+    if (poll(vpollfds.data(), vpollfds.size(), SELECT_TIMEOUT_MILLISECONDS) <= 0)
+        { return; }
+   
 
-    if (interruptNet) return;
+    if (interruptNet)
+        { return; }
+   
 
     for (struct pollfd pollfd_entry : vpollfds) {
-        if (pollfd_entry.revents & POLLIN) recv_set.insert(pollfd_entry.fd);
-        if (pollfd_entry.revents & POLLOUT) send_set.insert(pollfd_entry.fd);
-        if (pollfd_entry.revents & (POLLERR | POLLHUP)) error_set.insert(pollfd_entry.fd);
+        if (pollfd_entry.revents & POLLIN) 
+           { recv_set.insert(pollfd_entry.fd); }
+       
+        if (pollfd_entry.revents & POLLOUT)
+           { send_set.insert(pollfd_entry.fd); }
+       
+        if (pollfd_entry.revents & (POLLERR | POLLHUP)) 
+           { error_set.insert(pollfd_entry.fd); }
+       
     }
 }
 #else
@@ -1347,27 +1357,27 @@ void CConnman::SocketEvents(std::set<SOCKET> &recv_set, std::set<SOCKET> &send_s
         }
         FD_ZERO(&fdsetSend);
         FD_ZERO(&fdsetError);
-        if (!interruptNet.sleep_for(std::chrono::milliseconds(SELECT_TIMEOUT_MILLISECONDS))) {
-            return;
-        }
+        if (!interruptNet.sleep_for(std::chrono::milliseconds(SELECT_TIMEOUT_MILLISECONDS))) 
+           { return; }
+       
     }
 
     for (SOCKET hSocket : recv_select_set) {
-        if (FD_ISSET(hSocket, &fdsetRecv)) {
-            recv_set.insert(hSocket);
-        }
+        if (FD_ISSET(hSocket, &fdsetRecv)) 
+           { recv_set.insert(hSocket); }
+       
     }
 
     for (SOCKET hSocket : send_select_set) {
-        if (FD_ISSET(hSocket, &fdsetSend)) {
-            send_set.insert(hSocket);
-        }
+        if (FD_ISSET(hSocket, &fdsetSend)) 
+           { send_set.insert(hSocket); }
+        
     }
 
     for (SOCKET hSocket : error_select_set) {
-        if (FD_ISSET(hSocket, &fdsetError)) {
-            error_set.insert(hSocket);
-        }
+        if (FD_ISSET(hSocket, &fdsetError))
+            { error_set.insert(hSocket); }
+       
     }
 }
 #endif
@@ -1377,7 +1387,9 @@ void CConnman::SocketHandler()
     std::set<SOCKET> recv_set, send_set, error_set;
     SocketEvents(recv_set, send_set, error_set);
 
-    if (interruptNet) return;
+    if (interruptNet) 
+       { return; }
+   
 
     //
     // Accept new connections
@@ -2648,7 +2660,9 @@ std::vector<CAddress> CConnman::GetAddressesUntrusted(CNode &requestor, size_t m
 
     std::vector<CAddress> ret{cache_entry.m_addrs_response_cache};
     // Truncate results if they are larger than specified.
-    if (max_addresses > 0 && ret.size() > max_addresses) ret.resize(max_addresses);
+    if (max_addresses > 0 && ret.size() > max_addresses) 
+       { ret.resize(max_addresses); }
+   
     return ret;
 }
 
@@ -3032,11 +3046,12 @@ void CNode::ReadConfigFromExtversion()
     // for example here is where BU sets tx chain limits or if the message checksum is checked
 
     // log the received version number, if any
-    if (const auto ver = extversion.GetVersion())
-        LogPrint(BCLog::NET, "extversion: peer=%d is using extversion %d.%d.%d\n", GetId(),
-                 ver->Major(), ver->Minor(), ver->Revision());
-    else
-        LogPrint(BCLog::NET, "extversion: peer=%d did not send us their \"Version\" key\n", GetId());
+    if (const auto ver = extversion.GetVersion()) 
+       { LogPrint(BCLog::NET, "extversion: peer=%d is using extversion %d.%d.%d\n", GetId(),
+                 ver->Major(), ver->Minor(), ver->Revision()); } 
+    else 
+       { LogPrint(BCLog::NET, "extversion: peer=%d did not send us their \"Version\" key\n", GetId()); }
+   
 }
 
 //! Returns the number of bytes enqeueud (and eventually sent) for a particular command
