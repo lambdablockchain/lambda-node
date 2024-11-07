@@ -145,7 +145,9 @@ struct Sections {
         case RPCArg::Type::NUM:
         case RPCArg::Type::AMOUNT:
         case RPCArg::Type::BOOL: {
-            if (outer_type == OuterType::NONE) return; // Nothing more to do for non-recursive types on first recursion
+            if (outer_type == OuterType::NONE) 
+               { return;  }
+           
             auto left = indent;
             if (arg.m_type_str.size() != 0 && outer_type == OuterType::OBJ) {
                 left += "\"" + arg.m_name + "\": " + arg.m_type_str.at(0);
@@ -278,7 +280,9 @@ std::string RPCHelpMan::ToString() const {
     for (size_t i{0}; i < m_args.size(); ++i) {
         const auto& arg = m_args.at(i);
 
-        if (i == 0) ret += "\nArguments:\n";
+        if (i == 0) 
+           { ret += "\nArguments:\n"; }
+       
 
         // Push named argument name and description
         const auto str_wrapper = (arg.m_type == RPCArg::Type::STR || arg.m_type == RPCArg::Type::STR_HEX) ? "\"" : "";
@@ -448,7 +452,9 @@ std::string RPCArg::ToStringObj(const bool oneline) const
 
 std::string RPCArg::ToString(const bool oneline) const
 {
-    if (oneline && !m_oneline_description.empty()) return m_oneline_description;
+    if (oneline && !m_oneline_description.empty()) 
+       { return m_oneline_description; }
+   
 
     switch (m_type) {
         case Type::STR_HEX:
