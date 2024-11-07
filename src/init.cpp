@@ -2288,7 +2288,9 @@ bool AppInitMain(Config &config, RPCServer &rpcServer,
     if (gArgs.IsArgSet("-rejectsubversion")) {
         std::set<std::string> rejectSubVers;
         for (const auto &reject : gArgs.GetArgs("-rejectsubversion")) {
-            if (reject.empty()) continue;
+            if (reject.empty()) 
+               { continue; }
+           
             rejectSubVers.insert(reject);
         }
         config.SetRejectSubVersions(rejectSubVers);
