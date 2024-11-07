@@ -81,8 +81,9 @@ void Initialize(CScheduler &scheduler) {
         );
         // We run the cleanup task once "soon" if this is the first time Initialize() was called, to clean any stale
         // files immediately at startup.
-        if (invocationId == 1 && config.jobDataExpirySecs > 2)
-            scheduler.scheduleFromNow([]{CleanJobDataDir();}, 100);
+        if (invocationId == 1 && config.jobDataExpirySecs > 2) 
+           { scheduler.scheduleFromNow([] { CleanJobDataDir(); }, 100); }
+        
     }
 }
 
@@ -128,8 +129,9 @@ void CleanJobDataDir() {
     // process gbt/trash/ dir
     for (const auto &entry : fs::directory_iterator(trashDir)) {
         const auto &path = entry.path();
-        if (!fs::is_regular_file(path))
-            continue;
+        if (!fs::is_regular_file(path)) 
+           { continue; }
+       
         ++total;
         const auto mtime = fs::last_write_time(path);
         if (mtime < cutoff) {
