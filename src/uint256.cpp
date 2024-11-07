@@ -57,9 +57,9 @@ template <unsigned int BITS> void base_blob<BITS>::SetHex(const char *psz) noexc
         ++p1;
     }
 
-    // clear remaining bytes, if any
     while (p1 < pend)
-        *p1++ = 0;
+        { *p1++ = 0;}
+    
 }
 
 template <unsigned int BITS>
