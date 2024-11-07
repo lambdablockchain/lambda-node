@@ -2071,7 +2071,9 @@ static void PushGetAddrOnceIfAfterVerAck(CConnman *connman, CNode *pfrom) {
 static void PushVerACK(CConnman *connman, CNode *pfrom, int nVersion = 0 /* 0 = read from pfrom */) {
     const CNetMsgMaker msg_maker(INIT_PROTO_VERSION);
 
-    if (nVersion == 0) nVersion = pfrom->nVersion;
+    if (nVersion == 0) 
+       { nVersion = pfrom->nVersion; }
+   
 
     if (nVersion >= FEATURE_NEGOTIATION_BEFORE_VERACK_VERSION) {
         // Signal ADDRv2 support (BIP155), but only if version >= FEATURE_NEGOTIATION_BEFORE_VERACK_VERSION
@@ -3840,11 +3842,11 @@ static bool ProcessMessage(const Config &config, CNode *pfrom,
         } catch (const std::exception &e) {
             LogPrint(BCLog::DSPROOF, "Failure handling double spend proof. Peer: %d Reason: %s\n", pfrom->GetId(), e.what());
             if (!dsp.GetId().IsNull())
-                g_mempool.doubleSpendProofStorage()->markProofRejected(dsp.GetId());
-            if (bannablePeerId > -1) {
-                // signal that a bad proof was seen & punish peer
-                GetMainSignals().BadDSProofsDetectedFromNodeIds(std::vector<NodeId>(1, bannablePeerId));
-            }
+                { g_mempool.doubleSpendProofStorage()->markProofRejected(dsp.GetId());}
+            
+            if (bannablePeerId > -1) 
+              { GetMainSignals().BadDSProofsDetectedFromNodeIds(std::vector<NodeId>(1, bannablePeerId)); }
+           
             return false;
         }
         if (addedForTx && !dsp.GetId().IsNull()) { // added to mempool correctly, forward to nodes.
@@ -4998,10 +5000,12 @@ void PeerLogicValidation::TransactionDoubleSpent(const CTransactionRef &ptx, con
     connman->ForEachNode([ptx, inv = CInv(MSG_DOUBLESPENDPROOF, dspId)](CNode *pnode) {
         {
             LOCK(pnode->cs_filter);
-            if (!pnode->fRelayTxes)
-                return;
-            if (pnode->pfilter && !pnode->pfilter->IsRelevantAndUpdate(*ptx))
-                return;
+            if (!pnode->fRelayTxes) 
+              { return; }
+           
+            if (pnode->pfilter && !pnode->pfilter->IsRelevantAndUpdate(*ptx)) 
+               { return; }
+            
         }
         pnode->PushInventory(inv);
     });
