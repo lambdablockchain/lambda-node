@@ -79,8 +79,9 @@ void SetupExpiryHooks(CScheduler &scheduler) {
         // print to the log if we are really still outdated
         // we may become un-outdated only if the user's clock
         // was reset back.
-        if (IsOutdated())
-            LogPrintf("\n\n%s\n\n", GetWarnString(false));
+        if (IsOutdated()) 
+           { LogPrintf("\n\n%s\n\n", GetWarnString(false)); }
+       
         // disable RPC if we are at or past the expiry deadline
         fRPCDisabled = fDisableRPCOnExpiry && IsExpired();
     };
