@@ -320,9 +320,9 @@ void BlockAssembler::addTxs(int64_t nLimitTimePoint) {
     auto IsSkippedChild = [&skippedChildren](const auto &it) { return bool(skippedChildren.count(&*it)); };
 
     auto MissingParents = [this, &missingParentCount](const auto &iter) EXCLUSIVE_LOCKS_REQUIRED(mempool->cs) {
-        // If we've added any of this tx's parents already, then missingParentCount will have the current count
         if (auto pcIt = missingParentCount.find(&*iter); pcIt != missingParentCount.end())
-            return pcIt->second != 0; // when pcIt->second reaches 0, we have added all of this tx's parents
+            { return pcIt->second != 0; } 
+       
         return !mempool->GetMemPoolParents(iter).empty();
     };
 
