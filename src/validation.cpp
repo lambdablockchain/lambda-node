@@ -580,7 +580,7 @@ AcceptToMemoryPoolWorker(const Config &config, CTxMemPool &pool,
 
                         const CCoinsViewMemPool viewMemPool(pcoinsTip.get(), pool); // always sees mempool-spent
                         Coin coin;
-                        if (!viewMemPool.GetCoin(txin.prevout, coin)) {
+                        if (!viewMemPool.GetCoin(txin.prevout, coin)) 
                            { throw std::runtime_error(strprintf("Could not find coin: %s", txin.prevout.ToString())); }
                        
 
