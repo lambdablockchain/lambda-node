@@ -27,8 +27,9 @@ int ParseVerbosity(const UniValue &arg, const int def, const int trueval, const 
     } else if (arg.is(UniValue::MBOOL)) {
         verbosity = arg.get_bool() ? trueval : falseval;
     }
-    if (verbosity < 0 || verbosity > verbosityMax)
-        throw JSONRPCError(RPC_INVALID_PARAMETER, "Bad verbosity");
+    if (verbosity < 0 || verbosity > verbosityMax) 
+       { throw JSONRPCError(RPC_INVALID_PARAMETER, "Bad verbosity"); }
+    
     return verbosity;
 }
 
@@ -45,7 +46,8 @@ UniValue::Object ToObject(const DoubleSpendProof::Spender &spender) {
     pushData.reserve(2);
     CScript script;
     for (const auto &data : spender.pushData)
-        script << data;
+        { script << data; }
+   
     pushData.emplace_back("asm", ScriptToAsmStr(script, true));
     pushData.emplace_back("hex", HexStr(script));
     ret.emplace_back("pushdata", std::move(pushData));
@@ -57,8 +59,9 @@ UniValue::Object ToObject(int verbosity, const DoubleSpendProof &dsproof, const 
                           const std::optional<CTxMemPool::DspDescendants> &descendants = std::nullopt) {
     UniValue::Object ret;
 
-    if (verbosity <= 0 || verbosity > verbosityMax)
-        throw JSONRPCError(RPC_INVALID_PARAMETER, "Bad verbosity");
+    if (verbosity <= 0 || verbosity > verbosityMax) 
+       { throw JSONRPCError(RPC_INVALID_PARAMETER, "Bad verbosity");  }
+   
 
     ret.reserve(1 + verbosity + bool(path) + bool(descendants));
 
@@ -86,33 +89,37 @@ UniValue::Object ToObject(int verbosity, const DoubleSpendProof &dsproof, const 
     if (path) {
         UniValue::Array arr;
         arr.reserve(path->size());
-        for (const auto &ancestorTxId : *path)
-            arr.emplace_back(ancestorTxId.ToString());
+        for (const auto &ancestorTxId : *path) 
+           { arr.emplace_back(ancestorTxId.ToString()); }
+       
         ret.emplace_back("path", std::move(arr));
     }
     // add "descendants" key if the caller provided a valid optional
     if (descendants) {
         UniValue::Array arr;
         arr.reserve(descendants->size());
-        for (const auto &descendantTxId : *descendants)
-            arr.emplace_back(descendantTxId.ToString());
+        for (const auto &descendantTxId : *descendants) 
+           { arr.emplace_back(descendantTxId.ToString()); }
+       
         ret.emplace_back("descendants", std::move(arr));
     }
     // verbosity = 3 or above, add the "spenders" array
     if (verbosity >= 3) {
         UniValue::Array spenders;
         spenders.reserve(2);
-        for (const auto &spender : {dsproof.spender1(), dsproof.spender2()})
-            spenders.emplace_back(ToObject(spender));
+        for (const auto &spender : {dsproof.spender1(), dsproof.spender2()}) 
+           { spenders.emplace_back(ToObject(spender)); }
+       
         ret.emplace_back("spenders", std::move(spenders));
     }
     return ret;
 }
 
 void ThrowIfDisabled() {
-    if (!DoubleSpendProof::IsEnabled())
-        throw JSONRPCError(RPC_METHOD_DISABLED,
-                           "Double-spend proofs subsystem is disabled. Restart with -doublespendproof=1 to enable.");
+    if (!DoubleSpendProof::IsEnabled()) 
+      { throw JSONRPCError(RPC_METHOD_DISABLED,
+                           "Double-spend proofs subsystem is disabled. Restart with -doublespendproof=1 to enable."); }
+   
 }
 
 std::string ResultsPartForVerbosity(int verbosity, std::string::size_type indent = 0) {
@@ -282,7 +289,8 @@ static UniValue getdsproof(const Config &,
                 }
             } else {
                 if (auto optProof = g_mempool.getDoubleSpendProof(txId, descPtr))
-                    optPair.emplace(std::move(*optProof), std::move(txId));
+                    { optPair.emplace(std::move(*optProof), std::move(txId)); }
+               
             }
         }
     } else {
@@ -292,8 +300,9 @@ static UniValue getdsproof(const Config &,
                               {"vout", UniValue::VNUM}});
         const TxId txId{ParseHashO(obj, "txid")};
         const int vout = obj["vout"].get_int();
-        if (vout < 0)
-            throw JSONRPCError(RPC_INVALID_PARAMETER, "vout must be positive");
+        if (vout < 0) 
+          { throw JSONRPCError(RPC_INVALID_PARAMETER, "vout must be positive"); }
+       
         const COutPoint outpoint(txId, static_cast<uint32_t>(vout));
 
         // next, look up the outpoint
@@ -301,7 +310,8 @@ static UniValue getdsproof(const Config &,
     }
 
     if (!optPair)
-        return UniValue{}; // noting found, return null
+        { return UniValue{};  }
+   
 
     if (optPair->second.IsNull()) {
         // orphan result, ensure optPath and optDescendants empty to omit "descendants" and "path" keys
@@ -363,8 +373,9 @@ static UniValue getdsprooflist(const Config &,
     const int verbosity = ParseVerbosity(request.params[0], 0, 2); // defaults to 0 (false) if missing, true=2
     bool includeOrphans = false;
 
-    if (request.params.size() >= 2)
-        includeOrphans = request.params[1].get_bool();
+    if (request.params.size() >= 2) 
+       { includeOrphans = request.params[1].get_bool(); }
+   
 
     const auto proofs = g_mempool.listDoubleSpendProofs(includeOrphans);
     UniValue::Array ret;
@@ -372,14 +383,16 @@ static UniValue getdsprooflist(const Config &,
 
     if (verbosity <= 0) {
         // verbosity = 0, just dump the dsproof id's
-        for (const auto & [dsproof, txId] : proofs)
+        for (const auto &[dsproof, txId] : proofs) {
             ret.emplace_back(dsproof.GetId().ToString());
+        }
     } else if (verbosity >= 1) {
         // verbosity = 1, dump an object with keys: "txid", "hex"
         // verbosity = 2, dump an object with keys: "dspid", "txid", "outpoint",
         // verbosity = 3, dump an object with keys: "dspid", "txid", "outpoint", "spenders"
-        for (const auto & [dsproof, txId] : proofs)
-            ret.emplace_back(ToObject(verbosity, dsproof, txId));
+        for (const auto &[dsproof, txId] : proofs) 
+           { ret.emplace_back(ToObject(verbosity, dsproof, txId)); }
+       
     }
     return ret;
 }
