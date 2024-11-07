@@ -55,6 +55,8 @@ build-node using unix
 
 sudo apt-get install build-essential cmake git libboost-chrono-dev libboost-filesystem-dev libboost-test-dev libboost-thread-dev libevent-dev libminiupnpc-dev libssl-dev libzmq3-dev help2man ninja-build python3 clang-tidy libminiupnpc-dev libdb++-dev qttools5-dev qttools5-dev-tools qtbase5-dev protobuf-compiler libprotobuf-dev libqrcodegen-dev
 
+
+```bash
 git clone https://github.com/lambdablockchain/lambda-node.git
 
 cd lambda-node
@@ -70,7 +72,7 @@ find ../ -name "*.sh" -exec dos2unix {} \; -exec chmod +x {} \;
 find ../ -name "*.py" -exec dos2unix {} \; -exec chmod +x {} \;
 
 ninja
-
+```
 
 when install completeted create new file in .lambda directory name : lambda.conf add this lines
 -----------------------------------------------------------------------------------------------
