@@ -638,8 +638,9 @@ static UniValue getblocktemplatecommon(bool fLight, const Config &config, const 
             // we reserve 1 more than we need, because makeMerkleBranch may use a little more space
             vtxIdsNoCoinbase.reserve(pvtx->size());
             for (const auto &tx : *pvtx) {
-                if (tx->IsCoinBase())
-                    continue;
+                if (tx->IsCoinBase()) 
+                   { continue; }
+               
                 vtxIdsNoCoinbase.push_back(tx->GetId());
             }
             // make merkleSteps and merkle branch
@@ -1224,8 +1225,9 @@ std::vector<uint256> MakeMerkleBranch(std::vector<uint256> hashes) {
            ?cb  0  tx  tx   tx  tx tx  tx   <-- input hashes (txids)
     */
     std::vector<uint256> steps;
-    if (hashes.empty())
-        return steps;
+    if (hashes.empty()) 
+       { return steps; }
+   
     steps.reserve(size_t(std::ceil(std::log2(hashes.size() + 1)))); // results will be of size ~log2 input hashes
     while (hashes.size() > 1) {
         // put first element
@@ -1332,8 +1334,9 @@ void CacheAndSaveTxsToFile(const JobId &jobId, const std::vector<CTransactionRef
     std::vector<CTransactionRef> storeTxs;
     bool didSetupStoreTxs = false;
     const auto setupStoreTxs = [&storeTxs, &didSetupStoreTxs, pvtx] {
-        if (didSetupStoreTxs)
-            return;
+        if (didSetupStoreTxs) 
+           { return; }
+       
         if (!pvtx->empty()) {
             // we store all but the first tx (all but coinbase)
             auto start = pvtx->front()->IsCoinBase() ? std::next(pvtx->begin()) : pvtx->begin();
@@ -1355,7 +1358,8 @@ void CacheAndSaveTxsToFile(const JobId &jobId, const std::vector<CTransactionRef
             datastream.reserve(256 * nTx + sizeof(nTx)); // assume avg 256 byte tx size. This doesn't have to be exact, this is just to avoid redundant allocations as we serialize.
             datastream << nTx; // first write the size
             for (const auto &txRef : storeTxs)
-                datastream << *txRef;
+                { datastream << *txRef; }
+           
 
             const auto t0 = GetTimeMicros(); // for perf. logging iff BCLog::RPC is enabled
             auto tmpOut = outputFile;
@@ -1364,14 +1368,14 @@ void CacheAndSaveTxsToFile(const JobId &jobId, const std::vector<CTransactionRef
             {
                 fs::ofstream ofile(tmpOut, std::ios_base::binary|std::ios_base::out|std::ios_base::trunc);
                 if ((ok = ofile.is_open())) {
-                    // "GBT" magic bytes at front
                     using std::streamsize;
                     ofile.write(kDataFileMagic.data(), streamsize(kDataFileMagic.size()));
-                    if (ofile)
-                        ofile.write(datastream.data(), streamsize(datastream.size()));
-                    if (ofile)
-                        // "GBT" magic bytes at end
-                        ofile.write(kDataFileMagic.data(), streamsize(kDataFileMagic.size()));
+                    if (ofile) 
+                       { ofile.write(datastream.data(), streamsize(datastream.size())); }
+                   
+                    if (ofile) 
+                       { ofile.write(kDataFileMagic.data(), streamsize(kDataFileMagic.size())); }
+                   
                     ok = bool(ofile);
                 }
             } // file is closed
