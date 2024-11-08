@@ -430,8 +430,9 @@ void CTxMemPool::check(const CCoinsViewCache *pcoins) const {
         setEntries setAncestors;
         CalculateMemPoolAncestors(*it, setAncestors);
         // all ancestors should have entryId < this tx's entryId
-        for (const auto &ancestor : setAncestors)
-            assert(ancestor->GetEntryId() < it->GetEntryId());
+        for (const auto &ancestor : setAncestors) 
+           { assert(ancestor->GetEntryId() < it->GetEntryId()); }
+       
 
         // Check children against mapNextTx
         CTxMemPool::setEntries setChildrenCheck;
@@ -483,9 +484,13 @@ void CTxMemPool::check(const CCoinsViewCache *pcoins) const {
 bool CTxMemPool::CompareTopologically(const TxId &txida, const TxId &txidb) const {
     LOCK(cs);
     auto it1 = mapTx.find(txida);
-    if (it1 == mapTx.end()) return false;
+    if (it1 == mapTx.end()) 
+       { return false; }
+   
     auto it2 = mapTx.find(txidb);
-    if (it2 == mapTx.end()) return true;
+    if (it2 == mapTx.end())
+        { return true; }
+   
     return it1->GetEntryId() < it2->GetEntryId();
 }
 
@@ -572,8 +577,9 @@ void CTxMemPool::PrioritiseTransaction(const TxId &txid,
 void CTxMemPool::ApplyDelta(const TxId &txid, Amount &nFeeDelta) const {
     LOCK(cs);
     auto pos = mapDeltas.find(txid);
-    if (pos == mapDeltas.end())
-        return;
+    if (pos == mapDeltas.end()) 
+       { return; }
+   
     nFeeDelta += pos->second;
 }
 
@@ -737,8 +743,9 @@ CTransactionRef CTxMemPool::addDoubleSpendProof(const DoubleSpendProof &proof, c
             return CTransactionRef();
         }
         iter = mapTx.find(spendingTx->second->GetId());
-    } else
-        iter = *optIter;
+    } else 
+       { iter = *optIter; }
+   
 
     if (iter->HasDsp())  {
         // A DSProof already exists for this tx, don't propagate new one.
@@ -767,10 +774,12 @@ auto CTxMemPool::listDoubleSpendProofs(const bool includeOrphans) const -> std::
     ret.reserve(proofs.size());
     for (auto & [proof, isOrphan] : proofs) {
         TxId txId;
-        if (proof.isEmpty())
-            throw std::runtime_error("Internal error: m_dspStorage returned an empty proof");
-        if (isOrphan && !includeOrphans)
-            throw std::runtime_error("Internal error: m_dspStorage returned orphans unexpectedly");
+        if (proof.isEmpty()) 
+           { throw std::runtime_error("Internal error: m_dspStorage returned an empty proof"); }
+        
+        if (isOrphan && !includeOrphans) 
+           { throw std::runtime_error("Internal error: m_dspStorage returned orphans unexpectedly"); }
+       
         if (!isOrphan) {
             // find the txId for this proof
             if (auto it = mapNextTx.find(proof.outPoint()); it != mapNextTx.end()) {
@@ -814,8 +823,9 @@ auto CTxMemPool::getDoubleSpendProof(const DspId &dspId, DspDescendants *desc) c
         txId = it->second->GetId();
         if (desc) {
             // caller supplied a descendants set they want populated, so populate it on this hit
-            if (auto optIter = GetIter(txId))
-                *desc = getDspDescendantsForIter(*optIter);
+            if (auto optIter = GetIter(txId)) 
+               { *desc = getDspDescendantsForIter(*optIter); }
+           
         }
     }
     return ret;
@@ -832,8 +842,9 @@ auto CTxMemPool::getDspDescendantsForIter(txiter it) const -> DspDescendants {
     DspDescendants ret;
     setEntries iters;
     CalculateDescendants(it, iters);
-    for (const auto &iter : iters)
-        ret.emplace(iter->GetTx().GetId());
+    for (const auto &iter : iters) 
+       { ret.emplace(iter->GetTx().GetId()); }
+   
     return ret;
 }
 
@@ -881,7 +892,9 @@ auto CTxMemPool::recursiveDSProofSearch(const TxId &txId, DspDescendants *desc, 
         path.push_back(txit->GetTx().GetId());
 
         if (path.size() > recursionMax || seenTxs.size() > ancestorMax) {
-            if (score) *score = std::min(0.25, *score);
+            if (score) 
+               { *score = std::min(0.25, *score); } 
+            
             // guard against excessively long mempool chains eating up resources
             throw RecursionLimitReached(strprintf("recursiveDSProofSearch: mempool depth limit exceeded (%d, %d)",
                                                   path.size(), seenTxs.size()));
@@ -891,7 +904,9 @@ auto CTxMemPool::recursiveDSProofSearch(const TxId &txId, DspDescendants *desc, 
         if ((optProof = getDoubleSpendProof_common(txit, desc))) {
             // dsp found for this txId. Setting `ret` ends any recursion
             ret.emplace(std::move(*optProof), std::move(path));
-            if (score) *score = 0.0; // proof found, set score to 0
+            if (score) 
+               { *score = 0.0; }
+           
             return;
         }
 
@@ -906,8 +921,9 @@ auto CTxMemPool::recursiveDSProofSearch(const TxId &txId, DspDescendants *desc, 
         // so keep searching recursively; recurse for each parent (only if never seen).
         for (const auto &parent : GetMemPoolParents(txit)) {
             // if we have already searched this parent, skip
-            if (!seenTxs.insert(parent).second)
-                continue;
+            if (!seenTxs.insert(parent).second) 
+               { continue; }
+           
 
             // recurse; NB: this may modify `optProof`, `seenTxs`, `*score` and/or `ret`
             search(parent);
@@ -925,7 +941,9 @@ auto CTxMemPool::recursiveDSProofSearch(const TxId &txId, DspDescendants *desc, 
     LOCK2(cs_main, cs);
 
     if (txiter txit = mapTx.find(txId); txit != mapTx.end()) {
-        if (score) *score = 1.0; // assume good until proven otherwise
+        if (score) 
+           { *score = 1.0; }
+       
         search(txit);
     } else if (score) {
         // confidence score is -1.0 for an unknown tx
@@ -955,7 +973,8 @@ auto CTxMemPool::getDoubleSpendProof(const COutPoint &outpoint, DspDescendants *
             if (desc) {
                 // caller supplied a descendants set they want populated, so populate it on this hit
                 if (auto optIter = GetIter(txId))
-                    *desc = getDspDescendantsForIter(*optIter);
+                    { *desc = getDspDescendantsForIter(*optIter); }
+               
             }
         }
     } else {
@@ -1169,8 +1188,9 @@ void DisconnectedBlockTransactions::importMempool(CTxMemPool &pool) {
 }
 
 auto DisconnectedBlockTransactions::getTxInfo(const CTransactionRef &tx) const -> const TxInfo * {
-    if (auto it = txInfo.find(tx->GetId()); it != txInfo.end())
-        return &it->second;
+    if (auto it = txInfo.find(tx->GetId()); it != txInfo.end()) 
+      { return &it->second; }
+   
     return nullptr;
 }
 
@@ -1186,8 +1206,9 @@ void DisconnectedBlockTransactions::updateMempoolForReorg(const Config &config,
         // the mempool starting with the earliest transaction that had been
         // previously seen in a block.
         for (const CTransactionRef &tx : reverse_iterate(queuedTx.get<insertion_order>())) {
-            if (tx->IsCoinBase())
-                continue;
+            if (tx->IsCoinBase()) 
+               { continue; }
+           
             // restore saved PrioritiseTransaction state and nAcceptTime
             const auto ptxInfo = getTxInfo(tx);
             bool hasFeeDelta = false;
