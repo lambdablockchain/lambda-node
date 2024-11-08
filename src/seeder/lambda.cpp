@@ -395,8 +395,9 @@ bool CSeederNode::Run() {
     }
     if (sock == INVALID_SOCKET) {
         res = false;
-    } else
-        CloseSocket(sock);
+    } else 
+       { CloseSocket(sock); }
+   
     return (ban == 0) && res;
 }
 
