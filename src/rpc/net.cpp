@@ -746,15 +746,19 @@ static UniValue clearbanned(const Config &config,
 
     bool manual = true, automatic = true;
 
-    if (request.params.size() > 0)
-        manual = request.params[0].get_bool();
-    if (request.params.size() > 1)
-        automatic = request.params[1].get_bool();
+    if (request.params.size() > 0) 
+       { manual = request.params[0].get_bool(); }
+   
+    if (request.params.size() > 1) 
+       { automatic = request.params[1].get_bool(); }
+   
 
-    if (manual)
-        g_banman->ClearBanned();
-    if (automatic)
-        g_banman->ClearDiscouraged();
+    if (manual) 
+       { g_banman->ClearBanned(); }
+   
+    if (automatic) 
+       { g_banman->ClearDiscouraged(); }
+   
 
     return UniValue();
 }
