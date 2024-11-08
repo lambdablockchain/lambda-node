@@ -18,7 +18,7 @@
 
 #include <attributes.h>
 #include <stdexcept>
-
+#include <cstdint>
 #include <string>
 #include <vector>
 
