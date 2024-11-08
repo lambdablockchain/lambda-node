@@ -196,8 +196,9 @@ extern "C" void *ThreadCrawler(void *data) {
                                  getaddr ? &addr : nullptr,
                                  res.services);
 
-            if (res.fGood && getaddr)
-                res.lastAddressRequest = now;
+            if (res.fGood && getaddr) 
+               { res.lastAddressRequest = now; }
+           
         }
 
         db.ResultMany(ips);
@@ -441,8 +442,9 @@ extern "C" void *ThreadStats(void *) {
         uint64_t requests = 0;
         uint64_t queries = 0;
         for (const auto *dnsThread : dnsThreads) {
-            if (!dnsThread)
-                continue;
+            if (!dnsThread) 
+               { continue; }
+           
             requests += dnsThread->dns_opt.nRequests;
             queries += dnsThread->dbQueries;
         }
