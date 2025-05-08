@@ -87,6 +87,7 @@ rpcpassword=pass
 rpcport=9332
 addnode=145.239.0.137:11029
 addnode=51.75.144.177:21029
+addnode==91.55.255.202:9333
 ```
 save and run ./lambdad ./lambda-cli 
 PS: Lambda-qt is not fully developed please do not use it
