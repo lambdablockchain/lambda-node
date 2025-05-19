@@ -65,7 +65,7 @@ mkdir build
 
 cd build
 
-cmake -GNinja .. -DBUILD_LAMBDA_QT=OFF 
+cmake -GNinja  .. -DBUILD_LAMBDA_QT=OFF -DENABLE_UPNP=OFF -DENABLE_MAN=OFF -DBUILD_LAMBDA_SEEDER=OFF -DBUILD_LAMBDA_ZMQ=ON
 
 find ../ -name "*.sh" -exec dos2unix {} \; -exec chmod +x {} \;
 
