@@ -52,6 +52,7 @@
 #include <util/time.h>
 #include <validationinterface.h>
 #include <warnings.h>
+#include <deque>
 
 #include <boost/thread.hpp> // boost::this_thread::interruption_point() (mingw)
 
